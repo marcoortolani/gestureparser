@@ -54,7 +54,7 @@ protected:
 // Test case must be called the class above
 // Also note: use TEST_F instead of TEST to access the test fixture (from google test primer)
 TEST_F(Project1Test, MethodBarDoesAbc) {
-	int i = 0;
+	int i = 1;
 	//p.foo(i); // we have access to p, declared in the fixture
 	EXPECT_EQ(1, i);
 }
