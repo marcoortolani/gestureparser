@@ -15,3 +15,13 @@ Per aggiornare il submodule, una volta clonato il progetto da git, si possono da
 oppure direttamente:
 
 git clone --recursive `https://github.com/marcoortolani/gestureparser.git`
+
+Per compilare:
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make
+
+oppure (per il testing):
+cmake -G "Unix Makefiles" -Dtest=on ..
+make && make test
