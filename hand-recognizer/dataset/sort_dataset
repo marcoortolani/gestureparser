@@ -1,0 +1,4 @@
+#!/bin/bash
+sort -k1.1,1.1 dataset > sorted;
+more sorted > dataset;
+rm sorted;

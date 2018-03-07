@@ -1,0 +1,14 @@
+;
+Query
+Set
+start
+stop
+heater
+light
+energymeter
+status
+med
+high
+low
+increase
+decrease

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it-IT">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<meta http-equiv="refresh" content="10">-->
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>Kinect Hand Recognizer | Graph Visualizer</title>
+    <script src="js/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/paper.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+
+    <!-- Optional theme
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    -->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+    <script src="js/highcharts.js"></script>
+    <script src="js/exporting.js"></script>
+    <script src="js/graph-visualizer.js"></script>
+    <script>
+      var myVar = setInterval(function(){ myTimer() }, 1000);
+
+      function myTimer() {
+          var d = new Date();
+          var dma = d.toLocaleDateString();
+          var t = d.toLocaleTimeString();
+          document.getElementById("orologio").innerHTML = t+'&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i>';
+      }
+
+      function refresh(){
+        window.location.reload();
+      }
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><i class="fa fa-hand-spock-o" aria-hidden="true"></i>&nbsp;Kinect Hand Recognizer</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-area-chart" aria-hidden="true"></i>&nbsp;Graph Visualizer <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a onclick="refresh()"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;Ricarica</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-bitbucket" aria-hidden="true"></i>&nbsp;Repo&nbsp;<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="https://bitbucket.org/iciccio/kinect-svm"><i class="fa fa-file-code-o" aria-hidden="true"></i>&nbsp;MATLAB</a></li>
+                <li><a href="https://bitbucket.org/iciccio/hand-recognizer"><i class="fa fa-file-code-o" aria-hidden="true"></i>&nbsp;C++</a></li>
+                <li class="divider"></li>
+                <li><a href="http://lanzaweb.altervista.org"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Francesco Lanza</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="navbar-form navbar-left" role="search" action="https://www.google.com/search" method="GET" target="_blank">
+            <div class="form-group">
+              <input id="q" name="q" type="text" class="form-control" placeholder="Google.com" size="40" required autofocus>
+            </div>
+            <button type="submit" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></button>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="orologio" style="font-size:18px;color:white;font-weight:500;text-shadow:2px 2px rgba(43,43,43,0.6)">--:--:--&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i></a></li>
+            <!--<li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login</a></li>-->
+          </ul>
+        </div>
+      </div>
+    </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul class="breadcrumb">
+          <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home</a></li>
+          <li class="active">Graph Visualizer</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <img id="hand-img"/>
+          </div>
+          <div class="col-md-6">
+            <div id="graph-samples" style="min-width: 310px; height: 550px; margin: 0 auto;"></div>
+          </div>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <br />
+        <div class="row">
+          <div id="graph-visualizer" style="min-width: 310px; height: 550px; margin: 0 auto;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form class="form-horizontal">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;Login Panel</h4>
+        </div>
+        <div class="modal-body">
+            <fieldset>
+              <legend></legend>
+              <div class="form-group">
+                <label for="inputEmail" class="col-lg-2 control-label"><i class="fa fa-envelope" aria-hidden="true"></i></label>
+                <div class="col-lg-10">
+                  <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword" class="col-lg-2 control-label"><i class="fa fa-asterisk" aria-hidden="true"></i></label>
+                <div class="col-lg-10">
+                  <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group">
+              <div class="col-lg-10 col-lg-offset-2">
+                  <button type="submit" class="btn btn-success"><i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                  <button type="reset" class="btn btn-danger"><i class="fa fa-eraser" aria-hidden="true"></i></button>
+              </div>
+          </div>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  </body>
+</html>
