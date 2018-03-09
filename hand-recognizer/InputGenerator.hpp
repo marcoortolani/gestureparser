@@ -15,7 +15,7 @@
 #include <vector>
 #include <string.h>
 
-#define INPUT_PARSER_FILE "/input/sentence.txt"
+#define INPUT_PARSER_FILE "./input/sentence.txt"
 
 class InputGenerator{
 public:

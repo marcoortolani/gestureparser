@@ -32,8 +32,8 @@
 #define ERROR_ON_OPEN_KINECT "Non posso aprire lo streaming da Kinect.\nControllare che la Kinect sia collegata."
 #define ERROR_ON_ACQUISITION_KINECT "Non riesco ad aquisire il frame da Kinect."
 
-#define DATA_JSON_PATH "/data.json"
-#define DATA_JSON_JPG "/data.jpg"
+#define DATA_JSON_PATH "./data.json"
+#define DATA_JSON_JPG "./data.jpg"
 
 #define PI 3.14159265
 
