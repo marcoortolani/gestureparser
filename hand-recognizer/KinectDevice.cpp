@@ -9,11 +9,11 @@
 #include "KinectDevice.hpp"
 
 KinectDevice::KinectDevice(){
-    sensor.open(CV_CAP_OPENNI);
-    if( !sensor.isOpened() ){
-        std::cout << ERROR_ON_OPEN_KINECT << std::endl;
-        exit(-1);
-    }
+    // sensor.open(CV_CAP_OPENNI);
+    // if( !sensor.isOpened() ){
+    //     std::cout << ERROR_ON_OPEN_KINECT << std::endl;
+    //     exit(-1);
+    // }
 }
 
 void KinectDevice::setFrame(cv::Mat f){
@@ -89,6 +89,19 @@ cv::Mat KinectDevice::shot(){
     return frame;
 }
 
+void KinectDevice::jpgToFrame (int index){
+cv::Mat image;
+const char* path[4];
+path[0]=IMMAGINE_0;
+path[1]=IMMAGINE_1;
+path[2]=IMMAGINE_2;
+path[3]=IMMAGINE_3;
+image = cv::imread(path[index], -1 );
+image.convertTo( frame, CV_8UC1, scaleFactor );
+frame=image;
+im2bw();
+}
+
 cv::Size KinectDevice::setFrameSize(){
     cv::Mat tmp;
     sensor >> tmp;
@@ -150,7 +163,7 @@ void KinectDevice::drawContourns(){
     for( int i = 0; i< contours.size(); i++ ){
         cv::drawContours( drawing, contours, i, color, 1, 1, hierarchy, 0, cv::Point());
     }
-    
+
     // Show in a window
     cv::namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
     cv::imshow( "Contours", drawing );
@@ -189,21 +202,21 @@ cv::Point KinectDevice::initialValue(){
 std::vector<double> KinectDevice::findAngle(){
     std::vector<double> temp(contorno.size());
     cv::Point iValueT = iValue - centroide;
-    
+
     double varAngle = atan2d360(iValueT);
     cv::Mat Mrot = cv::Mat::eye(2, 2, CV_32S);
     Mrot.at<double>(0, 0) =      std::cos(varAngle);
     Mrot.at<double>(0, 1) = (-1)*std::sin(varAngle);
     Mrot.at<double>(1, 0) =      std::sin(varAngle);
     Mrot.at<double>(1, 1) =      std::cos(varAngle);
-    
+
     cv::Point Princ;
     Princ.x = Mrot.at<double>(0, 0) * iValueT.x + Mrot.at<double>(0, 1) * iValueT.y;
     Princ.y = Mrot.at<double>(1, 0) * iValueT.x + Mrot.at<double>(1, 1) * iValueT.y;
-    
+
     double principal;
     principal = atan2d360(Princ);
-    
+
     for (int i = 0 ; i < contorno.size() ; i++) {
         cv::Point Pt = contorno.at(i) - centroide;
         cv::Point V;
@@ -213,24 +226,24 @@ std::vector<double> KinectDevice::findAngle(){
     }
     angolo = temp;
     return angolo;
-    
+
 }
 
 void KinectDevice::normalize(){
     double minVal = 0;
     cv::Point minIdx;
-    
+
     minMaxLoc(angolo, &minVal,NULL,&minIdx,NULL,cv::noArray());
     minVal = std::abs(minVal);
     cv::add(angolo,minVal,angolo);
     minMaxLoc(angolo, NULL,NULL,&minIdx,NULL,cv::noArray());
-    
+
     std::vector<double> _angolo(angolo.begin()+minIdx.x,angolo.end());
     _angolo.insert(_angolo.end(),angolo.begin(), angolo.begin()+minIdx.x);
-    
+
     std::vector<double> _distanza(distanza.begin()+minIdx.x,distanza.end());
     _distanza.insert(_distanza.end(), distanza.begin(), distanza.begin()+minIdx.x);
-    
+
     angolo = _angolo;
     distanza = _distanza;
 }

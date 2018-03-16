@@ -22,10 +22,11 @@ void print_menu(){
             <<"Input: ";
 }
 
-void simulation(KinectDevice& kinect, Dataset& dataset){
-    kinect.shot2bw();
+void simulation(KinectDevice& kinect, Dataset& dataset, int index){
+    kinect.jpgToFrame(index);
+    //kinect.shot2bw();
     //estraggo contours e hierarchy
-    kinect.edge();
+    //kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();
@@ -62,22 +63,21 @@ void exit_with_prompt(){
 
 int main(int argc, char* argv[]){
     // Apro la connessione con la kinect.
-    // KinectDevice kinect;  //spostato
     Dataset dataset;
     InputGenerator command_exec;
-
-    int opt = 0 ;
+    KinectDevice kinect;
+    int opt;
     char exec_quit = 'n';
     int i = 0;
     do {
         print_menu();
+        opt=0;
         std::cin>>opt;
         switch (opt) {
             {case 1:
-              KinectDevice kinect;
                 while(i<4){
-                    system(COMMAND_WEB_VISUALIZER);
-                    simulation(kinect, dataset);
+                    //system(COMMAND_WEB_VISUALIZER);
+                    simulation(kinect, dataset, i);
                     i++;
                     std::cout<<"WAIT\n";
                     usleep(5000000);
@@ -100,7 +100,6 @@ int main(int argc, char* argv[]){
         }
         std::cout<<"Quit [n(default)/y]: ";
         std::cin>>exec_quit;
-        opt = 0;
     } while (exec_quit != 'y' );
     return 0;
 }

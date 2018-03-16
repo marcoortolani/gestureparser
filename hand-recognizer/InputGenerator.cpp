@@ -21,16 +21,22 @@ void InputGenerator::parse(const char* filename){
         char* cmd = strtok(strdup(line.c_str()), " ");
         if(strcmp(cmd, "0") == 0){
             sentence<<"Set ";
+            std::cout<<"Set ";
         }else if (strcmp(cmd,"1") == 0){
             sentence<<"light ";
+            std::cout<<"light ";
         }else if (strcmp(cmd,"2") == 0){
             sentence<<"decrease ";
+            std::cout<<"decrease ";
         }else if (strcmp(cmd,"3") == 0){
             sentence<<";";
+            std::cout<<";\n";
         }else if (strcmp(cmd,"4") == 0){
             sentence<<"status ";
+            std::cout<<"status ";
         }else if (strcmp(cmd,"5") == 0){
             sentence<<"Query ";
+            std::cout<<"Query ";
         }
     }
     sentence.close();
