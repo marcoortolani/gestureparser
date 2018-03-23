@@ -1,3 +1,6 @@
 [submodule "gtest"]
 	path = gtest
 	url = https://github.com/google/googletest.git
+[submodule "libsvm"]
+	path = libsvm
+	url = https://github.com/cjlin1/libsvm.git
