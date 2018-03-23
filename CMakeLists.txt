@@ -5,20 +5,37 @@ project("Earley Parser")
 # Enable all warning by default
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
+set (CMAKE_CXX_STANDARD 11)
+
+find_package(OpenCV 3.0.0 REQUIRED)
+
+MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
+MESSAGE(STATUS "LINK LIBRARIES ${OpenCV_LIBS}")
+
 ################################
 # Normal Libraries & Executables
 ################################
 include_directories(jama)
 include_directories(earley)
 
-add_subdirectory(earley)
+include_directories(hand-recognizer)
 
-add_executable(myearley main.cpp)
+# Lib directories
+add_subdirectory(earley)
+add_subdirectory(hand-recognizer)
+add_subdirectory(libsvm)
+
+# Build probabilistic parser executable
+add_executable(myearley earley-main.cpp)
 
 # Key idea: SEPARATE OUT your main() function into its own file so it can be its
 # own executable. Separating out main() means you can add this library to be
 # used elsewhere.
 target_link_libraries(myearley earleyCore)
+
+# Temporarily build another executable for the hand recognizer
+add_executable(hr hand-main.cpp)
+target_link_libraries(hr svm kinectCore ${OpenCV_LIBS})
 
 ################################
 # Testing
