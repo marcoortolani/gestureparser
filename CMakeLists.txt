@@ -18,6 +18,8 @@ MESSAGE(STATUS "LINK LIBRARIES ${OpenCV_LIBS}")
 include_directories(jama)
 include_directories(earley)
 
+
+include_directories(libsvm)
 include_directories(hand-recognizer)
 
 # Lib directories
