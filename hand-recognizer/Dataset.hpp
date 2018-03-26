@@ -27,7 +27,7 @@
 #define MODE_CREATE_DATASET 0
 
 
-#define DATASET_DIR "\"./dataset\""
+#define DATASET_DIR "\"../dataset\""
 #define DATASET_SVM "../dataset/dataset"
 #define DATASET_SVM_MODEL "../dataset/dataset.model"
 #define SCALING_MODEL 0
