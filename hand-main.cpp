@@ -26,7 +26,7 @@ void simulation(KinectDevice& kinect, Dataset& dataset, int index){
     kinect.jpgToFrame(index);
     //kinect.shot2bw();
     //estraggo contours e hierarchy
-    //kinect.edge();
+    kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();

@@ -35,10 +35,10 @@
 #define DATA_JSON_PATH "./data.json"
 #define DATA_JSON_JPG "./data.jpg"
 /*
-#define IMMAGINE_0 "./0.jpg"
-#define IMMAGINE_1 "./1.jpg"
-#define IMMAGINE_2 "./0.jpg"
-#define IMMAGINE_3 "./1.jpg"
+#define IMMAGINE_0 "./hands/00_rgb.jpg"
+#define IMMAGINE_1 "./hands/01_rgb.jpg"
+#define IMMAGINE_2 "./hands/02_rgb.jpg"
+#define IMMAGINE_3 "./hands/03_rgb.jpg"
 */
 
 #define IMMAGINE_0 "../dataset/dx/0/1481713432723.jpg"
