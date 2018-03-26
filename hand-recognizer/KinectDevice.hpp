@@ -35,10 +35,10 @@
 #define DATA_JSON_PATH "./data.json"
 #define DATA_JSON_JPG "./data.jpg"
 
-#define IMMAGINE_0 "./dataset/dx/0/1481713432723.jpg"
-#define IMMAGINE_1 "./dataset/dx/1/1481806150355.jpg"
-#define IMMAGINE_2 "./dataset/dx/2/1481537380867.jpg"
-#define IMMAGINE_3 "./dataset/dx/3/1481807308973.jpg"
+#define IMMAGINE_0 "../dataset/dx/0/1481713432723.jpg"
+#define IMMAGINE_1 "../dataset/dx/1/1481806150355.jpg"
+#define IMMAGINE_2 "../dataset/dx/2/1481537380867.jpg"
+#define IMMAGINE_3 "../dataset/dx/3/1481807308973.jpg"
 
 
 #define PI 3.14159265

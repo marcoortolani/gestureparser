@@ -5,7 +5,7 @@ project("Earley Parser")
 # Enable all warning by default
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
-set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenCV 3.0.0 REQUIRED)
 

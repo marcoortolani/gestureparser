@@ -28,34 +28,34 @@
 
 
 #define DATASET_DIR "\"./dataset\""
-#define DATASET_SVM "./dataset/dataset"
-#define DATASET_SVM_MODEL "./dataset/dataset.model"
+#define DATASET_SVM "../dataset/dataset"
+#define DATASET_SVM_MODEL "../dataset/dataset.model"
 #define SCALING_MODEL 0
-#define DATASET_SVM_MODEL_SCALED "./dataset/dataset.scale.model"
-#define DATASET_PATH "./dataset/dataset.json"
-#define TESTSET_SVM "./dataset/testset"
-#define OUTPUT_PROBABILISTIC_SVM "./dataset/prob.khr"
+#define DATASET_SVM_MODEL_SCALED "../dataset/dataset.scale.model"
+#define DATASET_PATH "../dataset/dataset.json"
+#define TESTSET_SVM "../dataset/testset"
+#define OUTPUT_PROBABILISTIC_SVM "../dataset/prob.khr"
 
 
 
 #define DX_HAND 1
 #if DX_HAND
-#define dir_dx_0  "./dataset/dx/0"
-#define dir_dx_1  "./dataset/dx/1"
-#define dir_dx_2  "./dataset/dx/2"
-#define dir_dx_3  "./dataset/dx/3"
-#define dir_dx_4  "./dataset/dx/4"
-#define dir_dx_5  "./dataset/dx/5"
+#define dir_dx_0  "../dataset/dx/0"
+#define dir_dx_1  "../dataset/dx/1"
+#define dir_dx_2  "../dataset/dx/2"
+#define dir_dx_3  "../dataset/dx/3"
+#define dir_dx_4  "../dataset/dx/4"
+#define dir_dx_5  "../dataset/dx/5"
 #endif
 
 /*#define SX_HAND 0
 #if SX_HAND
-#define dir_sx_0  "./dataset/sx/0"
-#define dir_sx_1  "./dataset/sx/1"
-#define dir_sx_2  "./dataset/sx/2"
-#define dir_sx_3  "./dataset/sx/3"
-#define dir_sx_4  "./dataset/sx/4"
-#define dir_sx_5  "./dataset/sx/5"
+#define dir_sx_0  "../dataset/sx/0"
+#define dir_sx_1  "../dataset/sx/1"
+#define dir_sx_2  "../dataset/sx/2"
+#define dir_sx_3  "../dataset/sx/3"
+#define dir_sx_4  "../dataset/sx/4"
+#define dir_sx_5  "../dataset/sx/5"
 #endif*/
 
 
