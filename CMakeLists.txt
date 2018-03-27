@@ -40,6 +40,10 @@ target_link_libraries(myearley earleyCore)
 add_executable(hr hand-main.cpp)
 target_link_libraries(hr svm kinectCore ${OpenCV_LIBS})
 
+# This should be the final "global" main
+add_executable(gestrec main.cpp)
+target_link_libraries(gestrec svm kinectCore ${OpenCV_LIBS})
+
 ################################
 # Testing
 ################################
