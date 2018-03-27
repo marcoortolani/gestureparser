@@ -26,7 +26,9 @@ void simulation(KinectDevice& kinect, Dataset& dataset, int index){
     kinect.jpgToFrame(index);
     //kinect.shot2bw();
     //estraggo contours e hierarchy
-    kinect.edge();
+
+    // Edge già estratto nel dataset di prova
+    //kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();
@@ -80,7 +82,7 @@ int main(int argc, char* argv[]){
                     simulation(kinect, dataset, i);
                     i++;
                     std::cout<<"WAIT\n";
-                    usleep(5000000);
+                    usleep(50000);
                 }
                 break;
             }
