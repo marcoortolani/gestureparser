@@ -96,7 +96,7 @@ path[0]=IMMAGINE_0;
 path[1]=IMMAGINE_1;
 path[2]=IMMAGINE_2;
 path[3]=IMMAGINE_3;
-image = cv::imread(path[index], -1 );
+image = cv::imread(path[index], 0 );
 image.convertTo( frame, CV_8UC1, scaleFactor );
 frame=image;
 im2bw();
@@ -133,6 +133,8 @@ cv::Mat KinectDevice::im2bw(){
 
 void KinectDevice::extractCountours(){
     cv::findContours(frame, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+    //cv::imshow("Extract Contours", frame);
+    //cv::waitKey(20000);
 }
 
 std::vector<cv::Moments> KinectDevice::getMoments(){

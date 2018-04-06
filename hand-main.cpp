@@ -46,7 +46,7 @@ void simulation(KinectDevice& kinect, Dataset& dataset, int index){
 void dataset_creator(KinectDevice& kinect, Dataset& dataset){
     kinect.shot2bw();
     //estraggo contours e hierarchy
-    kinect.edge();
+    //kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();
@@ -77,6 +77,11 @@ int main(int argc, char* argv[]){
         std::cin>>opt;
         switch (opt) {
             {case 1:
+                //cancello i files che mantengono i dati delle precedenti simulazioni
+                std::remove("../dataset/testset.json");
+                std::remove("../dataset/testset");
+                std::remove("../dataset/prob.khr");
+                std::remove("../input/sentence-hr.txt");
                 while(i<4){
                     //system(COMMAND_WEB_VISUALIZER);
                     simulation(kinect, dataset, i);

@@ -41,10 +41,10 @@
 #define IMMAGINE_3 "./hands/03_rgb.jpg"
 */
 
-#define IMMAGINE_0 "../dataset/dx/0/1481713432723.jpg"
-#define IMMAGINE_1 "../dataset/dx/1/1481806150355.jpg"
-#define IMMAGINE_2 "../dataset/dx/2/1481537380867.jpg"
-#define IMMAGINE_3 "../dataset/dx/3/1481807308973.jpg"
+#define IMMAGINE_0 "../dataset/dx/0/0_9.tif"
+#define IMMAGINE_1 "../dataset/dx/1/1_5.tif"
+#define IMMAGINE_2 "../dataset/dx/2/2_9.tif"
+#define IMMAGINE_3 "../dataset/dx/3/3_5.tif"
 
 
 #define PI 3.14159265

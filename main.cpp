@@ -48,13 +48,12 @@ void SampleWithoutReplacement(int populationSize, int sampleSize,std::vector<int
 int main(int argc, char* argv[]) {
   const float scaleFactor = 0.06274509803922f;
 
-//  string imgPath = "../dataset/dx/0/1481713432723.jpg";
-  string imgPath = "../dataset/dx/1/1481713360075.jpg";
+  string imgPath = "../dataset/dx/3/3_5.tif";
 
   cout << "Reading in image: " << imgPath << endl;
 
   // Read image from file
-  Mat image = cv::imread(imgPath, -1);
+  Mat image = cv::imread(imgPath, 0);
 
   cv::imshow("Original image", image);
   cv::waitKey(2000);
@@ -127,8 +126,8 @@ int main(int argc, char* argv[]) {
       std::vector<cv::Point> src1(1);
       src1.insert(src1.end(),contorno.at(i));
       tempDistanze.at(i) = cv::norm(src1,src2,cv::NORM_L2, cv::noArray());
-      std::cout<<"Point "<<i<<": "<<contorno.at(i)<<" - Centroide: "<<centroide<<" "<<"Distanza: "<<tempDistanze.at(i)<<std::endl;
-      std::cout<<std::endl;
+      //std::cout<<"Point "<<i<<": "<<contorno.at(i)<<" - Centroide: "<<centroide<<" "<<"Distanza: "<<tempDistanze.at(i)<<std::endl;
+      //std::cout<<std::endl;
   }
   distanza = tempDistanze;
 
