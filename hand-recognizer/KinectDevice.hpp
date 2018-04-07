@@ -34,18 +34,19 @@
 
 #define DATA_JSON_PATH "./data.json"
 #define DATA_JSON_JPG "./data.jpg"
-/*
-#define IMMAGINE_0 "./hands/00_rgb.jpg"
-#define IMMAGINE_1 "./hands/01_rgb.jpg"
-#define IMMAGINE_2 "./hands/02_rgb.jpg"
-#define IMMAGINE_3 "./hands/03_rgb.jpg"
-*/
 
+//immagini del dataset
+/*
 #define IMMAGINE_0 "../dataset/dx/0/0_9.tif"
 #define IMMAGINE_1 "../dataset/dx/1/1_5.tif"
 #define IMMAGINE_2 "../dataset/dx/2/2_9.tif"
 #define IMMAGINE_3 "../dataset/dx/3/3_5.tif"
-
+*/
+// immagini del testset
+#define IMMAGINE_0 "../testset/0/0_9.tif"
+#define IMMAGINE_1 "../testset/1/1_5.tif"
+#define IMMAGINE_2 "../testset/2/2_9.tif"
+#define IMMAGINE_3 "../testset/3/3_5.tif"
 
 #define PI 3.14159265
 

@@ -28,7 +28,7 @@ void simulation(KinectDevice& kinect, Dataset& dataset, int index){
     //estraggo contours e hierarchy
 
     // Edge già estratto nel dataset di prova
-    //kinect.edge();
+    kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();
