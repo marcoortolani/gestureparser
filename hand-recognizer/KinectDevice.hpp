@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <fstream>
 #include <random>
+#include <string.h>
+#include <string>
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -64,7 +66,7 @@ public:
     //funzione acquisizione frame
     cv::Mat shot();
     //anzichè acquisire il frame con la kinekt passo un file jpg
-    void jpgToFrame (int index);
+    void jpgToFrame (int index, int mode);
     //funzione elaborazione frame
     cv::Mat shot2bw();
     cv::Mat edge();

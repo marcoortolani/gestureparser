@@ -89,14 +89,24 @@ cv::Mat KinectDevice::shot(){
     return frame;
 }
 
-void KinectDevice::jpgToFrame (int index){
+void KinectDevice::jpgToFrame (int index, int mode){
 cv::Mat image;
-const char* path[4];
-path[0]=IMMAGINE_0;
-path[1]=IMMAGINE_1;
-path[2]=IMMAGINE_2;
-path[3]=IMMAGINE_3;
-image = cv::imread(path[index], 0 );
+if (mode==0){
+  const char* path[4];
+  path[0]=IMMAGINE_0;
+  path[1]=IMMAGINE_1;
+  path[2]=IMMAGINE_2;
+  path[3]=IMMAGINE_3;
+  image = cv::imread(path[index], 0 );
+
+} else{
+    char integer_string[20];
+  	sprintf(integer_string, "%d", index);
+  	char percorso[50] = "../testset/5/5_";
+    strcat(percorso, integer_string);
+    strcat(percorso, ".tif");
+    image = cv::imread(percorso, 0 );
+}
 image.convertTo( frame, CV_8UC1, scaleFactor );
 frame=image;
 im2bw();
