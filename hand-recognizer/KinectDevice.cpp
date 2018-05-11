@@ -102,7 +102,7 @@ if (mode==0){
 } else{
     char integer_string[20];
   	sprintf(integer_string, "%d", index);
-  	char percorso[50] = "../testset/5/5_";
+  	char percorso[50] = "../testset/5/OK/5_";
     strcat(percorso, integer_string);
     strcat(percorso, ".tif");
     image = cv::imread(percorso, 0 );
@@ -123,8 +123,10 @@ cv::Size KinectDevice::setFrameSize(){
 
 cv::Mat KinectDevice::edge(){
     cv::Mat edged = frame.clone();
-    cv::GaussianBlur(edged, edged, cv::Size(7,7), 1.5, 1.5);
-    cv::Canny(edged, edged, 0, 30, 3);
+    //cv::GaussianBlur(edged, edged, cv::Size(7,7), 1.5, 1.5);
+    cv::Canny(edged, edged, 0, 120, 3);
+    //cv::imshow("Edged", edged);
+    //cv::waitKey(20000);
     return edged;
 }
 
@@ -198,8 +200,8 @@ void KinectDevice::p2pDistance(){
         std::vector<cv::Point> src1(1);
         src1.insert(src1.end(),contorno.at(i));
         temp.at(i) = cv::norm(src1,src2,cv::NORM_L2, cv::noArray());
-        std::cout<<"Point "<<i<<": "<<contorno.at(i)<<" - Centroide: "<<centroide<<" "<<"Distanza: "<<temp.at(i)<<std::endl;
-        std::cout<<std::endl;
+        //std::cout<<"Point "<<i<<": "<<contorno.at(i)<<" - Centroide: "<<centroide<<" "<<"Distanza: "<<temp.at(i)<<std::endl;
+        //std::cout<<std::endl;
     }
     distanza = temp;
 }

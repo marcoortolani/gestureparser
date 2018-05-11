@@ -101,7 +101,7 @@ void Dataset::parseObjsFile(){
 void Dataset::saveElement(nlohmann::json sample, cv::Mat img){
     char position;
     int label;
-    
+
     //std::cout<<"d | s: ";
     //std::cin>>position;
     //std::cout<<std::endl;
@@ -167,7 +167,7 @@ void Dataset::saveGesture(nlohmann::json jline,const char* filename){
     testjson.open(ftestjson.c_str(),std::ofstream::out | std::ofstream::app);
     testjson<<jline;
     testjson.close();
-    test <<8<<" ";
+    test <<5<<" ";
     for (int i = 0; i < jline["samples"].size(); i++) {
         test<<i+1<<":"<<jline["samples"].at(i)<<" ";
     }

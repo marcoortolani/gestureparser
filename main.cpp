@@ -48,7 +48,7 @@ void SampleWithoutReplacement(int populationSize, int sampleSize,std::vector<int
 int main(int argc, char* argv[]) {
   const float scaleFactor = 0.06274509803922f;
 
-  string imgPath = "../dataset/dx/3/3_5.tif";
+  string imgPath = "../testset/0/0_10.tif";
 
   cout << "Reading in image: " << imgPath << endl;
 
@@ -104,14 +104,15 @@ int main(int argc, char* argv[]) {
   }
   mc = tempPoints;
 
-  contorno = contours.at(0);
-  centroide.x = round(mc.at(0).x);
-  centroide.y = round(mc.at(0).y);
+  contorno = contours.at(contours.size()-1);
+  centroide.x = round(mc.at(mc.size()-1).x);
+  centroide.y = round(mc.at(mc.size()-1).y);
 
-  cv::Point iValue = contorno.at(0);
+  cv::Point iValue = contorno.at(contorno.size()-1);
 
   cout << "Centroid: " << mc << endl;
   cout << "Initial point: " << iValue << endl;
+  //  cout << "Contorno: " << contorno << endl;
 
   // p2pDistance() ---> CORREGGERE
   std::vector<double> distanza;

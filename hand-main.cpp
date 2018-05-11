@@ -106,7 +106,7 @@ int main(int argc, char* argv[]){
               std::remove("../dataset/prob.khr");
               std::remove("../input/sentence-hr.txt");
               i=1;
-              while(i<30){
+              while(i<11){
                   //system(COMMAND_WEB_VISUALIZER);
                   simulation(kinect, dataset, i, 1);
                   i++;
