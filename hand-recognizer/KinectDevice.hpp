@@ -66,7 +66,7 @@ public:
     //funzione acquisizione frame
     cv::Mat shot();
     //anzichè acquisire il frame con la kinekt passo un file jpg
-    void jpgToFrame (int index, int mode);
+    void jpgToFrame (int index, int mode, int n_dita);
     //funzione elaborazione frame
     cv::Mat shot2bw();
     cv::Mat edge();

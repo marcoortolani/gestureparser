@@ -158,7 +158,7 @@ void Dataset::saveElement(nlohmann::json sample, cv::Mat img){
     }
 }
 
-void Dataset::saveGesture(nlohmann::json jline,const char* filename){
+void Dataset::saveGesture( int n_dita, nlohmann::json jline,const char* filename){
     std::ofstream test;
     std::ofstream testjson;
     test.open(filename,std::ofstream::out | std::ofstream::app);
@@ -167,7 +167,7 @@ void Dataset::saveGesture(nlohmann::json jline,const char* filename){
     testjson.open(ftestjson.c_str(),std::ofstream::out | std::ofstream::app);
     testjson<<jline;
     testjson.close();
-    test <<5<<" ";
+    test <<n_dita<<" ";
     for (int i = 0; i < jline["samples"].size(); i++) {
         test<<i+1<<":"<<jline["samples"].at(i)<<" ";
     }

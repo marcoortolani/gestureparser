@@ -89,7 +89,7 @@ cv::Mat KinectDevice::shot(){
     return frame;
 }
 
-void KinectDevice::jpgToFrame (int index, int mode){
+void KinectDevice::jpgToFrame (int index, int mode, int n_dita){
 cv::Mat image;
 if (mode==0){
   const char* path[4];
@@ -101,8 +101,14 @@ if (mode==0){
 
 } else{
     char integer_string[20];
-  	sprintf(integer_string, "%d", index);
-  	char percorso[50] = "../testset/5/OK/5_";
+  	sprintf(integer_string, "%d", n_dita);
+  	char percorso[50] = "../testset/";
+    strcat(percorso, integer_string);
+    strcat(percorso, "/OK/"); //uso le 10 immagini scelte dal testset
+    //strcat(percorso, "/");  //uso tutte le immagini del testset
+    strcat(percorso, integer_string);
+    strcat(percorso, "_");
+    sprintf(integer_string, "%d", index);
     strcat(percorso, integer_string);
     strcat(percorso, ".tif");
     image = cv::imread(percorso, 0 );

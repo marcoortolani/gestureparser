@@ -30,6 +30,7 @@
 #define DATASET_DIR "\"../dataset\""
 #define DATASET_SVM "../dataset/dataset"
 #define DATASET_SVM_MODEL "../dataset/dataset.model"
+#define DATASET_SVM_MODEL_NEW "../dataset/dataset_new.model"
 #define SCALING_MODEL 0
 #define DATASET_SVM_MODEL_SCALED "../dataset/dataset.scale.model"
 #define DATASET_PATH "../dataset/dataset.json"
@@ -88,7 +89,7 @@ public:
     void parseObjsFile();
     void saveElement(nlohmann::json sample, cv::Mat img);
     void genSVMDataset();
-    void saveGesture(nlohmann::json jline,const char* filename = TESTSET_SVM);
+    void saveGesture(int n_dita, nlohmann::json jline,const char* filename = TESTSET_SVM);
 
 private:
     const char* fname;
