@@ -38,18 +38,19 @@
 #define DATA_JSON_JPG "./data.jpg"
 
 //immagini del dataset
-/*
+
 #define IMMAGINE_0 "../dataset/dx/0/0_9.tif"
 #define IMMAGINE_1 "../dataset/dx/1/1_5.tif"
 #define IMMAGINE_2 "../dataset/dx/2/2_9.tif"
 #define IMMAGINE_3 "../dataset/dx/3/3_5.tif"
-*/
+
 // immagini del testset
+/*
 #define IMMAGINE_0 "../testset/0/0_9.tif"
 #define IMMAGINE_1 "../testset/1/1_5.tif"
 #define IMMAGINE_2 "../testset/2/2_9.tif"
 #define IMMAGINE_3 "../testset/3/3_5.tif"
-
+*/
 #define PI 3.14159265
 
 using json = nlohmann::json;
@@ -66,7 +67,7 @@ public:
     //funzione acquisizione frame
     cv::Mat shot();
     //anzichè acquisire il frame con la kinekt passo un file jpg
-    void jpgToFrame (int index, int mode, int n_dita);
+    void jpgToFrame (int index, int mode, int n_dita, int test_use);
     //funzione elaborazione frame
     cv::Mat shot2bw();
     cv::Mat edge();
@@ -164,6 +165,7 @@ private:
     double GetUniform(){
         static std::default_random_engine re;
         static std::uniform_real_distribution<double> Dist(0,1);
+        //std::cout << "Distribuzione: " << Dist(re) << '\n';
         return Dist(re);
     }
 
@@ -185,6 +187,7 @@ private:
                 samples[m] = t;
                 t++; m++;
             }
+            //std::cout << "Sample# " << m <<'\n';
         }
     }
 };

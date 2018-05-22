@@ -25,8 +25,8 @@ void print_menu(){
             <<"Input: ";
 }
 
-void simulation(KinectDevice& kinect, Dataset& dataset, int index, int mode, int n_dita){
-    kinect.jpgToFrame(index, mode, n_dita);
+void simulation(KinectDevice& kinect, Dataset& dataset, int img_number, int mode, int n_dita, int test_use){
+    kinect.jpgToFrame(img_number, mode, n_dita, test_use);
     //kinect.shot2bw();
     //estraggo contours e hierarchy
 
@@ -42,12 +42,10 @@ void simulation(KinectDevice& kinect, Dataset& dataset, int index, int mode, int
     kinect.printSizeInfo();
     nlohmann::json test = kinect.genJSON();
     dataset.saveGesture(n_dita, test);
-    gesture_prediction(TESTSET_SVM,DATASET_SVM_MODEL,OUTPUT_PROBABILISTIC_SVM);
-
 }
 
-void training(KinectDevice& kinect, Dataset& dataset, int index, int mode, int n_dita){
-    kinect.jpgToFrame(index, mode, n_dita);
+void training(KinectDevice& kinect, Dataset& dataset, int img_number, int mode, int n_dita){
+    kinect.jpgToFrame(img_number, mode, n_dita, 0);
     //kinect.shot2bw();
     //estraggo contours e hierarchy
 
@@ -60,7 +58,7 @@ void training(KinectDevice& kinect, Dataset& dataset, int index, int mode, int n
     kinect.findAngle();
     kinect.normalize();
     kinect.samples();
-    kinect.printSizeInfo();
+    //kinect.printSizeInfo();
     nlohmann::json test = kinect.genJSON();
     dataset.saveGesture(n_dita, test);
 }
@@ -92,7 +90,7 @@ int main(int argc, char* argv[]){
     KinectDevice kinect;
     int opt;
     char exec_quit = 'n';
-    int j, i = 0;
+    int scegli_dataset, img_number;
     do {
         print_menu();
         opt=0;
@@ -104,13 +102,15 @@ int main(int argc, char* argv[]){
                 std::remove("../dataset/testset");
                 std::remove("../dataset/prob.khr");
                 std::remove("../input/sentence-hr.txt");
-                while(i<4){
+                img_number=0;
+                while(img_number<4){
                     //system(COMMAND_WEB_VISUALIZER);
-                    simulation(kinect, dataset, i, 0, i);
-                    i++;
+                    simulation(kinect, dataset, img_number, 0, img_number, 0);
+                    img_number++;
                     std::cout<<"WAIT\n";
-                    usleep(50000);
+                    sleep(2);
                 }
+                gesture_prediction(TESTSET_SVM,DATASET_SVM_MODEL,OUTPUT_PROBABILISTIC_SVM);
                 break;
             }
             case 2:
@@ -126,27 +126,45 @@ int main(int argc, char* argv[]){
               std::remove("../dataset/testset");
               std::remove("../dataset/prob.khr");
               std::remove("../input/sentence-hr.txt");
-              i=1;
+              img_number=1;
+              int use_dataset;
+              std::cout << "Quale modello uso? (0-vecchio 1-nuovo)\n";
+              std::cin >>use_dataset;
               std::cout << "Quante dita? (0-5)" << std::endl;
-              std::cin >> j;
-              while(i<11){
+              std::cin >> scegli_dataset;
+              while(img_number<31){
                   //system(COMMAND_WEB_VISUALIZER);
-                  simulation(kinect, dataset, i, 1, j);
-                  i++;
+                  simulation(kinect, dataset, img_number, 1, scegli_dataset, 1);
+                  img_number++;
               }
+              if (use_dataset==0){
+                std::cout<<"use_dataset"<<use_dataset<<std::endl;
+                gesture_prediction(TESTSET_SVM,DATASET_SVM_MODEL,OUTPUT_PROBABILISTIC_SVM);
+              }
+              else{
+              std::cout<<"use_dataset"<<use_dataset<<std::endl;
+              gesture_prediction(TESTSET_SVM,DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
+            }
                 break;
             case 5:
               std::remove("../dataset/testset.json");
               std::remove("../dataset/testset");
               std::remove("../dataset/prob.khr");
               std::remove("../input/sentence-hr.txt");
-
-              for (j=0; j<6; j++){
-                for(i=1; i<11; i++){
-                    training(kinect, dataset, i, 1, j);
+              scegli_dataset=0;
+              for (scegli_dataset=0; scegli_dataset<6; scegli_dataset++){
+                for(img_number=1; img_number<31; img_number++){
+                    training(kinect, dataset, img_number, 1, scegli_dataset);
+                    //sleep(1);
                 }
               }
               train(TESTSET_SVM,DATASET_SVM_MODEL_NEW);
+              std::cout << "Vuoi testare il modello appena creato? (y/n)\n(Verranno usate le stesse features usate nell'addestramento)" << '\n';
+              char testare;
+              std::cin >> testare;
+              if (testare=='y' || testare=='Y'){
+                gesture_prediction(TESTSET_SVM,DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
+              }
                 break;
             case 9:
                 exit(1);

@@ -89,33 +89,39 @@ cv::Mat KinectDevice::shot(){
     return frame;
 }
 
-void KinectDevice::jpgToFrame (int index, int mode, int n_dita){
+void KinectDevice::jpgToFrame (int index, int mode, int n_dita, int test_use){
 cv::Mat image;
-if (mode==0){
+if (mode==0){           //simulation
   const char* path[4];
   path[0]=IMMAGINE_0;
   path[1]=IMMAGINE_1;
   path[2]=IMMAGINE_2;
   path[3]=IMMAGINE_3;
+  std::cout << "path: " << path[index] << '\n';
   image = cv::imread(path[index], 0 );
 
-} else{
+} else{               //test testset oppure create model
     char integer_string[20];
   	sprintf(integer_string, "%d", n_dita);
-  	char percorso[50] = "../testset/";
+    char percorso[50] ="";
+    //if (test_use==1)
+  	// strcat(percorso, "../testset/");
+    //else
+    	strcat(percorso, "../dataset/dx/");
     strcat(percorso, integer_string);
-    strcat(percorso, "/OK/"); //uso le 10 immagini scelte dal testset
-    //strcat(percorso, "/");  //uso tutte le immagini del testset
+    //strcat(percorso, "/OK/"); //uso le 10 immagini scelte dal testset
+    strcat(percorso, "/");  //uso tutte le immagini del testset
     strcat(percorso, integer_string);
     strcat(percorso, "_");
     sprintf(integer_string, "%d", index);
     strcat(percorso, integer_string);
     strcat(percorso, ".tif");
+    std::cout << "path: " << percorso << '\n';
     image = cv::imread(percorso, 0 );
 }
 image.convertTo( frame, CV_8UC1, scaleFactor );
 frame=image;
-im2bw();
+//im2bw();
 }
 
 cv::Size KinectDevice::setFrameSize(){
@@ -129,7 +135,7 @@ cv::Size KinectDevice::setFrameSize(){
 
 cv::Mat KinectDevice::edge(){
     cv::Mat edged = frame.clone();
-    //cv::GaussianBlur(edged, edged, cv::Size(7,7), 1.5, 1.5);
+    cv::GaussianBlur(edged, edged, cv::Size(7,7), 1.5, 1.5);
     cv::Canny(edged, edged, 0, 120, 3);
     //cv::imshow("Edged", edged);
     //cv::waitKey(20000);
@@ -187,6 +193,7 @@ void KinectDevice::drawContourns(){
     // Show in a window
     cv::namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
     cv::imshow( "Contours", drawing );
+    cv::waitKey(2000);
 }
 
 void KinectDevice::setHandFeatures(){
