@@ -31,7 +31,7 @@ void simulation(KinectDevice& kinect, Dataset& dataset, int img_number, int mode
     //estraggo contours e hierarchy
 
     // Edge già estratto nel dataset di prova
-    kinect.edge();
+    //kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();
@@ -50,7 +50,7 @@ void training(KinectDevice& kinect, Dataset& dataset, int img_number, int mode, 
     //estraggo contours e hierarchy
 
     // Edge già estratto nel dataset di prova
-    kinect.edge();
+    //kinect.edge();
     kinect.extractCountours();
 
     kinect.setHandFeatures();
@@ -166,6 +166,10 @@ int main(int argc, char* argv[]){
                 gesture_prediction(TESTSET_SVM,DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
               }
                 break;
+            case 6:
+              train("../dataset/dataset", DATASET_SVM_MODEL_NEW);
+              gesture_prediction("../dataset/dataset",DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
+            break;
             case 9:
                 exit(1);
             default:

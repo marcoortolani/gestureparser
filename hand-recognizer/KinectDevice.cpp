@@ -104,10 +104,11 @@ if (mode==0){           //simulation
     char integer_string[20];
   	sprintf(integer_string, "%d", n_dita);
     char percorso[50] ="";
+    char percorso_est[50] ="";
     //if (test_use==1)
   	// strcat(percorso, "../testset/");
     //else
-    	strcat(percorso, "../dataset/dx/");
+    strcat(percorso, "../dataset/dx/");
     strcat(percorso, integer_string);
     //strcat(percorso, "/OK/"); //uso le 10 immagini scelte dal testset
     strcat(percorso, "/");  //uso tutte le immagini del testset
@@ -115,11 +116,18 @@ if (mode==0){           //simulation
     strcat(percorso, "_");
     sprintf(integer_string, "%d", index);
     strcat(percorso, integer_string);
-    strcat(percorso, ".tif");
-    std::cout << "path: " << percorso << '\n';
-    image = cv::imread(percorso, 0 );
+    strcat(percorso_est, percorso);
+    strcat(percorso_est, ".tif");
+    std::cout << "Reading in path: " << percorso_est << '\n';
+    image = cv::imread(percorso_est, 0);
+    // //per salvare le immagini in jpg senza compressione
+    // strcat(percorso, ".jpg");
+    // std::cout << "Whrite in path: " << percorso << '\n';
+    // std::vector<int> parametri;
+    // parametri.push_back(100);
+    // cv::imwrite(percorso, image, parametri);
 }
-image.convertTo( frame, CV_8UC1, scaleFactor );
+//image.convertTo( frame, CV_8UC1, scaleFactor );
 frame=image;
 //im2bw();
 }
@@ -249,7 +257,7 @@ std::vector<double> KinectDevice::findAngle(){
         cv::Point V;
         V.x = Mrot.at<double>(0, 0) * Pt.x + Mrot.at<double>(0, 1) * Pt.y;
         V.y = Mrot.at<double>(1, 0) * Pt.x + Mrot.at<double>(1, 1) * Pt.y;
-        temp.at(i) = (atan2d360(V) - principal);
+        temp.at(i) = floor(atan2d360(V) - principal);
     }
     angolo = temp;
     return angolo;

@@ -29,7 +29,7 @@ int train(const char* input_file_name,const char* model_file_name)
   param.svm_type = C_SVC;
 	param.kernel_type = RBF;
 	param.degree = 3;
-	param.gamma = 3.05176e-05;	// 1/num_features
+	param.gamma = 4.62962963e-05;	// 1/num_features
 	param.coef0 = 0;
 	param.nu = 0.5;
 	param.cache_size = 100;
