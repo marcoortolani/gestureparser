@@ -159,6 +159,7 @@ void Dataset::saveElement(nlohmann::json sample, cv::Mat img){
 }
 
 void Dataset::saveGesture( int n_dita, nlohmann::json jline,const char* filename){
+    float somma_righe=0;
     std::ofstream test;
     std::ofstream testjson;
     test.open(filename,std::ofstream::out | std::ofstream::app);
@@ -167,11 +168,21 @@ void Dataset::saveGesture( int n_dita, nlohmann::json jline,const char* filename
     testjson.open(ftestjson.c_str(),std::ofstream::out | std::ofstream::app);
     testjson<<jline;
     testjson.close();
-    test <<n_dita<<" ";
-    for (int i = 0; i < jline["samples"].size(); i++) {
-        test<<i+1<<":"<<jline["samples"].at(i)<<" ";
+    if ((float)jline["centroide_x"] < 0 || (float)jline["centroide_y"] < 0){
+      test << 0 << std::endl;
+    } else{
+      for (int i = 0; i < (int) jline["samples"].size(); i++) {
+          somma_righe=somma_righe+((float)jline["samples"].at(i));
+      }
+      test << ceil(somma_righe) << " " << n_dita<<" ";
+      for (int i = 0; i < (int) jline["samples"].size(); i++) {
+        //if ((float)jline["samples"].at(i) < 10000){
+          test<<i+1<<":"<<jline["samples"].at(i)<<" ";
+        // } else
+        //   test<<i+1<<":"<<0.0<<" ";
+      }
+      test << std::endl;
     }
-    test << std::endl;
     test.close();
 }
 
@@ -184,7 +195,7 @@ void Dataset::genSVMDataset(){
     while(std::getline(rdfile,sline)){
         jline = json::parse(sline);
         dfile << jline["label"]<<" ";
-        for (int i = 0; i < jline["samples"].size(); i++) {
+        for (int i = 0; i < (int) jline["samples"].size(); i++) {
             dfile<<i+1<<":"<<jline["samples"].at(i)<<" ";
         }
         dfile << std::endl;

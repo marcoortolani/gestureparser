@@ -24,12 +24,12 @@ int cross_validation;
 int nr_fold;
 
 //svm-train
-int train(const char* input_file_name,const char* model_file_name)
+int train(const char* input_file_name,const char* model_file_name, int cross_v)
 {
   param.svm_type = C_SVC;
 	param.kernel_type = RBF;
 	param.degree = 3;
-	param.gamma = 4.62962963e-05;	// 1/num_features
+	param.gamma = 2.7778e-5;	// 1/num_features
 	param.coef0 = 0;
 	param.nu = 0.5;
 	param.cache_size = 100;
@@ -41,7 +41,7 @@ int train(const char* input_file_name,const char* model_file_name)
 	param.nr_weight = 0;
 	param.weight_label = NULL;
 	param.weight = NULL;
-	cross_validation = 0;
+	cross_validation = cross_v;
 	const char *error_msg;
 
 	read_problem(input_file_name);
@@ -55,6 +55,7 @@ int train(const char* input_file_name,const char* model_file_name)
 
 	if(cross_validation)
 	{
+    nr_fold = 20;
 		do_cross_validation();
 	}
 	else

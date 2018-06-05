@@ -117,7 +117,7 @@ if (mode==0){           //simulation
     sprintf(integer_string, "%d", index);
     strcat(percorso, integer_string);
     strcat(percorso_est, percorso);
-    strcat(percorso_est, ".tif");
+    strcat(percorso_est, ".bmp");
     std::cout << "Reading in path: " << percorso_est << '\n';
     image = cv::imread(percorso_est, 0);
     // //per salvare le immagini in jpg senza compressione

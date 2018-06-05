@@ -89,6 +89,8 @@ public:
         datas["angolo"] = angolo;
         datas["distanza"] = distanza;
         datas["samples"] = features;
+        datas["centroide_x"] =centroide.x;
+        datas["centroide_y"] =centroide.y;
         std::ofstream jf;
         jf.open(DATA_JSON_PATH);
         jf<<datas;
