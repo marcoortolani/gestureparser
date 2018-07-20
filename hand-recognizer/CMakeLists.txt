@@ -1,1 +1,1 @@
-add_library(kinectCore Dataset.cpp InputGenerator.cpp KinectDevice.cpp)
+add_library(kinectCore Dataset.cpp InputGenerator.cpp KinectDevice.cpp FeaturesExtraction.cpp)

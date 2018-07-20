@@ -11,6 +11,7 @@
 #include "KinectDevice.hpp"
 #include "Dataset.hpp"
 #include "InputGenerator.hpp"
+#include "FeaturesExtraction.hpp"
 #define ONLY_CONTOURN 1
 #define COMMAND_WEB_VISUALIZER "open file:///web/index.html"
 
