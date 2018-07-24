@@ -34,7 +34,7 @@ bool FeaturesExtraction::acquireframe(int dita, int index){
   sprintf(integer_string, "%d", index);
   strcat(percorso, integer_string);
   strcat(percorso, ".bmp");
-  std::cout << percorso << '\n';
+  //std::cout << percorso << '\n';
   try{
     image= cv::imread(percorso, 0);
     this->frame=image;
@@ -100,13 +100,14 @@ void FeaturesExtraction::gen_distances(){
           index_max_value=i;
         }
     }
-    //salvo le distanze a partire dalla distanza maggiore
-    for (int i=index_max_value; i<(int)temp_distances.size(); i++){
-      this->distances.push_back(temp_distances.at(i));
-    }
-    for (int i=0; i<index_max_value; i++){
-      this->distances.push_back(temp_distances.at(i));
-    }
+    // //salvo le distanze a partire dalla distanza maggiore
+    // for (int i=index_max_value; i<(int)temp_distances.size(); i++){
+    //   this->distances.push_back(temp_distances.at(i));
+    // }
+    // for (int i=0; i<index_max_value; i++){
+    //   this->distances.push_back(temp_distances.at(i));
+    // }
+  this->distances=temp_distances;
 }
 
 std::vector<int> FeaturesExtraction::find(std::vector<int> vec, int value){
@@ -126,7 +127,7 @@ void FeaturesExtraction::sample_features(){
     indexes.push_back(i);
   }
   costante=(float)(200/(float)distances.size());  //il vettore finale sarà di 200 campioni
-  std::cout << "costante= " << costante <<'\n';
+  //std::cout << "costante= " << costante <<'\n';
   for (int i=0; i<=(int)distances.size(); i++){
     indexes.at(i)=ceil(indexes.at(i)*costante);
   }

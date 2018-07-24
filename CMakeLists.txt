@@ -48,6 +48,10 @@ target_link_libraries(gestrec svm kinectCore ${OpenCV_LIBS})
 add_executable(train train-main.cpp)
 target_link_libraries(train svm kinectCore ${OpenCV_LIBS})
 
+# Temporarily build another executable for the train-testing
+add_executable(train-test training-testing.cpp)
+target_link_libraries(train-test svm kinectCore ${OpenCV_LIBS})
+
 ################################
 # Testing
 ################################
