@@ -63,7 +63,7 @@ void exit_input_error(int line_num)
 	exit(1);
 }
 
-void predict(FILE *input, FILE *output)
+double predict(FILE *input, FILE *output)
 {
 	int correct = 0;
 	int total = 0;
@@ -175,9 +175,10 @@ void predict(FILE *input, FILE *output)
 			(double)correct/total*100,correct,total);
 	if(predict_probability)
 		free(prob_estimates);
+	return ((double)correct/total*100);
 }
 
-int gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, int predict_probability = 1)
+double gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, int predict_probability = 1)
 {
 	FILE *input, *output;
 	input = fopen(ifilename,"r");
@@ -214,14 +215,14 @@ int gesture_prediction(const char* ifilename,const char* modelfile, const char* 
 		if(svm_check_probability_model(model)!=0)
 			info("Model supports probability estimates, but disabled in prediction.\n");
 	}
-
-	predict(input,output);
+	double accuracy;
+	accuracy=predict(input,output);
 	svm_free_and_destroy_model(&model);
 	free(x);
 	free(line);
 	fclose(input);
 	fclose(output);
-	return 0;
+	return accuracy;
 }
 
 /*

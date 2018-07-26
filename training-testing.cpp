@@ -15,44 +15,58 @@ std::vector<int> permutateIndexes() {
   std::vector<int> myvector;
   for (int i=1; i<31; i++) myvector.push_back(i);
   std::random_shuffle ( myvector.begin(), myvector.end() );
+  std::cout << "Indici riordinati: " << '\n';
+  for (int i=1; i<31; i++) std::cout << myvector.at(i-1) << " ";
+  std::cout << '\n';
   return myvector;
 }
 
 int main() {
+  FeaturesExtraction* featureextr;
+  std::vector<double> accuracy;
   std::vector<int> indici;
   int n_addestramento;
   float perc_add;
-  std::cout << "Quante features uso per addestrare? (in percentuale)" << '\n';
+  std::cout << "Quante features per classe uso per addestrare? (in percentuale)" << '\n';
   std::cin>>perc_add;
   perc_add=floor((perc_add/100)*30);
   n_addestramento=(int) perc_add;
+  std::cout << "Verranno usate " << n_addestramento << " features per addestrare il modello e " << 30-n_addestramento << " per testarlo." << '\n';
   if(n_addestramento<30){
     for (int k=0; k<5; k++){
+      std::cout << "\nProva " << k+1 << '\n';
       indici=permutateIndexes();
       std::ofstream file;
       file.open("../dataset/feature_mauro");
       for (int i=0; i<6; i++){
         for (int j=0; j<n_addestramento; j++){
-          FeaturesExtraction featureextr;
-          featureextr.genFeatures(i, indici.at(j), file);
+          featureextr= new FeaturesExtraction();
+          featureextr->genFeatures(i, indici.at(j), file);
+          delete featureextr;
         }
       }
       file.close();
-      std::cout << "\nGenerate le features per addestrare il modello" << '\n';
+      std::cout << "Generate le features per addestrare il modello" << '\n';
       train("../dataset/feature_mauro", "../dataset/dataset_new.model",0);
-      std::cout << "\nModello generato" << '\n';
+      std::cout << "Modello generato" << '\n';
       file.open("../dataset/feature_mauro");
       for (int i=0; i<6; i++){
         for (int j=n_addestramento; j<30; j++){
-          FeaturesExtraction featureextr;
-          featureextr.genFeatures(i, indici.at(j), file);
+          featureextr= new FeaturesExtraction();
+          featureextr->genFeatures(i, indici.at(j), file);
+          delete featureextr;
         }
       }
       file.close();
-      std::cout << "Prova " << k+1 << '\n';
-      gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
-      sleep(0.5);
+      accuracy.push_back(gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr"));
+      sleep(1);
     }
+    double mean_acc=0.0;
+    for (int k=0; k<5; k++){
+      mean_acc=mean_acc+accuracy.at(k);
+    }
+    mean_acc=mean_acc/5;
+    std::cout << "\nMean Accuracy: " << mean_acc <<'\n';
   } else{
     std::cerr << "Non valido" << '\n';
   }
