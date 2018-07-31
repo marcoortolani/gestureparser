@@ -1,1 +1,2 @@
 Query decrease status ;
+Set light high decrease ;
