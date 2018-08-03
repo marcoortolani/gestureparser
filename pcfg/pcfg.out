@@ -1,0 +1,8 @@
+S
+S --> S1 Z [1]
+S1 --> Q T1 [1]
+Z --> ; [1]
+Q --> Query [1]
+T1 --> B T [1]
+B --> energymeter [1]
+T --> status [1]
