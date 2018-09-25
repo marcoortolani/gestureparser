@@ -22,10 +22,11 @@ int main() {
       case 1:{
           std::ofstream file;
           file.open("../dataset/feature_mauro");
-          for (int i=0; i<6; i++){
+          for (int user=1; user<5; user++)
+          for (int i=1; i<12; i++){
             for (int j=1; j<31; j++){
               FeaturesExtraction featureextr;
-              featureextr.genFeatures(i, j, file);
+              featureextr.genFeatures(user,i, j, file);
             }
           }
           file.close();

@@ -35,7 +35,7 @@ public:
     bool containsSymbol(const Symbol &symbol) const {
         return external_to_internal.find(symbol) != external_to_internal.end();
     }
-    
+
     /// Returns true, if the given ID does exist in the signature
     bool containsID(const ID & id) const {
         return id < number_of_entries();

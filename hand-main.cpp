@@ -170,6 +170,10 @@ int main(int argc, char* argv[]){
               train("../dataset/dataset", DATASET_SVM_MODEL_NEW,0);
               gesture_prediction("../dataset/dataset",DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
             break;
+            case 7:     //nuovo dataset unipd
+              train("../dataset/dataset-mauro-unipd",DATASET_SVM_MODEL_NEW,0);
+              gesture_prediction("../dataset/testset-mauro-unipd",DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
+            break;
             case 9:
                 exit(1);
             default:

@@ -17,13 +17,13 @@
 
 class FeaturesExtraction{
   public:
-    bool acquireframe(int dita, int index);
+    bool acquireframe(int user, int dita, int index);
     cv::Mat edge();
     cv::Mat im2bw();
     void setHandProperties();
     void gen_distances();
     void sample_features();
-    void genFeatures(int dita, int index, std::ofstream &file);
+    void genFeatures(int user, int dita, int index, std::ofstream &file);
   private:
     std::vector<int> find(std::vector<int> vec, int value);
     cv::Mat frame;

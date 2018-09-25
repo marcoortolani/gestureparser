@@ -48,7 +48,7 @@ public:
 //        	std::cout << "PCFGRule: Rule for '" << *this << "' could not be created.";
         }
     }
-    
+
 
     //////////////////////////////////////////////////////////////////////////
     // Getter & Setter
@@ -68,7 +68,7 @@ public:
     const Probability& get_prob() const {
         return prob;
     }
-    
+
     /// set the probability of this rule
     void set_probability(Probability new_prob) {
         prob = new_prob;
@@ -122,13 +122,13 @@ public:
     operator bool() const {
         return valid;
     }
-    
+
     struct ProbabilityComparator {
         inline bool operator()(const PCFGRule &  left, const PCFGRule & right) {
             return left.get_prob() < right.get_prob();
         }
     };
-    
+
 
 private:
     // parses a string like "S -> NP VP [1.0]"
@@ -183,7 +183,7 @@ private:
 
     }
 
-    
+
 public:
     class Hasher {
     public:
@@ -198,7 +198,7 @@ public:
             boost::hash_combine(h, k.get_prob());
             return h;
         }
-        
+
     private:
         // Hashfunction for an integer. Code from: http://burtleburtle.net/bob/hash/integer.html
         uint32_t hash_int(uint32_t a) const {

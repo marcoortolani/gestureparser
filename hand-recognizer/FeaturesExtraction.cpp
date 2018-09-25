@@ -1,7 +1,7 @@
 #include "FeaturesExtraction.hpp"
 
-void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
-  acquireframe(dita, index);
+void FeaturesExtraction::genFeatures(int user, int dita, int index, std::ofstream &file){
+  acquireframe(user, dita, index);
   //std::cout << "acquisico frame" << '\n';
   //im2bw();
   //std::cout << "bianco e nero" << '\n';
@@ -21,19 +21,20 @@ void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
   file << "\n";
 }
 
-bool FeaturesExtraction::acquireframe(int dita, int index){
+bool FeaturesExtraction::acquireframe(int user, int dita, int index){
   cv::Mat image;
   char integer_string[20]="";
   char percorso[50]="";
+  strcat(percorso, "../dataset_new/S");
+  sprintf(integer_string, "%d", user);
+  strcat(percorso, integer_string);
+  strcat(percorso, "/G");
   sprintf(integer_string, "%d", dita);
-  strcat(percorso, "../dataset/dx/");
   strcat(percorso, integer_string);
   strcat(percorso, "/");
-  strcat(percorso, integer_string);
-  strcat(percorso, "_");
   sprintf(integer_string, "%d", index);
   strcat(percorso, integer_string);
-  strcat(percorso, ".bmp");
+  strcat(percorso, "-cont.bmp");
   //std::cout << percorso << '\n';
   try{
     image= cv::imread(percorso, 0);
@@ -82,6 +83,27 @@ void FeaturesExtraction::setHandProperties(){
     }
     this->max_area_contour=contours.at(index_max_area);
 }
+// massimo perimetro
+/*
+void FeaturesExtraction::setHandProperties(int gesture, int image){
+    cv::Moments moment;
+    int index_max_area, index_max_perimetro, temp_size, size_;
+    findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));
+    index_max_area = 0;
+    size_=0;
+    temp_size=0;
+    for(int i=0; i< (int)contours.size(); i++){
+      temp_size=contours.at(i).size();
+      if(temp_size>size_)
+        index_max_perimetro=i;
+      }
+      moment = moments((cv::Mat)contours[index_max_perimetro]);
+      this->centroide_x = round(moment.m10/moment.m00);
+      this->centroide_y = round(moment.m01/moment.m00);
+      this->area = moment.m00;
+      this->max_area_contour=contours.at(index_max_perimetro);
+}
+*/
 
 void FeaturesExtraction::gen_distances(){
     float temp_max_value=0;
