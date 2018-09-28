@@ -10,12 +10,21 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenCV 3.0.0 REQUIRED)
 
-MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
-MESSAGE(STATUS "LINK LIBRARIES ${OpenCV_LIBS}")
+# MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
+# MESSAGE(STATUS "LINK LIBRARIES ${OpenCV_LIBS}")
+
+FIND_PACKAGE( Boost 1.40 COMPONENTS system filesystem REQUIRED )
+# INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+#
+# ADD_EXECUTABLE( anyExecutable myMain.cpp )
+#
+# TARGET_LINK_LIBRARIES( anyExecutable LINK_PUBLIC ${Boost_LIBRARIES} )
 
 ################################
 # Normal Libraries & Executables
 ################################
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 include_directories(libsvm)
 include_directories(hand-recognizer)
 
