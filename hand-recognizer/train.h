@@ -24,7 +24,7 @@ int cross_validation;
 int nr_fold;
 
 //svm-train
-int train(const char* input_file_name,const char* model_file_name, int cross_v)
+int train(const char* input_file_name,const char* model_file_name, int cross_v, int fold)
 {
   param.svm_type = C_SVC;
 	param.kernel_type = RBF;
@@ -55,7 +55,7 @@ int train(const char* input_file_name,const char* model_file_name, int cross_v)
 
 	if(cross_validation)
 	{
-    nr_fold = 20;
+    nr_fold = fold;
 		do_cross_validation();
 	}
 	else

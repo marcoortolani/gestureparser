@@ -158,7 +158,7 @@ int main(int argc, char* argv[]){
                     //sleep(1);
                 }
               }
-              train(TESTSET_SVM,DATASET_SVM_MODEL_NEW,0);
+              train(TESTSET_SVM,DATASET_SVM_MODEL_NEW,0,20);
               std::cout << "Vuoi testare il modello appena creato? (y/n)\n(Verranno usate le stesse features usate nell'addestramento)" << '\n';
               char testare;
               std::cin >> testare;
@@ -167,11 +167,11 @@ int main(int argc, char* argv[]){
               }
                 break;
             case 6:
-              train("../dataset/dataset", DATASET_SVM_MODEL_NEW,0);
+              train("../dataset/dataset", DATASET_SVM_MODEL_NEW,0,20);
               gesture_prediction("../dataset/dataset",DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
             break;
             case 7:     //nuovo dataset unipd
-              train("../dataset/dataset-mauro-unipd",DATASET_SVM_MODEL_NEW,0);
+              train("../dataset/dataset-mauro-unipd",DATASET_SVM_MODEL_NEW,0, 20);
               gesture_prediction("../dataset/testset-mauro-unipd",DATASET_SVM_MODEL_NEW,OUTPUT_PROBABILISTIC_SVM);
             break;
             case 9:

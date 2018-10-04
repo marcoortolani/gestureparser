@@ -1,13 +1,13 @@
 #include "FeaturesExtraction.hpp"
 
-void FeaturesExtraction::genFeatures(int user, int dita, int index, std::ofstream &file){
-  acquireframe(user, dita, index);
+void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
+  acquireframe(dita, index);
   //std::cout << "acquisico frame" << '\n';
   //im2bw();
   //std::cout << "bianco e nero" << '\n';
   //edge();
   //std::cout << "edge" << '\n';
-  setHandProperties();
+  setHandProperties(true);
   //std::cout << "setHandProperties" << '\n';
   gen_distances();
   //std::cout << "gen_distances" << '\n';
@@ -21,14 +21,11 @@ void FeaturesExtraction::genFeatures(int user, int dita, int index, std::ofstrea
   file << "\n";
 }
 
-bool FeaturesExtraction::acquireframe(int user, int dita, int index){
+bool FeaturesExtraction::acquireframe(int dita, int index){
   cv::Mat image;
   char integer_string[20]="";
   char percorso[50]="";
-  strcat(percorso, "../dataset_new/S");
-  sprintf(integer_string, "%d", user);
-  strcat(percorso, integer_string);
-  strcat(percorso, "/G");
+  strcat(percorso, "../DatasetNewRipulito/G");
   sprintf(integer_string, "%d", dita);
   strcat(percorso, integer_string);
   strcat(percorso, "/");
@@ -67,68 +64,68 @@ cv::Mat FeaturesExtraction::im2bw(){
 }
 
 
-void FeaturesExtraction::setHandProperties(){
+void FeaturesExtraction::setHandProperties(bool perimetro){
     cv::Moments moment;
-    int index_max_area;
-    findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));
-    index_max_area = 0;
-    for(int i=0; i< (int)contours.size(); i++){
-      moment = moments((cv::Mat)contours[i]);
-      if(moments((cv::Mat)contours[index_max_area]).m00 <= moment.m00){
-          index_max_area = i;
-          this->centroide_x = round(moment.m10/moment.m00);
-          this->centroide_y = round(moment.m01/moment.m00);
-          this->area = moment.m00;
-      }
-    }
-    this->max_area_contour=contours.at(index_max_area);
-}
-// massimo perimetro
-/*
-void FeaturesExtraction::setHandProperties(int gesture, int image){
-    cv::Moments moment;
-    int index_max_area, index_max_perimetro, temp_size, size_;
-    findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));
+    int index_max_area, index_max_perimetro, temp_size, size_;;
+    findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_NONE,cv::Point(0,0));
+    //findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));   //vecchia versione (Lanza), faceva una approssimazione sui bordi
     index_max_area = 0;
     size_=0;
     temp_size=0;
-    for(int i=0; i< (int)contours.size(); i++){
-      temp_size=contours.at(i).size();
-      if(temp_size>size_)
-        index_max_perimetro=i;
+    if (perimetro){
+      for(int i=0; i< (int)contours.size(); i++){
+        temp_size=contours.at(i).size();
+        if(temp_size>size_)
+          index_max_perimetro=i;
       }
       moment = moments((cv::Mat)contours[index_max_perimetro]);
       this->centroide_x = round(moment.m10/moment.m00);
       this->centroide_y = round(moment.m01/moment.m00);
       this->area = moment.m00;
       this->max_area_contour=contours.at(index_max_perimetro);
+    } else {
+      for(int i=0; i< (int)contours.size(); i++){
+        moment = moments((cv::Mat)contours[i]);
+        if(moments((cv::Mat)contours[index_max_area]).m00 <= moment.m00){
+            index_max_area = i;
+            this->centroide_x = round(moment.m10/moment.m00);
+            this->centroide_y = round(moment.m01/moment.m00);
+            this->area = moment.m00;
+            this->max_area_contour=contours.at(index_max_area);
+        }
+      }
+    }
+
 }
-*/
 
 void FeaturesExtraction::gen_distances(){
     float temp_max_value=0;
-    int index_max_value;
-    float x_diff, y_diff, temp_dist;
+    float x_diff, y_diff, temp_dist, index_lower_point;
+    int min_x = 9999;
+    int min_y=0;
     std::vector<float> temp_distances;
     for(int i = 0; i < (int) this->max_area_contour.size() ; i++){
-        x_diff=this->max_area_contour.at(i).x - centroide_x;
-        y_diff=this->max_area_contour.at(i).y - centroide_y;
-        x_diff=x_diff*x_diff;
-        y_diff=y_diff*y_diff;
-        temp_dist=sqrt(x_diff+y_diff);
-        temp_distances.push_back(temp_dist);
-        if (temp_dist>temp_max_value){
-          temp_max_value=temp_dist;
-          index_max_value=i;
-        }
+      if ((max_area_contour.at(i).x < min_x) && (max_area_contour.at(i).y > min_y)){
+        index_lower_point=i;
+        //std::cout << i << '\n';
+      }
+      x_diff=this->max_area_contour.at(i).x - centroide_x;
+      y_diff=this->max_area_contour.at(i).y - centroide_y;
+      x_diff=x_diff*x_diff;
+      y_diff=y_diff*y_diff;
+      temp_dist=sqrt(x_diff+y_diff);
+      temp_distances.push_back(temp_dist);
+      if (temp_dist>temp_max_value){
+        temp_max_value=temp_dist;
+      }
     }
-    // //salvo le distanze a partire dalla distanza maggiore
-    // for (int i=index_max_value; i<(int)temp_distances.size(); i++){
-    //   this->distances.push_back(temp_distances.at(i));
-    // }
-    // for (int i=0; i<index_max_value; i++){
-    //   this->distances.push_back(temp_distances.at(i));
-    // }
+    //salvo le distanze a partire dal punto in basso a sinistra
+    for (int i=index_lower_point; i<(int)temp_distances.size(); i++){
+      this->distances.push_back(temp_distances.at(i));
+    }
+    for (int i=0; i<index_lower_point; i++){
+      this->distances.push_back(temp_distances.at(i));
+    }
   this->distances=temp_distances;
 }
 

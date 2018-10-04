@@ -92,14 +92,14 @@ int main(int argc, char* argv[]) {
 
   // getMoments() ---> CORREGGERE
   std::vector<cv::Moments> tempMoments(contours.size());
-  for( int i = 0; i < contours.size(); i++ ){
+  for( int i = 0; i < (int) contours.size(); i++ ){
       tempMoments[i] = moments( contours[i], false );
   }
   mu = tempMoments;
 
   // getMassCenter() ---> CORREGGERE
   std::vector<cv::Point2f> tempPoints( contours.size() );
-  for( int i = 0; i < contours.size(); i++ ){
+  for( int i = 0; i < (int) contours.size(); i++ ){
       tempPoints[i] = cv::Point2f( mu[i].m10/mu[i].m00 , mu[i].m01/mu[i].m00 );
   }
   mc = tempPoints;
@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
   std::vector<cv::Point> src2(1);
   src2.insert(src2.end(),centroide);
 
-  for(int i = 0; i < contorno.size() ; i++){
+  for(int i = 0; i < (int) contorno.size() ; i++){
       std::vector<cv::Point> src1(1);
       src1.insert(src1.end(),contorno.at(i));
       tempDistanze.at(i) = cv::norm(src1,src2,cv::NORM_L2, cv::noArray());
@@ -150,7 +150,7 @@ int main(int argc, char* argv[]) {
   double principal;
   principal = atan2d360(Princ);
 
-  for (int i = 0 ; i < contorno.size() ; i++) {
+  for (int i = 0 ; i < (int) contorno.size() ; i++) {
       cv::Point Pt = contorno.at(i) - centroide;
       cv::Point V;
       V.x = Mrot.at<double>(0, 0) * Pt.x + Mrot.at<double>(0, 1) * Pt.y;

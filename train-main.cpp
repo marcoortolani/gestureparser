@@ -8,7 +8,7 @@ void print_menu(){
             <<"1) Genera le features dal dataset\n"
             <<"2) SVM train\n"
             <<"3) Cross Validation\n"
-            <<"4) Testa il modello\n\n"
+            <<"4) Testa il modello (col train-set)\n\n"
             <<"9) Exit\n\n"
             <<"Input: ";
 }
@@ -22,23 +22,25 @@ int main() {
       case 1:{
           std::ofstream file;
           file.open("../dataset/feature_mauro");
-          for (int user=1; user<5; user++)
           for (int i=1; i<12; i++){
-            for (int j=1; j<31; j++){
+            for (int j=1; j<51; j++){
               FeaturesExtraction featureextr;
-              featureextr.genFeatures(user,i, j, file);
+              featureextr.genFeatures(i, j, file);
             }
           }
           file.close();
           break;
       }
       case 2:{
-          train("../dataset/feature_mauro", "../dataset/dataset_new.model",0);
+          train("../dataset/feature_mauro", "../dataset/dataset_new.model",0,20);
           std::cout << "\nAddestrato con il file generato al puno 1" << '\n';
         break;
       }
       case 3:{
-          train("../dataset/feature_mauro", "../dataset/dataset_new.model",1);
+          int perc_add;
+          std::cout << "Quante features (in percentuale) uso per testare il modello?" << '\n';
+          std::cin>>perc_add;
+          train("../dataset/feature_mauro", "../dataset/dataset_new.model",1,perc_add);
           std::cout << "\nCross validation con il file generato al puno 1" << '\n';
         break;
       }

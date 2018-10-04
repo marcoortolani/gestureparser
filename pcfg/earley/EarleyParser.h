@@ -472,6 +472,7 @@ typename EarleyParser<T>::EarleySet EarleyParser<T>::predict(const EarleySet &in
             predicted_states.push_back(EarleyState<T>(rules[temp_rule_index], in_parse_column, 0));
             predicted_states.back().alpha() = Y_alpha*rules[temp_rule_index].weight();
             predicted_states.back().gamma() = rules[temp_rule_index].weight();
+            std::cout << j << " Forward Probability: " << predicted_states.back().alpha() << ", Inner Probability: "<< predicted_states.back().gamma() <<'\n';
         }
     }
 

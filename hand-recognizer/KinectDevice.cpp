@@ -171,7 +171,7 @@ void KinectDevice::extractCountours(){
 
 std::vector<cv::Moments> KinectDevice::getMoments(){
     std::vector<cv::Moments> temp(contours.size());
-    for( int i = 0; i < contours.size(); i++ ){
+    for( int i = 0; i < (int) contours.size(); i++ ){
         temp[i] = moments( contours[i], false );
     }
     mu = temp;
@@ -183,7 +183,7 @@ std::vector<cv::Point2f> KinectDevice::getMassCenter(){
         getMoments();
     }
     std::vector<cv::Point2f> temp( contours.size() );
-    for( int i = 0; i < contours.size(); i++ ){
+    for( int i = 0; i < (int) contours.size(); i++ ){
         temp[i] = cv::Point2f( mu[i].m10/mu[i].m00 , mu[i].m01/mu[i].m00 );
     }
     mc = temp;
@@ -194,7 +194,7 @@ void KinectDevice::drawContourns(){
     // Draw contours
     cv::Scalar color = cv::Scalar(240,128,30);
     cv::Mat drawing = cv::Mat::zeros( frame.size(), CV_8UC3 );
-    for( int i = 0; i< contours.size(); i++ ){
+    for( int i = 0; i< (int) contours.size(); i++ ){
         cv::drawContours( drawing, contours, i, color, 1, 1, hierarchy, 0, cv::Point());
     }
 

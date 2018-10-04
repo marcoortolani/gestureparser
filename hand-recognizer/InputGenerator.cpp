@@ -44,7 +44,7 @@ void InputGenerator::parse(const char* filename){
 }
 
 void InputGenerator::RemedialLikehoodController(const char* PProbability, const char* SVMProbability){
-    int index = -1;
+    int index;
     int tok = 0;
     int l_list = 14;
     double r[14] = {0.0};

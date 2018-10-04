@@ -27,7 +27,7 @@ int main() {
   std::vector<int> indici;
   int n_addestramento;
   float perc_add;
-  std::cout << "Quante features per classe uso per addestrare? (in percentuale)" << '\n';
+  std::cout << "Quante features per classe uso per testare? (in percentuale)" << '\n';
   std::cin>>perc_add;
   perc_add=floor((perc_add/100)*30);
   n_addestramento=(int) perc_add;
@@ -41,19 +41,19 @@ int main() {
       for (int i=0; i<6; i++){
         for (int j=0; j<n_addestramento; j++){
           featureextr= new FeaturesExtraction();
-          featureextr->genFeatures(1, i, indici.at(j), file);
+          featureextr->genFeatures(i, indici.at(j), file);
           delete featureextr;
         }
       }
       file.close();
       std::cout << "Generate le features per addestrare il modello" << '\n';
-      train("../dataset/feature_mauro", "../dataset/dataset_new.model",0);
+      train("../dataset/feature_mauro", "../dataset/dataset_new.model",0,20);
       std::cout << "Modello generato" << '\n';
       file.open("../dataset/feature_mauro");
       for (int i=0; i<6; i++){
         for (int j=n_addestramento; j<30; j++){
           featureextr= new FeaturesExtraction();
-          featureextr->genFeatures(1, i, indici.at(j), file);
+          featureextr->genFeatures(i, indici.at(j), file);
           delete featureextr;
         }
       }
