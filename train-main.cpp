@@ -23,7 +23,7 @@ int main() {
           std::ofstream file;
           file.open("../dataset/feature_mauro");
           for (int i=1; i<12; i++){
-            for (int j=1; j<51; j++){
+            for (int j=1; j<101; j++){
               FeaturesExtraction featureextr;
               featureextr.genFeatures(i, j, file);
             }

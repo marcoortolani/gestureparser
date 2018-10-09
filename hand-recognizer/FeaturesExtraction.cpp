@@ -7,7 +7,7 @@ void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
   //std::cout << "bianco e nero" << '\n';
   //edge();
   //std::cout << "edge" << '\n';
-  setHandProperties(true);
+  setHandProperties(false);
   //std::cout << "setHandProperties" << '\n';
   gen_distances();
   //std::cout << "gen_distances" << '\n';
@@ -25,7 +25,7 @@ bool FeaturesExtraction::acquireframe(int dita, int index){
   cv::Mat image;
   char integer_string[20]="";
   char percorso[50]="";
-  strcat(percorso, "../DatasetNewRipulito/G");
+  strcat(percorso, "../DatastNewNoEdge/G");
   sprintf(integer_string, "%d", dita);
   strcat(percorso, integer_string);
   strcat(percorso, "/");
