@@ -21,6 +21,27 @@ void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
   file << "\n";
 }
 
+void FeaturesExtraction::genFeatures_sporche(int user, int dita, int index, std::ofstream &file){
+  acquireframe_sporche(user, dita, index);
+  //std::cout << "acquisico frame" << '\n';
+  //im2bw();
+  //std::cout << "bianco e nero" << '\n';
+  //edge();
+  //std::cout << "edge" << '\n';
+  setHandProperties(false);
+  //std::cout << "setHandProperties" << '\n';
+  gen_distances();
+  //std::cout << "gen_distances" << '\n';
+  sample_features();
+  //std::cout << "sample_features" << '\n';
+  file<< dita << " ";
+  for (int i=0; i<(int)features.size(); i++){
+    //std::cout << i+1 << ":"<<features.at(i) << " ";
+    file << i+1 << ":"<<features.at(i) << " ";
+  }
+  file << "\n";
+}
+
 bool FeaturesExtraction::acquireframe(int dita, int index){
   cv::Mat image;
   char integer_string[20]="";
@@ -32,7 +53,29 @@ bool FeaturesExtraction::acquireframe(int dita, int index){
   sprintf(integer_string, "%d", index);
   strcat(percorso, integer_string);
   strcat(percorso, "-cont.bmp");
-  //std::cout << percorso << '\n';
+  std::cout << percorso << '\n';
+  try{
+    image= cv::imread(percorso, 0);
+    this->frame=image;
+    return true;
+  } catch(const std::exception& e){
+            std::cout << "Errore acquisizione immagine: "<<e.what()<< std::endl;
+            return false;
+          }
+}
+
+bool FeaturesExtraction::acquireframe_sporche(int user, int dita, int index){
+  cv::Mat image;
+  char integer_string[20]="";
+  char percorso[50]="";
+  strcat(percorso, "../dataset_new_seq/G");
+  sprintf(integer_string, "%d", dita);
+  strcat(percorso, integer_string);
+  strcat(percorso, "/");
+  sprintf(integer_string, "%d", index);
+  strcat(percorso, integer_string);
+  strcat(percorso, "-cont.bmp");
+  std::cout << percorso << '\n';
   try{
     image= cv::imread(percorso, 0);
     this->frame=image;

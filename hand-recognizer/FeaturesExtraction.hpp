@@ -18,12 +18,14 @@
 class FeaturesExtraction{
   public:
     bool acquireframe(int dita, int index);
+    bool acquireframe_sporche(int user, int dita, int index);
     cv::Mat edge();
     cv::Mat im2bw();
     void setHandProperties(bool perimetro);
     void gen_distances();
     void sample_features();
     void genFeatures(int dita, int index, std::ofstream &file);
+    void genFeatures_sporche(int user, int dita, int index, std::ofstream &file);
   private:
     std::vector<int> find(std::vector<int> vec, int value);
     cv::Mat frame;
