@@ -22,12 +22,15 @@ int main() {
     std::cin>>opt;
     switch (opt) {
       case 1:{
+          int approx;
+          std::cout << "Approssimare? \n 0) no \n 1) si" << '\n';
+          std::cin >> approx;
           std::ofstream file;
           file.open("../dataset/feature_mauro");
           for (int i=1; i<12; i++){
             for (int j=1; j<101; j++){
               FeaturesExtraction featureextr;
-              featureextr.genFeatures(i, j, file);
+              featureextr.genFeatures(i, j, file, approx);
             }
           }
           file.close();
@@ -57,7 +60,7 @@ int main() {
         file.open("../dataset/feature_mauro");
         for (int i=201; i<231; i++){
           FeaturesExtraction featureextr;
-          featureextr.genFeatures(1, i, file);
+          featureextr.genFeatures(1, i, file, 0);
         }
         file.close();
         gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");

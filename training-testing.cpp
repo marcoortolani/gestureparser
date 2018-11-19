@@ -41,7 +41,7 @@ int main() {
       for (int i=0; i<6; i++){
         for (int j=0; j<n_addestramento; j++){
           featureextr= new FeaturesExtraction();
-          featureextr->genFeatures(i, indici.at(j), file);
+          featureextr->genFeatures(i, indici.at(j), file, 0);
           delete featureextr;
         }
       }
@@ -53,7 +53,7 @@ int main() {
       for (int i=0; i<6; i++){
         for (int j=n_addestramento; j<30; j++){
           featureextr= new FeaturesExtraction();
-          featureextr->genFeatures(i, indici.at(j), file);
+          featureextr->genFeatures(i, indici.at(j), file, 0);
           delete featureextr;
         }
       }

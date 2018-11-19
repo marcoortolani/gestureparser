@@ -1,13 +1,13 @@
 #include "FeaturesExtraction.hpp"
 
-void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
+void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file, int approx){
   acquireframe(dita, index);
   //std::cout << "acquisico frame" << '\n';
   //im2bw();
   //std::cout << "bianco e nero" << '\n';
   //edge();
   //std::cout << "edge" << '\n';
-  setHandProperties(false);
+  setHandProperties(false, approx);
   //std::cout << "setHandProperties" << '\n';
   gen_distances();
   //std::cout << "gen_distances" << '\n';
@@ -28,7 +28,7 @@ void FeaturesExtraction::genFeatures_sporche(int user, int dita, int index, std:
   //std::cout << "bianco e nero" << '\n';
   //edge();
   //std::cout << "edge" << '\n';
-  setHandProperties(false);
+  setHandProperties(false, 0);
   //std::cout << "setHandProperties" << '\n';
   gen_distances();
   //std::cout << "gen_distances" << '\n';
@@ -107,11 +107,12 @@ cv::Mat FeaturesExtraction::im2bw(){
 }
 
 
-void FeaturesExtraction::setHandProperties(bool perimetro){
+void FeaturesExtraction::setHandProperties(bool perimetro, int approx){
     cv::Moments moment;
-    int index_max_area, index_max_perimetro, temp_size, size_;;
-    findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_NONE,cv::Point(0,0));
-    //findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));   //vecchia versione (Lanza), faceva una approssimazione sui bordi
+    int index_max_area, index_max_perimetro, temp_size, size_;
+    if (approx == 1){
+      findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));   //vecchia versione (Lanza), faceva una approssimazione sui bordi
+    } else findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_NONE,cv::Point(0,0));
     index_max_area = 0;
     size_=0;
     temp_size=0;
@@ -184,7 +185,7 @@ std::vector<int> FeaturesExtraction::find(std::vector<int> vec, int value){
 void FeaturesExtraction::sample_features(){
   std::vector<int> indexes, temp_ind;
   float costante=0;
-  int temp_val=0;
+  float temp_val=0;
   for (int i=0; i<=(int)distances.size(); i++){
     indexes.push_back(i);
   }
@@ -220,3 +221,12 @@ void FeaturesExtraction::sample_features(){
       }
     }
 }
+/*
+void FeaturesExtraction::plot_contours(std::vector<float> contorno){
+    int len_vect=contorno.size();
+    array float x[len_vect], y[len_vect];
+    lindata(1, len_vect, x, 36); // assign x with values from 0 to 360 linearly
+    y = contorno.at(x);
+    plotxy(x, y, "Ch plot", "xlabel", "ylabel");
+}
+*/

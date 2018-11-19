@@ -21,11 +21,12 @@ class FeaturesExtraction{
     bool acquireframe_sporche(int user, int dita, int index);
     cv::Mat edge();
     cv::Mat im2bw();
-    void setHandProperties(bool perimetro);
+    void setHandProperties(bool perimetro, int approx);
     void gen_distances();
     void sample_features();
-    void genFeatures(int dita, int index, std::ofstream &file);
+    void genFeatures(int dita, int index, std::ofstream &file, int approx);
     void genFeatures_sporche(int user, int dita, int index, std::ofstream &file);
+    //void plot_contours(std::vector<float> contorno);
   private:
     std::vector<int> find(std::vector<int> vec, int value);
     cv::Mat frame;
