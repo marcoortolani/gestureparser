@@ -61,9 +61,9 @@ int main() {
       accuracy.push_back(gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr"));
       std::cout << "Labels predette" << '\n';
       int label_predetta;
-      for(int i=0; i<(int)labels_probability.size(); i++){
-        label_predetta=labels_probability.at(i).at(0);
-        std::cout << label_predetta<< " con probabilità " << labels_probability.at(i).at(label_predetta+1) << std::endl;
+      for(int i=0; i<(int)labels_probabilities.size(); i++){
+        label_predetta=labels_probabilities.at(i).at(0);
+        std::cout << label_predetta<< " con probabilità " << labels_probabilities.at(i).at(label_predetta+1) << std::endl;
         if (((i+1)%(30-n_addestramento))==0) std::cout << '\n';
       }
 

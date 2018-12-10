@@ -7,7 +7,7 @@
 void print_menu(){
     std::cout<<"\nOpzioni\n"
             <<"1) Genera le features dal dataset\n"
-            <<"2) SVM train\n"
+            <<"2) SVM train, genera il modello\n"
             <<"3) Cross Validation\n"
             <<"4) Testa il modello\n"
             <<"5) Testa con le immagini del vecchio dataset\n"
@@ -15,6 +15,18 @@ void print_menu(){
             <<"7) Sorteggia immagini\n\n"
             <<"9) Exit\n\n"
             <<"Input: ";
+}
+
+void print_probabilityes (){
+  std::cout << "\nPredictions: \n\n";
+  for (int i = 0; i < (int) labels_probabilities.size(); i++){
+    for (int j = 0; j < (int) labels_probabilities.at(i).size(); j++){
+        if (j==0) std::cout << "Label: ";
+        std::cout << labels_probabilities.at(i).at(j)<< "\t";
+        if (j==0) std::cout << "Probabilities: ";
+    }
+    std::cout << '\n';
+  }
 }
 
 int random_index(int n) {
@@ -27,7 +39,7 @@ int random_index(int n) {
   */
   std::random_device rd;
   std::mt19937 eng(rd());
-  std::uniform_int_distribution<> distr(100, n);
+  std::uniform_int_distribution<> distr(91, n);
   return distr(eng);
 }
 
@@ -44,7 +56,7 @@ int main() {
           std::ofstream file;
           file.open("../dataset/feature_mauro");
           for (int i=1; i<12; i++){
-            for (int j=1; j<101; j++){
+            for (int j=1; j<91; j++){
               FeaturesExtraction featureextr;
               featureextr.genFeatures(i, j, file, approx);
             }
@@ -53,8 +65,11 @@ int main() {
           break;
       }
       case 2:{
+        std::cout << "Bloccato!" << '\n';
+        /*
           train("../dataset/feature_mauro", "../dataset/dataset_new.model",0,20);
           std::cout << "\nAddestrato con il file generato al puno 1" << '\n';
+          */
         break;
       }
       case 3:{
@@ -82,6 +97,7 @@ int main() {
         }
         gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
         std::cout << "\nGesture prediction con il file generato al puno 1" << '\n';
+        print_probabilityes();
         break;
       }
       case 5:{
@@ -114,12 +130,21 @@ int main() {
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
         std::ofstream file;
         file.open("../dataset/feature_mauro");
+        std::cout << "\nSenza approssimazione\n\n";
         for (int i=1; i<12; i++){
             FeaturesExtraction featureextr;
             featureextr.genFeatures(i, random_index(n_immagini[i]), file, 0);
         }
         file.close();
         gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        std::cout << "\nCon approssimazione\n\n";
+        for (int i=1; i<12; i++){
+            FeaturesExtraction featureextr;
+            featureextr.genFeatures(i, random_index(n_immagini[i]), file, 1);
+        }
+        file.close();
+        gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        print_probabilityes();
         break;
       }
       case 9:

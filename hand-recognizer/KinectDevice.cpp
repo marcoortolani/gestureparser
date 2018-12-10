@@ -217,7 +217,7 @@ void KinectDevice::p2pDistance(){
     std::vector<double> temp(contorno.size());
     std::vector<cv::Point> src2(1);
     src2.insert(src2.end(),centroide);
-    for(int i = 0; i < contorno.size() ; i++){
+    for(int i = 0; i < (int) contorno.size() ; i++){
         std::vector<cv::Point> src1(1);
         src1.insert(src1.end(),contorno.at(i));
         temp.at(i) = cv::norm(src1,src2,cv::NORM_L2, cv::noArray());
@@ -252,7 +252,7 @@ std::vector<double> KinectDevice::findAngle(){
     double principal;
     principal = atan2d360(Princ);
 
-    for (int i = 0 ; i < contorno.size() ; i++) {
+    for (int i = 0 ; i < (int) contorno.size() ; i++) {
         cv::Point Pt = contorno.at(i) - centroide;
         cv::Point V;
         V.x = Mrot.at<double>(0, 0) * Pt.x + Mrot.at<double>(0, 1) * Pt.y;

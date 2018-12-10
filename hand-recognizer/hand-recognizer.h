@@ -24,7 +24,7 @@
 #include <errno.h>
 #include "svm.h"
 
-std::vector<std::vector<double>> labels_probability;
+std::vector<std::vector<double>> labels_probabilities;
 
 //svm-predict
 int print_null(const char *s,...) {return 0;}
@@ -149,7 +149,7 @@ double predict(FILE *input, FILE *output)
 				temp_prob.push_back(prob_estimates[j]);
 				fprintf(output," %g",prob_estimates[j]);
 			}
-			labels_probability.push_back(temp_prob);
+			labels_probabilities.push_back(temp_prob);
 			fprintf(output,"\n");
 		}
 		else
@@ -186,7 +186,7 @@ double predict(FILE *input, FILE *output)
 
 double gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, int predict_probability = 1)
 {
-	labels_probability.clear();
+	labels_probabilities.clear();
 	FILE *input, *output;
 	input = fopen(ifilename,"r");
 	if(input == NULL)
