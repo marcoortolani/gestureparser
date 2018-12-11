@@ -26,7 +26,7 @@ class EarleyParser : public Stringable
         std::vector<std::vector<unsigned int> > parse(const std::vector<T> &sentence, std::vector<EarleySet> &earley_chart) const;
 
         std::vector<unsigned int> parse_init(std::vector<EarleySet> &earley_chart) const;
-        std::vector<unsigned int> parse_word(std::vector<EarleySet> &earley_chart, const T &in_word, bool do_prediction) const;
+        std::vector<unsigned int> parse_word(std::vector<EarleySet> &earley_chart, const T &in_word, bool do_prediction, bool *flag_status_ok) const;
 
         ParseTree<T> getViterbiParse(const EarleyState<T> &end_state, const std::vector<EarleySet> &earley_chart) const;
         std::vector<std::pair<T, double> > getNextWordTransitions(const EarleySet &in_states) const;
@@ -193,8 +193,14 @@ vector<vector<unsigned int> > EarleyParser<T>::parse(const vector<T> &sentence, 
     }
 
     // parse each word
-    for(unsigned int i = 0; i < sentence.size(); i++)
-        states_counts.push_back(parse_word(earley_chart, sentence[i], (i < (sentence.size()-1))));
+    for(unsigned int i = 0; i < sentence.size(); i++){
+      bool flag_ok;
+      states_counts.push_back(parse_word(earley_chart, sentence[i], (i < (sentence.size()-1)), &flag_ok));
+      std::cout << "Word " << i+1 << '\n';
+      if (!flag_ok){
+        std::cout << "Non riconosciuta la parola numero " << i+1 <<": "  << sentence[i] << '\n';
+      }
+    }
 
     return states_counts;
 }
@@ -224,7 +230,7 @@ vector<unsigned int> EarleyParser<T>::parse_init(vector<EarleySet> &earley_chart
 }
 
 template <typename T>
-vector<unsigned int> EarleyParser<T>::parse_word(vector<EarleySet> &earley_chart, const T &in_word, bool do_prediction) const
+vector<unsigned int> EarleyParser<T>::parse_word(vector<EarleySet> &earley_chart, const T &in_word, bool do_prediction, bool *flag_status_ok) const
 {
     vector<unsigned int> states_count(3, static_cast<unsigned int>(0));
     bool flag=false;
@@ -240,11 +246,13 @@ vector<unsigned int> EarleyParser<T>::parse_word(vector<EarleySet> &earley_chart
     earley_chart.push_back(scanned_states);
     states_count[0] = earley_chart.back().size();
     std::cout << std::endl;
+    *flag_status_ok=true;
     if(scanned_states.size() == 0)
     {
         std::cout << "No new states scanned." << std::endl;
 //        std::cout << "No parsed sentence. :-(" << std::endl;
         flag=true;
+        *flag_status_ok=false;
 //        return states_count;
     }
 

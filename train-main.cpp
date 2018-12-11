@@ -17,16 +17,44 @@ void print_menu(){
             <<"Input: ";
 }
 
-void print_probabilityes (){
+void print_vec_vec (std::vector<std::vector<double>> vec_vec, bool labels){
   std::cout << "\nPredictions: \n\n";
-  for (int i = 0; i < (int) labels_probabilities.size(); i++){
-    for (int j = 0; j < (int) labels_probabilities.at(i).size(); j++){
-        if (j==0) std::cout << "Label: ";
-        std::cout << labels_probabilities.at(i).at(j)<< "\t";
-        if (j==0) std::cout << "Probabilities: ";
+  for (int i = 0; i < (int) vec_vec.size(); i++){
+    for (int j = 0; j < (int) vec_vec.at(i).size(); j++){
+        if (j==0) std::cout << "Predetta: ";
+        std::cout << vec_vec.at(i).at(j)<< "\t";
+        if (j==0){
+          if(labels){
+            std::cout << "Altre labels (in ordine): ";
+          } else std::cout << "Probabilities: ";
+        }
     }
     std::cout << '\n';
   }
+}
+std::vector<std::vector<double>> order_indexes (){
+  std::vector<std::vector<double>> indexes;
+  std::vector<double> temp_probs;
+  std::vector<double> temp_indexes;
+  double temp_max;
+  int temp_index;
+  for (int i=0; i< (int) labels_probabilities.size(); i++){
+    temp_probs=labels_probabilities.at(i);
+    temp_indexes.clear();
+    for (int j = 1; j < (int) temp_probs.size(); j++) {
+      temp_max=-1;
+      for (int k = 1; k < (int) temp_probs.size(); k++) {
+        if(temp_probs.at(k)>temp_max){
+          temp_max=temp_probs.at(k);
+          temp_index=k;
+        }
+      }
+      temp_probs.at(temp_index)=-1;
+      temp_indexes.push_back((double)temp_index);
+    }
+    indexes.push_back(temp_indexes);
+  }
+  return indexes;
 }
 
 int random_index(int n) {
@@ -97,7 +125,8 @@ int main() {
         }
         gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
         std::cout << "\nGesture prediction con il file generato al puno 1" << '\n';
-        print_probabilityes();
+        print_vec_vec(labels_probabilities, false);
+        print_vec_vec(order_indexes(), true);
         break;
       }
       case 5:{
@@ -144,7 +173,8 @@ int main() {
         }
         file.close();
         gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
-        print_probabilityes();
+        print_vec_vec(labels_probabilities, false);
+        print_vec_vec(order_indexes(), true);
         break;
       }
       case 9:
