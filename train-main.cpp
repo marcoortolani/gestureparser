@@ -12,7 +12,8 @@ void print_menu(){
             <<"4) Testa il modello\n"
             <<"5) Testa con le immagini del vecchio dataset\n"
             <<"6) Testa con tutte le immagini del dataset\n"
-            <<"7) Sorteggia immagini\n\n"
+            <<"7) Sorteggia immagini\n"
+            <<"8) Prova\n\n"
             <<"9) Exit\n\n"
             <<"Input: ";
 }
@@ -32,7 +33,21 @@ void print_vec_vec (std::vector<std::vector<double>> vec_vec, bool labels){
     std::cout << '\n';
   }
 }
-std::vector<std::vector<double>> order_indexes (){
+
+std::vector<std::vector<double>> vec_vec_multip (std::vector<std::vector<double>> vec_a, std::vector<std::vector<double>> vec_b){
+  std::vector<std::vector<double>> res;
+  std::vector<double> temp_mult;
+  for (int i = 0; i < (int) vec_a.size(); i++){
+    temp_mult.clear();
+    for (int j = 0; j < (int) vec_a.at(i).size(); j++){
+        temp_mult.push_back( vec_a.at(i).at(j) * vec_b.at(i).at(j));
+        }
+        res.push_back(temp_mult);
+    }
+  return res;
+}
+
+std::vector<std::vector<double>> order_indexes (std::vector<std::vector<double>> labels_probabilities){
   std::vector<std::vector<double>> indexes;
   std::vector<double> temp_probs;
   std::vector<double> temp_indexes;
@@ -109,6 +124,7 @@ int main() {
         break;
       }
       case 4:{
+        std::vector<std::vector<double>> labels_probabilities;
         int approx_new;
         std::cout << "Approssimare? \n 0) no \n 1) si" << '\n';
         std::cin >> approx_new;
@@ -123,10 +139,10 @@ int main() {
           }
           file.close();
         }
-        gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
         std::cout << "\nGesture prediction con il file generato al puno 1" << '\n';
-        print_vec_vec(labels_probabilities, false);
-        print_vec_vec(order_indexes(), true);
+        //print_vec_vec(labels_probabilities, false);
+        //print_vec_vec(order_indexes(), true);
         break;
       }
       case 5:{
@@ -156,6 +172,7 @@ int main() {
         break;
       }
       case 7:{
+        std::vector<std::vector<double>> labels_probabilities;
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
         std::ofstream file;
         file.open("../dataset/feature_mauro");
@@ -165,16 +182,17 @@ int main() {
             featureextr.genFeatures(i, random_index(n_immagini[i]), file, 0);
         }
         file.close();
-        gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        print_vec_vec(labels_probabilities, false);
         std::cout << "\nCon approssimazione\n\n";
         for (int i=1; i<12; i++){
             FeaturesExtraction featureextr;
             featureextr.genFeatures(i, random_index(n_immagini[i]), file, 1);
         }
         file.close();
-        gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
         print_vec_vec(labels_probabilities, false);
-        print_vec_vec(order_indexes(), true);
+        print_vec_vec(order_indexes(labels_probabilities), true);
         break;
       }
       case 9:

@@ -23,8 +23,8 @@ std::vector<int> permutateIndexes() {
 
 int main() {
   FeaturesExtraction* featureextr;
-  std::vector<double> accuracy;
   std::vector<int> indici;
+  std::vector<std::vector<double>> labels_probabilities;
   int n_addestramento;
   float perc_add;
   std::cout << "Quante features per classe uso per testare? (in percentuale)" << '\n';
@@ -58,7 +58,7 @@ int main() {
         }
       }
       file.close();
-      accuracy.push_back(gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr"));
+      labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
       std::cout << "Labels predette" << '\n';
       int label_predetta;
       for(int i=0; i<(int)labels_probabilities.size(); i++){
@@ -69,12 +69,6 @@ int main() {
 
       sleep(1);
     }
-    double mean_acc=0.0;
-    for (int k=0; k<5; k++){
-      mean_acc=mean_acc+accuracy.at(k);
-    }
-    mean_acc=mean_acc/5;
-    std::cout << "\nMean Accuracy: " << mean_acc <<'\n';
   } else{
     std::cerr << "Non valido" << '\n';
   }

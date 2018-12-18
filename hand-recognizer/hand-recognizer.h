@@ -24,7 +24,6 @@
 #include <errno.h>
 #include "svm.h"
 
-std::vector<std::vector<double>> labels_probabilities;
 
 //svm-predict
 int print_null(const char *s,...) {return 0;}
@@ -64,7 +63,7 @@ void exit_input_error(int line_num)
 	exit(1);
 }
 
-double predict(FILE *input, FILE *output)
+double predict(FILE *input, FILE *output, std::vector<std::vector<double>> *labels_probabilities)
 {
 	int correct = 0;
 	int total = 0;
@@ -149,7 +148,7 @@ double predict(FILE *input, FILE *output)
 				temp_prob.push_back(prob_estimates[j]);
 				fprintf(output," %g",prob_estimates[j]);
 			}
-			labels_probabilities.push_back(temp_prob);
+			labels_probabilities->push_back(temp_prob);
 			fprintf(output,"\n");
 		}
 		else
@@ -184,9 +183,9 @@ double predict(FILE *input, FILE *output)
 	return ((double)correct/total*100);
 }
 
-double gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, int predict_probability = 1)
+std::vector<std::vector<double>> gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, int predict_probability = 1)
 {
-	labels_probabilities.clear();
+	std::vector<std::vector<double>> labels_probabilities;
 	FILE *input, *output;
 	input = fopen(ifilename,"r");
 	if(input == NULL)
@@ -223,13 +222,13 @@ double gesture_prediction(const char* ifilename,const char* modelfile, const cha
 			info("Model supports probability estimates, but disabled in prediction.\n");
 	}
 	double accuracy;
-	accuracy=predict(input,output);
+	accuracy=predict(input,output,&labels_probabilities);
 	svm_free_and_destroy_model(&model);
 	free(x);
 	free(line);
 	fclose(input);
 	fclose(output);
-	return accuracy;
+	return labels_probabilities;
 }
 
 #endif /* hand_recognizer_h */
