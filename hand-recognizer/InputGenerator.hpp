@@ -20,7 +20,8 @@
 class InputGenerator{
 public:
     InputGenerator();
-    void parse(const char* filename);
+    //void parse(const char* filename);
+    std::string parse_label (int label, int num);
     void RemedialLikehoodController(const char* PProbability, const char* SVMProbability);
 private:
     std::ifstream input_file;

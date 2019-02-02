@@ -12,7 +12,7 @@
 
 using TNT::eye;
 
-
+double rules_prob[] = {0.500978, 0.499022, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 // Earley Parser template definition
 template <typename T>
 class EarleyParser : public Stringable
@@ -195,8 +195,21 @@ vector<vector<unsigned int> > EarleyParser<T>::parse(const vector<T> &sentence, 
     // parse each word
     for(unsigned int i = 0; i < sentence.size(); i++){
       bool flag_ok;
-      states_counts.push_back(parse_word(earley_chart, sentence[i], (i < (sentence.size()-1)), &flag_ok));
-      std::cout << "Word " << i+1 << '\n';
+      string parola_corrente;
+      std::cout << "Prima" << '\n';
+      for (int i = 0; i < 11; i++) {
+        std::cout << rules_prob[i] << " " ;
+      }
+      std::cout <<'\n';
+      // qui devo calcolare la prossima parola rules_prob*probabilità_svm
+      parola_corrente =sentence[i];
+      states_counts.push_back(parse_word(earley_chart, parola_corrente, (i < (sentence.size()-1)), &flag_ok));
+      std::cout << "Word " << i+1 << '\n' << "Rules Probs:" << "\n";
+      std::cout << "Dopo" << '\n';
+      for (int i = 0; i < 11; i++) {
+        std::cout << rules_prob[i] << " " ;
+      }
+      std::cout <<'\n';
       if (!flag_ok){
         std::cout << "Non riconosciuta la parola numero " << i+1 <<": "  << sentence[i] << '\n';
       }
@@ -469,6 +482,14 @@ typename EarleyParser<T>::EarleySet EarleyParser<T>::predict(const EarleySet &in
 
     // add each state Y --> v, update the alphas and gammas
     EarleySet predicted_states;
+
+    int associazione_regole_gesti[]= {-1, -1, -1, -1, 1, -1, 1, -1, 2, -1, 3, 4, -1, -1, 5, 6, 7, -1, -1, 8, 6, 5, 7, 6, 5, 7, 5, 6, 7, 7, 5, 6, 9, 10, 11, 2, 3};
+    for (int i = 0; i < 11; i++) {
+      rules_prob[i]=0;
+    }
+    bool is_terminal[] = {false, false, false, false, true, false, true,  false, true,  false, true, true,  false, false, true, true, true,  false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
+    std::vector<double> current_probs;
+    double normalizator=0.0;
     for(map<unsigned int, double>::const_iterator it = Y2alphas.begin(); it != Y2alphas.end(); it++)
     {
         const unsigned int Y_index = it->first;
@@ -480,10 +501,33 @@ typename EarleyParser<T>::EarleySet EarleyParser<T>::predict(const EarleySet &in
             predicted_states.push_back(EarleyState<T>(rules[temp_rule_index], in_parse_column, 0));
             predicted_states.back().alpha() = Y_alpha*rules[temp_rule_index].weight();
             predicted_states.back().gamma() = rules[temp_rule_index].weight();
-            std::cout << j << " Forward Probability: " << predicted_states.back().alpha() << ", Inner Probability: "<< predicted_states.back().gamma() << " #rule: " << rules_index[j] << " (riga " << rules_index[j]+2 << ")" << '\n';
+            if (is_terminal[rules_index[j]+1]){
+              rules_prob[associazione_regole_gesti[rules_index[j]+1]-1]=(double) Y_alpha*rules[temp_rule_index].weight();
+              current_probs.push_back((double) Y_alpha*rules[temp_rule_index].weight());
+            }
+            std::cout << j << " Forward Probability: " << Y_alpha*rules[temp_rule_index].weight() << ", Inner Probability: "<< rules[temp_rule_index].weight() << " #rule: " << rules_index[j] << " (riga " << rules_index[j]+2 << ")" << '\n';
         }
+         // std::cout << "Vettore delle probabilità associate alle regole" << '\n';
+         // for (int i = 0; i < 11; i++) {
+         //   std::cout << rules_prob[i] << " ";
+         // }
+         // std::cout << '\n';
     }
-
+    std::cout << "Vettore delle probabilità associate alle regole" << '\n';
+    for (int i = 0; i < 11; i++) {
+      std::cout << rules_prob[i] << " ";
+    }
+    std::cout << '\n';
+    std::cout << "Normalizzo" << '\n';
+    for(size_t i=0; i<current_probs.size(); i++){
+      normalizator += current_probs.at(i);
+    }
+    //std::cout << normalizator << '\n';
+    for (int i = 0; i < 11; i++) {
+      rules_prob[i]=rules_prob[i]/normalizator;
+      std::cout << rules_prob[i] << " ";
+    }
+    std::cout << '\n';
     // print the new states
     printEarleySet(predicted_states);
 

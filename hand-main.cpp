@@ -114,7 +114,7 @@ int main(int argc, char* argv[]){
                 break;
             }
             case 2:
-                command_exec.parse(OUTPUT_PROBABILISTIC_SVM);
+                //command_exec.parse(OUTPUT_PROBABILISTIC_SVM);
                 break;
 
             case 3:

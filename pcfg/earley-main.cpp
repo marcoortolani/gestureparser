@@ -99,13 +99,14 @@ std::vector<std::vector<std::string> > importSentencesFromFile(const std::string
 }
 
 int main(int argc, char *argv[]) {
-        if(argc < 3) {
-                cout << "Usage:" << endl;
-                cout << "ProbabilisticEarleyParser <grammar_filename> <sentences_filename>" << endl;
-                exit(1);
-        }
+        // if(argc < 3) {
+        //         cout << "Usage:" << endl;
+        //         cout << "ProbabilisticEarleyParser <grammar_filename> <sentences_filename>" << endl;
+        //         exit(1);
+        // }
 
-        std::string grammar_filename(argv[1]);
+        //std::string grammar_filename(argv[1]);
+        std::string grammar_filename("../input/grammar.txt");
         std::string start_symbol, wild_card;
         std::vector<GrammarRule<std::string> > rules;
 
@@ -116,7 +117,7 @@ int main(int argc, char *argv[]) {
         std::cout << parser << std::endl;
 
         std::cout << std::endl;
-        std::string sentences_filename(argv[2]);
+        std::string sentences_filename("../input/sentence.txt");
 
         std::vector<std::vector<std::string> > sentences = importSentencesFromFile(sentences_filename);
         std::cout << std::endl;
