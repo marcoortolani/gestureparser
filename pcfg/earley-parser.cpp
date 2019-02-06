@@ -99,11 +99,12 @@ std::vector<std::vector<std::string> > importSentencesFromFile_1(const std::stri
         return sentences;
 }
 
-int parser_di_earley (std::vector<std::vector<double>> svm_predictions){
+bool parser_di_earley (std::vector<std::vector<double>> svm_predictions){
+        std::cout.setstate(std::ios_base::failbit);
         std::string grammar_filename("../input/grammar.txt");
         std::string start_symbol, wild_card;
         std::vector<GrammarRule<std::string> > rules;
-
+        bool riconosciuta_parser=true;
         importGrammarFromFile_1(grammar_filename, rules, start_symbol, wild_card);
         std::cout << std::endl;
 
@@ -125,6 +126,7 @@ int parser_di_earley (std::vector<std::vector<double>> svm_predictions){
                         std::vector<std::vector<unsigned int> > states_counts = parser.parse(sentences[kk], earley_chart, svm_predictions);
                         if(states_counts.back().back()!=0) {
                                 flag=false;
+                                riconosciuta_parser=true;
                                 std::cout << std::endl << "Finished parsing." << std::endl << std::endl;
 
                                 ParseTree<std::string> viterbi_parse_tree;
@@ -212,7 +214,6 @@ int parser_di_earley (std::vector<std::vector<double>> svm_predictions){
                                         }
                                         vt.push_back(ccc);
                                 }
-
                                 unsigned int index = 0;
                                 for(unsigned int k = 0; k < vt.size(); k++) {
                                         if(vt[k]==0) {
@@ -222,34 +223,46 @@ int parser_di_earley (std::vector<std::vector<double>> svm_predictions){
                                 }
 
                                 std::vector<std::pair<std::string, double> > transition_probs = parser.getNextWordTransitions(earley_chart[index-1]);
-                                std::string symbol_corr=transition_probs[0].first;
-                                double max_prob=transition_probs[0].second;
-                                for(unsigned int j = 0; j < transition_probs.size(); j++) {
-                                        if(transition_probs[j].second > max_prob) {
-                                                symbol_corr=transition_probs[j].first;
-                                                max_prob=transition_probs[j].second;
-                                        }
+                                if (transition_probs.size()!=0){
+                                  std::string symbol_corr=transition_probs[0].first;
+                                  double max_prob=transition_probs[0].second;
+                                  for(unsigned int j = 0; j < transition_probs.size(); j++) {
+                                          if(transition_probs[j].second > max_prob) {
+                                                  symbol_corr=transition_probs[j].first;
+                                                  max_prob=transition_probs[j].second;
+                                          }
+                                  }
+                                  sentences[kk].at(index-1)=symbol_corr;
+                                  std::cout << symbol_corr << " --> " << max_prob << std::endl;
+                                } else{
+                                  std::cout << "Frase non riconosciuta" << '\n';
+                                  flag=false;
+                                  riconosciuta_parser=false;
                                 }
-                                sentences[kk].at(index-1)=symbol_corr;
-                                std::cout << symbol_corr << " --> " << max_prob << std::endl;
                         }
                 }
-                std::cout << "\n Original Sentence \n";
+                std::cout.clear();
+                std::cout << "\n\nOriginal Sentence \n";
                 for(unsigned int i = 0; i < original_sentence.size(); i++)
                 {
                         std::cout << original_sentence[i] << " ";
                 }
 
-                std::cout << "\n Parser Sentence\n";
-                for(unsigned int j = 0; j < sentences[kk].size(); j++) {
-                        std::cout << sentences[kk][j] << " ";
+                std::cout << "\n\nParser Sentence\n";
+                if(riconosciuta_parser){
+                  for(unsigned int j = 0; j < sentences[kk].size(); j++) {
+                          std::cout << sentences[kk][j] << " ";
+                  }
+                } else {
+                  std::cout << "Il parser non ha riconosciuto il comando";
                 }
-                std::cout << "\n SVM+Parser Sentence" << '\n';
+
+                std::cout << "\n\nSVM+Parser Sentence" << '\n';
                 for(unsigned int i = 0; i < frase_riconosciuta.size(); i++){
-                  std::cout << frase_riconosciuta.at(i) << " ";
+                  std::cout << frase_riconosciuta.at(i);
                 }
-                std::cout << '\n';
+                std::cout << "\n\n";
         }
 
-        return 0;
+        return riconosciuta_parser;
 }

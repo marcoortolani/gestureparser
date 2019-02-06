@@ -53,7 +53,7 @@ bool FeaturesExtraction::acquireframe(int dita, int index){
   sprintf(integer_string, "%d", index);
   strcat(percorso, integer_string);
   strcat(percorso, "-cont.bmp");
-  std::cout << percorso << '\n';
+  //std::cout << percorso << '\n';
   try{
     image= cv::imread(percorso, 0);
     this->frame=image;
@@ -75,7 +75,7 @@ bool FeaturesExtraction::acquireframe_sporche(int user, int dita, int index){
   sprintf(integer_string, "%d", index);
   strcat(percorso, integer_string);
   strcat(percorso, "-cont.bmp");
-  std::cout << percorso << '\n';
+  //std::cout << percorso << '\n';
   try{
     image= cv::imread(percorso, 0);
     this->frame=image;

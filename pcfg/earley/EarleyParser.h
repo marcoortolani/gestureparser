@@ -232,7 +232,7 @@ std::string prossima_parola(double* rules_prob, std::vector<double> svm_predicti
   }
   for (size_t i = 0; i < 11; i++) {
     if (normalizator==0){
-      vettore_prob[i]=-1;
+      vettore_prob[i]=vettore_prob[i]; //non normalizzo
     } else    vettore_prob[i]=vettore_prob[i]/normalizator;
   }
   int label = label_piu_probabile(vettore_prob);
@@ -595,7 +595,9 @@ typename EarleyParser<T>::EarleySet EarleyParser<T>::predict(const EarleySet &in
     }
     //std::cout << normalizator << '\n';
     for (int i = 0; i < 11; i++) {
-      rules_prob[i]=rules_prob[i]/normalizator;
+      if(normalizator==0){
+        rules_prob[i]=rules_prob[i]*1;
+      }else rules_prob[i]=rules_prob[i]/normalizator;
       std::cout << rules_prob[i] << " ";
     }
     std::cout << '\n';

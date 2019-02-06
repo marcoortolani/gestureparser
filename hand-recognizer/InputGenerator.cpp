@@ -18,66 +18,52 @@ void InputGenerator::parse_svm_output(const char* filename){
     std::ofstream sentence;
     std::string line;
     input_file.open(filename);
-    sentence.open(INPUT_PARSER_FILE,std::ofstream::out | std::ofstream::app); //trunc o app
+    sentence.open(INPUT_PARSER_FILE,std::ofstream::out | std::ofstream::trunc); //trunc o app
     while (std::getline(input_file, line)){
         char* cmd = strtok(strdup(line.c_str()), " ");
         if(strcmp(cmd, "1") == 0){
-
           if(num_parola<1){
             command.push_back("Query ");
-            std::cout<<"Query ";
           }else{
             command.push_back(";");
-            std::cout<<";";
           }
         }else if (strcmp(cmd,"2") == 0){
           if(num_parola<1){
             command.push_back("Set ");
-            std::cout<<"Set ";
           }else{
             command.push_back("increase ");
-            std::cout<<"increase ";
           }
         }else if (strcmp(cmd,"3") == 0){
           if(num_parola>2){
             command.push_back("start ");
-            std::cout<<"start ";
           }else{
             command.push_back("decrease ");
-            std::cout<<"decrease ";
           }
         }else if (strcmp(cmd,"4") == 0){
             command.push_back("start ");
-            std::cout<<"start ";
         }else if (strcmp(cmd,"5") == 0){
             command.push_back("heater ");
-            std::cout<<"heater ";
         }else if (strcmp(cmd,"6") == 0){
             command.push_back("light ");
-            std::cout<<"light ";
         }else if (strcmp(cmd,"7") == 0){
             command.push_back("energymeter ");
-            std::cout<<"energymeter ";
         }else if (strcmp(cmd,"8") == 0){
             command.push_back("status ");
-            std::cout<<"status ";
         }else if (strcmp(cmd,"9") == 0){
             command.push_back("med ");
-            std::cout<<"med ";
         }else if (strcmp(cmd,"10") == 0){
             command.push_back("high ");
-            std::cout<<"high ";
         }else if (strcmp(cmd,"11") == 0){
             command.push_back("low ");
-            std::cout<<"low ";
         }
             num_parola++;
     }
     for (size_t i = 0; i < command.size()-1; i++) {
       sentence<<command.at(i);
+      std::cout << command.at(i);
     }
     sentence<<";\n";
-    std::cout<<"\n";
+    std::cout<<";\n";
     sentence.close();
     input_file.close();
 }
