@@ -1,0 +1,3 @@
+status decrease med ;
+Query decrease status ;
+Query decrease status ;

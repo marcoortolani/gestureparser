@@ -1,7 +1,7 @@
 #ifndef EARLEY_PARSER
 #define EARLEY_PARSER
 
-#include "jama_lu_funcs.h"
+#include "../jama/jama_lu_funcs.h"
 #include "GrammarRule.h"
 #include "EarleyState.h"
 #include "ParseTree.h"
@@ -13,6 +13,14 @@
 using TNT::eye;
 
 double rules_prob[] = {0.500978, 0.499022, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+std::vector<std::string> frase_riconosciuta;
+void init_rules_prob (){
+  rules_prob[0]=0.500978;
+  rules_prob[1]=0.499022;
+  for (size_t i = 2; i < 11; i++) {
+    rules_prob[i]=0;
+  }
+}
 // Earley Parser template definition
 template <typename T>
 class EarleyParser : public Stringable
@@ -23,7 +31,7 @@ class EarleyParser : public Stringable
         EarleyParser();
         EarleyParser(const std::vector<GrammarRule<T> > &the_rules, const T &start_symbol, const T &wild_card);
 
-        std::vector<std::vector<unsigned int> > parse(const std::vector<T> &sentence, std::vector<EarleySet> &earley_chart) const;
+        std::vector<std::vector<unsigned int> > parse(std::vector<T> &sentence, std::vector<EarleySet> &earley_chart, std::vector<std::vector<double>> svm_predictions) const;
 
         std::vector<unsigned int> parse_init(std::vector<EarleySet> &earley_chart) const;
         std::vector<unsigned int> parse_word(std::vector<EarleySet> &earley_chart, const T &in_word, bool do_prediction, bool *flag_status_ok) const;
@@ -174,9 +182,70 @@ EarleyParser<T>::EarleyParser(const vector<GrammarRule<T> > &the_rules, const T 
         rules_lists.back().terminal_corners().push_back(i);
 }
 
+int label_piu_probabile (double* labels_probabilities){
+  double temp_max=-1;
+  int temp_index=-1;
+  for (int k = 0; k < 11; k++) {
+    if(labels_probabilities[k]>temp_max){
+      temp_max=labels_probabilities[k];
+      temp_index=k;
+    }
+  }
+  return temp_index;
+}
+
+std::string parse_label (int label, int num){
+  switch (label) {
+    case 0:
+      if (num>1) {
+        return "; ";
+      } else return "Query ";
+      break;
+    case 1:
+    if (num>1) {
+      return "increase ";
+    } else return "Set ";
+    break;
+    case 2:
+    if (num>2) {
+      return "decrease ";
+    } else return "start ";
+    case 3: return "stop "; break;
+    case 4: return "heater "; break;
+    case 5: return "light "; break;
+    case 6: return "energymeter "; break;
+    case 7: return "status "; break;
+    case 8: return "med "; break;
+    case 9: return "high "; break;
+    case 10: return "low "; break;
+    case -1: return "errore "; break;
+  }
+  return "ciao";
+}
+
+std::string prossima_parola(double* rules_prob, std::vector<double> svm_predictions, int num){
+  double vettore_prob[11];
+  double normalizator=0;
+  for (size_t i = 0; i < 11; i++) {
+    vettore_prob[i]=rules_prob[i]*svm_predictions.at(i+1);
+    normalizator+=vettore_prob[i];
+  }
+  for (size_t i = 0; i < 11; i++) {
+    if (normalizator==0){
+      vettore_prob[i]=-1;
+    } else    vettore_prob[i]=vettore_prob[i]/normalizator;
+  }
+  int label = label_piu_probabile(vettore_prob);
+  std::string temp_word;
+  temp_word=parse_label(label, num);
+  return temp_word;
+}
+
+
 template <typename T>
-vector<vector<unsigned int> > EarleyParser<T>::parse(const vector<T> &sentence, vector<EarleySet> &earley_chart) const
+vector<vector<unsigned int> > EarleyParser<T>::parse(vector<T> &sentence, vector<EarleySet> &earley_chart, std::vector<std::vector<double>> svm_predictions) const
 {
+    std::string mia_frase[sentence.size()];
     for(unsigned int i = 0; i < sentence.size(); i++)
         std::cout << sentence[i] << " ";
     std::cout << std::endl << std::endl;
@@ -195,15 +264,15 @@ vector<vector<unsigned int> > EarleyParser<T>::parse(const vector<T> &sentence, 
     // parse each word
     for(unsigned int i = 0; i < sentence.size(); i++){
       bool flag_ok;
-      string parola_corrente;
       std::cout << "Prima" << '\n';
       for (int i = 0; i < 11; i++) {
         std::cout << rules_prob[i] << " " ;
       }
       std::cout <<'\n';
-      // qui devo calcolare la prossima parola rules_prob*probabilità_svm
-      parola_corrente =sentence[i];
-      states_counts.push_back(parse_word(earley_chart, parola_corrente, (i < (sentence.size()-1)), &flag_ok));
+      if(i<svm_predictions.size()){
+        mia_frase[i]=prossima_parola(rules_prob, svm_predictions.at(i), i);
+      }
+      states_counts.push_back(parse_word(earley_chart, sentence[i], (i < (sentence.size()-1)), &flag_ok));
       std::cout << "Word " << i+1 << '\n' << "Rules Probs:" << "\n";
       std::cout << "Dopo" << '\n';
       for (int i = 0; i < 11; i++) {
@@ -214,7 +283,14 @@ vector<vector<unsigned int> > EarleyParser<T>::parse(const vector<T> &sentence, 
         std::cout << "Non riconosciuta la parola numero " << i+1 <<": "  << sentence[i] << '\n';
       }
     }
-
+    std::cout << "Frase Riconosciuta" << '\n';
+    frase_riconosciuta.clear();
+    for(unsigned int i = 0; i < sentence.size(); i++){
+      std::cout << mia_frase[i] << " ";
+      frase_riconosciuta.push_back(mia_frase[i]);
+    }
+    std::cout << std::endl << std::endl;
+    init_rules_prob();
     return states_counts;
 }
 
@@ -507,11 +583,6 @@ typename EarleyParser<T>::EarleySet EarleyParser<T>::predict(const EarleySet &in
             }
             std::cout << j << " Forward Probability: " << Y_alpha*rules[temp_rule_index].weight() << ", Inner Probability: "<< rules[temp_rule_index].weight() << " #rule: " << rules_index[j] << " (riga " << rules_index[j]+2 << ")" << '\n';
         }
-         // std::cout << "Vettore delle probabilità associate alle regole" << '\n';
-         // for (int i = 0; i < 11; i++) {
-         //   std::cout << rules_prob[i] << " ";
-         // }
-         // std::cout << '\n';
     }
     std::cout << "Vettore delle probabilità associate alle regole" << '\n';
     for (int i = 0; i < 11; i++) {

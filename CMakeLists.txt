@@ -48,3 +48,7 @@ target_link_libraries(train svm kinectCore ${OpenCV_LIBS})
 # Temporarily build another executable for the train-testing
 add_executable(train-test training-testing.cpp)
 target_link_libraries(train-test svm kinectCore ${OpenCV_LIBS})
+
+# Temporarily build another executable
+add_executable(main-semidef main-semidef.cpp)
+target_link_libraries(main-semidef svm kinectCore earleyCore ${OpenCV_LIBS})

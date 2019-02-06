@@ -221,8 +221,9 @@ std::vector<std::vector<double>> gesture_prediction(const char* ifilename,const 
 		if(svm_check_probability_model(model)!=0)
 			info("Model supports probability estimates, but disabled in prediction.\n");
 	}
-	double accuracy;
-	accuracy=predict(input,output,&labels_probabilities);
+	//double accuracy;
+	//accuracy=predict(input,output,&labels_probabilities);
+	predict(input,output,&labels_probabilities);
 	svm_free_and_destroy_model(&model);
 	free(x);
 	free(line);

@@ -2,11 +2,12 @@
 #include <fstream>
 
 #include "earley/EarleyParser.h"
+#include "earley/Stringable.h"
 
 using std::cout;
 using std::endl;
 
-void importGrammarFromFile(const std::string &filename,
+void importGrammarFromFile_1(const std::string &filename,
                            std::vector<GrammarRule<std::string> > &rules,
                            std::string &start_symbol,
                            std::string &wild_card) {
@@ -63,7 +64,7 @@ void importGrammarFromFile(const std::string &filename,
         std::cout << rules.size() << " rules loaded:" << std::endl;
 }
 
-std::vector<std::vector<std::string> > importSentencesFromFile(const std::string &filename) {
+std::vector<std::vector<std::string> > importSentencesFromFile_1(const std::string &filename) {
         std::ifstream in(filename.c_str(), std::ios::in);
         if (!in.is_open()) {
                 std::cout << "Error opening file " << filename << std::endl;
@@ -98,43 +99,30 @@ std::vector<std::vector<std::string> > importSentencesFromFile(const std::string
         return sentences;
 }
 
-//int main(int argc, char *argv[]) {
-int parser_earley (std::vector<std::vector<double>> svm_predictions){
-        // if(argc < 3) {
-        //         cout << "Usage:" << endl;
-        //         cout << "ProbabilisticEarleyParser <grammar_filename> <sentences_filename>" << endl;
-        //         exit(1);
-        // }
-
-        //std::string grammar_filename(argv[1]);
+int parser_di_earley (std::vector<std::vector<double>> svm_predictions){
         std::string grammar_filename("../input/grammar.txt");
         std::string start_symbol, wild_card;
         std::vector<GrammarRule<std::string> > rules;
 
-        importGrammarFromFile(grammar_filename, rules, start_symbol, wild_card);
+        importGrammarFromFile_1(grammar_filename, rules, start_symbol, wild_card);
         std::cout << std::endl;
 
         EarleyParser<std::string> parser(rules, start_symbol, wild_card);
         std::cout << parser << std::endl;
 
         std::cout << std::endl;
-        //std::string sentences_filename("../input/sentence.txt");
         std::string sentences_filename("../input/sentence-hr.txt");
 
-        std::vector<std::vector<std::string> > sentences = importSentencesFromFile(sentences_filename);
+        std::vector<std::vector<std::string> > sentences = importSentencesFromFile_1(sentences_filename);
         std::cout << std::endl;
 
         for(unsigned int kk=0; kk < sentences.size(); kk++) {
 
                 std::vector<std::string> original_sentence=sentences[kk];
-                //    vector<std::string> original_sentence=sentences[0];
-
                 bool flag=true;
                 while(flag) {
                         std::vector<EarleyParser<std::string>::EarleySet> earley_chart;
                         std::vector<std::vector<unsigned int> > states_counts = parser.parse(sentences[kk], earley_chart, svm_predictions);
-                        //      std::vector<std::vector<unsigned int> > states_counts = parser.parse(sentences[0], earley_chart);
-
                         if(states_counts.back().back()!=0) {
                                 flag=false;
                                 std::cout << std::endl << "Finished parsing." << std::endl << std::endl;
@@ -246,19 +234,22 @@ int parser_earley (std::vector<std::vector<double>> svm_predictions){
                                 std::cout << symbol_corr << " --> " << max_prob << std::endl;
                         }
                 }
-        }
-        return 0;
-}
+                std::cout << "\n Original Sentence \n";
+                for(unsigned int i = 0; i < original_sentence.size(); i++)
+                {
+                        std::cout << original_sentence[i] << " ";
+                }
 
-int main(int argc, char const *argv[]) {
-  std::vector<std::vector<double>> svm_predictions;
-  std::vector<double> temp;
-  for (size_t j = 0; j < 12; j++) {
-    temp.push_back(1);
-  }
-  for (size_t i = 0; i < 11; i++) {
-    svm_predictions.push_back(temp);
-  }
-  parser_earley(svm_predictions);
-  return 0;
+                std::cout << "\n Parser Sentence\n";
+                for(unsigned int j = 0; j < sentences[kk].size(); j++) {
+                        std::cout << sentences[kk][j] << " ";
+                }
+                std::cout << "\n SVM+Parser Sentence" << '\n';
+                for(unsigned int i = 0; i < frase_riconosciuta.size(); i++){
+                  std::cout << frase_riconosciuta.at(i) << " ";
+                }
+                std::cout << '\n';
+        }
+
+        return 0;
 }
