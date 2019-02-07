@@ -99,12 +99,13 @@ std::vector<std::vector<std::string> > importSentencesFromFile_1(const std::stri
         return sentences;
 }
 
-bool parser_di_earley (std::vector<std::vector<double>> svm_predictions){
+std::vector<std::vector<std::string>> parser_di_earley (std::vector<std::vector<double>> svm_predictions, bool &riconosciuta_parser){
+        std::vector<std::vector<std::string>> recognized_sentences;
+        std::vector<std::string> temp_sentences;
         std::cout.setstate(std::ios_base::failbit);
         std::string grammar_filename("../input/grammar.txt");
         std::string start_symbol, wild_card;
         std::vector<GrammarRule<std::string> > rules;
-        bool riconosciuta_parser=true;
         importGrammarFromFile_1(grammar_filename, rules, start_symbol, wild_card);
         std::cout << std::endl;
 
@@ -188,7 +189,6 @@ bool parser_di_earley (std::vector<std::vector<double>> svm_predictions){
                                 f.open("command.txt",std::ofstream::app);
                                 if(!f) {
                                         std::cout << "Errore nella creazione del file!";
-                                        return -1;
                                 }else{
                                         for(unsigned int i = 0; i < original_sentence.size(); i++)
                                         {
@@ -242,27 +242,35 @@ bool parser_di_earley (std::vector<std::vector<double>> svm_predictions){
                         }
                 }
                 std::cout.clear();
-                std::cout << "\n\nOriginal Sentence \n";
+                std::cout << "\n\nSVM Sentence \n";
                 for(unsigned int i = 0; i < original_sentence.size(); i++)
                 {
                         std::cout << original_sentence[i] << " ";
+                        temp_sentences.push_back(original_sentence[i]);
                 }
-
+                recognized_sentences.push_back(temp_sentences);
+                temp_sentences.clear();
                 std::cout << "\n\nParser Sentence\n";
                 if(riconosciuta_parser){
                   for(unsigned int j = 0; j < sentences[kk].size(); j++) {
                           std::cout << sentences[kk][j] << " ";
+                          temp_sentences.push_back(sentences[kk][j]);
                   }
                 } else {
                   std::cout << "Il parser non ha riconosciuto il comando";
+                  temp_sentences.push_back("error");
                 }
-
+                recognized_sentences.push_back(temp_sentences);
+                temp_sentences.clear();
                 std::cout << "\n\nSVM+Parser Sentence" << '\n';
                 for(unsigned int i = 0; i < frase_riconosciuta.size(); i++){
                   std::cout << frase_riconosciuta.at(i);
+                  temp_sentences.push_back(frase_riconosciuta.at(i));
                 }
+                recognized_sentences.push_back(temp_sentences);
+                temp_sentences.clear();
                 std::cout << "\n\n";
         }
 
-        return riconosciuta_parser;
+        return recognized_sentences;
 }

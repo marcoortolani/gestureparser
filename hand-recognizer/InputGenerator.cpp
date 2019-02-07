@@ -95,6 +95,21 @@ std::string InputGenerator::parse_label (int label, int num){
   }
 }
 
+bool InputGenerator::test_sentences_equal (std::vector<std::string> sentence1, std::vector<std::string> sentence2){
+  std::string s1, s2;
+  if (sentence1.size()!=sentence2.size())  return false;
+  for (int i = 0; i < (int) sentence1.size(); i++) {
+    s1=sentence1.at(i);
+    s2=sentence2.at(i);
+    s1.erase(std::remove(s1.begin(), s1.end(), ' '), s1.end());
+    s2.erase(std::remove(s2.begin(), s2.end(), ' '), s2.end());
+    if (s1 != s2) {
+      return false;
+    }
+  }
+  return true;
+}
+
 void InputGenerator::RemedialLikehoodController(const char* PProbability, const char* SVMProbability){
     int index;
     int tok = 0;
