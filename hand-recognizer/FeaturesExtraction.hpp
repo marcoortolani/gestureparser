@@ -15,18 +15,25 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
+#define DATASET_DIR "\"../dataset\""
+#define DATASET_SVM "../dataset/dataset"
+#define DATASET_SVM_MODEL "../dataset/dataset.model"
+#define DATASET_SVM_MODEL_NEW "../dataset/dataset_new.model"
+#define SCALING_MODEL 0
+#define DATASET_SVM_MODEL_SCALED "../dataset/dataset.scale.model"
+#define DATASET_PATH "../dataset/dataset.json"
+#define TESTSET_SVM "../dataset/testset"
+#define OUTPUT_PROBABILISTIC_SVM "../dataset/prob.khr"
+
 class FeaturesExtraction{
   public:
     bool acquireframe(int dita, int index);
-    bool acquireframe_sporche(int user, int dita, int index);
     cv::Mat edge();
     cv::Mat im2bw();
-    void setHandProperties(bool perimetro, int approx);
+    void setHandProperties(bool perimetro);
     void gen_distances();
     void sample_features();
-    void genFeatures(int dita, int index, std::ofstream &file, int approx);
-    void genFeatures_sporche(int user, int dita, int index, std::ofstream &file);
-    //void plot_contours(std::vector<float> contorno);
+    void genFeatures(int dita, int index, std::ofstream &file);
   private:
     std::vector<int> find(std::vector<int> vec, int value);
     cv::Mat frame;

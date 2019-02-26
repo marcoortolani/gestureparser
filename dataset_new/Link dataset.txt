@@ -1,2 +1,0 @@
-http://lttm.dei.unipd.it/downloads/gesture/senz3d/data/senz3d_dataset.zip
-http://lttm.dei.unipd.it/downloads/gesture/

@@ -1,19 +1,9 @@
-//
-//  hand-recognizer.h
-//  Kinect Hand Recognizer
-//
-//  Created by Francesco Lanza on 06/12/16.
-//  Copyright © 2016 Francesco Lanza. All rights reserved.
-//
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-#include "KinectDevice.hpp"
-#include "Dataset.hpp"
 #include "InputGenerator.hpp"
 #include "FeaturesExtraction.hpp"
 #define ONLY_CONTOURN 1
-#define COMMAND_WEB_VISUALIZER "open file:///web/index.html"
 
 #ifndef hand_recognizer_h
 #define hand_recognizer_h

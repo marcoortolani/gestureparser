@@ -1,34 +1,13 @@
 #include "FeaturesExtraction.hpp"
 
-void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file, int approx){
+void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
   acquireframe(dita, index);
   //std::cout << "acquisico frame" << '\n';
   //im2bw();
   //std::cout << "bianco e nero" << '\n';
   //edge();
   //std::cout << "edge" << '\n';
-  setHandProperties(false, approx);
-  //std::cout << "setHandProperties" << '\n';
-  gen_distances();
-  //std::cout << "gen_distances" << '\n';
-  sample_features();
-  //std::cout << "sample_features" << '\n';
-  file<< dita << " ";
-  for (int i=0; i<(int)features.size(); i++){
-    //std::cout << i+1 << ":"<<features.at(i) << " ";
-    file << i+1 << ":"<<features.at(i) << " ";
-  }
-  file << "\n";
-}
-
-void FeaturesExtraction::genFeatures_sporche(int user, int dita, int index, std::ofstream &file){
-  acquireframe_sporche(user, dita, index);
-  //std::cout << "acquisico frame" << '\n';
-  //im2bw();
-  //std::cout << "bianco e nero" << '\n';
-  //edge();
-  //std::cout << "edge" << '\n';
-  setHandProperties(false, 0);
+  setHandProperties(false);
   //std::cout << "setHandProperties" << '\n';
   gen_distances();
   //std::cout << "gen_distances" << '\n';
@@ -46,29 +25,7 @@ bool FeaturesExtraction::acquireframe(int dita, int index){
   cv::Mat image;
   char integer_string[20]="";
   char percorso[50]="";
-  strcat(percorso, "../DatastNewNoEdge/G");
-  sprintf(integer_string, "%d", dita);
-  strcat(percorso, integer_string);
-  strcat(percorso, "/");
-  sprintf(integer_string, "%d", index);
-  strcat(percorso, integer_string);
-  strcat(percorso, "-cont.bmp");
-  //std::cout << percorso << '\n';
-  try{
-    image= cv::imread(percorso, 0);
-    this->frame=image;
-    return true;
-  } catch(const std::exception& e){
-            std::cout << "Errore acquisizione immagine: "<<e.what()<< std::endl;
-            return false;
-          }
-}
-
-bool FeaturesExtraction::acquireframe_sporche(int user, int dita, int index){
-  cv::Mat image;
-  char integer_string[20]="";
-  char percorso[50]="";
-  strcat(percorso, "../dataset_new_seq/G");
+  strcat(percorso, "../dataset/G");
   sprintf(integer_string, "%d", dita);
   strcat(percorso, integer_string);
   strcat(percorso, "/");
@@ -107,12 +64,10 @@ cv::Mat FeaturesExtraction::im2bw(){
 }
 
 
-void FeaturesExtraction::setHandProperties(bool perimetro, int approx){
+void FeaturesExtraction::setHandProperties(bool perimetro){
     cv::Moments moment;
     int index_max_area, index_max_perimetro, temp_size, size_;
-    if (approx == 1){
-      findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_SIMPLE,cv::Point(0,0));   //vecchia versione (Lanza), faceva una approssimazione sui bordi
-    } else findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_NONE,cv::Point(0,0));
+    findContours(frame,contours,hierarchy,CV_RETR_TREE,CV_CHAIN_APPROX_NONE,cv::Point(0,0));
     index_max_area = 0;
     size_=0;
     temp_size=0;
@@ -221,12 +176,3 @@ void FeaturesExtraction::sample_features(){
       }
     }
 }
-/*
-void FeaturesExtraction::plot_contours(std::vector<float> contorno){
-    int len_vect=contorno.size();
-    array float x[len_vect], y[len_vect];
-    lindata(1, len_vect, x, 36); // assign x with values from 0 to 360 linearly
-    y = contorno.at(x);
-    plotxy(x, y, "Ch plot", "xlabel", "ylabel");
-}
-*/

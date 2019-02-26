@@ -1,3 +1,2 @@
-Query decrease status ;
-Set light high decrease ;
-Set light heater increase ;
+Query set status ;
+Set light high increase ;

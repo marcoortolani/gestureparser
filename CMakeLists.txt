@@ -8,6 +8,18 @@ set(CMAKE_CXX_FLAGS "-g -Wall")
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include_directories(jama)
+include_directories(earley)
+
+# Lib directories
+add_subdirectory(earley)
+
+
+# Key idea: SEPARATE OUT your main() function into its own file so it can be its
+# own executable. Separating out main() means you can add this library to be
+# used elsewhere.
+
+
 find_package(OpenCV 3.0.0 REQUIRED)
 
 # MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
@@ -28,27 +40,22 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(libsvm)
 include_directories(hand-recognizer)
 
+# Build probabilistic parser executable
+add_executable(myearley ./earley/earley-main.cpp)
+
+# Key idea: SEPARATE OUT your main() function into its own file so it can be its
+# own executable. Separating out main() means you can add this library to be
+# used elsewhere.
+target_link_libraries(myearley kinectCore earleyCore)
+
 # Lib directories
 add_subdirectory(hand-recognizer)
 add_subdirectory(libsvm)
-add_subdirectory(pcfg)
-
-# Temporarily build another executable for the hand recognizer
-add_executable(hr hand-main.cpp)
-target_link_libraries(hr svm kinectCore ${OpenCV_LIBS})
-
-# This should be the final "global" main
-add_executable(gestrec main.cpp)
-target_link_libraries(gestrec svm kinectCore ${OpenCV_LIBS})
 
 # Temporarily build another executable for the train
 add_executable(train train-main.cpp)
 target_link_libraries(train svm kinectCore ${OpenCV_LIBS})
 
-# Temporarily build another executable for the train-testing
-add_executable(train-test training-testing.cpp)
-target_link_libraries(train-test svm kinectCore ${OpenCV_LIBS})
-
 # Temporarily build another executable
-add_executable(main-semidef main-semidef.cpp)
-target_link_libraries(main-semidef svm kinectCore earleyCore ${OpenCV_LIBS})
+add_executable(main main.cpp)
+target_link_libraries(main svm kinectCore earleyCore ${OpenCV_LIBS})

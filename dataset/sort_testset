@@ -1,4 +1,0 @@
-#!/bin/bash
-sort -k1.1,1.1 testset > sorted_t;
-more sorted_t > testset;
-rm sorted_t;

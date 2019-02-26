@@ -1,11 +1,3 @@
-//
-//  InputGenerator.cpp
-//  Kinect Hand Recognizer
-//
-//  Created by Francesco Lanza on 16/12/16.
-//  Copyright © 2016 Francesco Lanza. All rights reserved.
-//
-
 #include "InputGenerator.hpp"
 
 InputGenerator::InputGenerator(){
@@ -22,25 +14,25 @@ void InputGenerator::parse_svm_output(const char* filename){
     while (std::getline(input_file, line)){
         char* cmd = strtok(strdup(line.c_str()), " ");
         if(strcmp(cmd, "1") == 0){
-          if(num_parola<1){
-            command.push_back("Query ");
+          if(num_parola>1){
+            command.push_back("; ");
           }else{
-            command.push_back(";");
+            command.push_back("Query ");
           }
         }else if (strcmp(cmd,"2") == 0){
-          if(num_parola<1){
-            command.push_back("Set ");
-          }else{
+          if(num_parola>1){
             command.push_back("increase ");
+          }else{
+            command.push_back("Set ");
           }
         }else if (strcmp(cmd,"3") == 0){
           if(num_parola>2){
-            command.push_back("start ");
-          }else{
             command.push_back("decrease ");
+          }else{
+            command.push_back("start ");
           }
         }else if (strcmp(cmd,"4") == 0){
-            command.push_back("start ");
+            command.push_back("stop ");
         }else if (strcmp(cmd,"5") == 0){
             command.push_back("heater ");
         }else if (strcmp(cmd,"6") == 0){
@@ -82,7 +74,7 @@ std::string InputGenerator::parse_label (int label, int num){
     break;
     case 3:
     if (num>2) {
-      return "decrease ";
+      return "decrease " ;
     } else return "start ";
     case 4: return "stop "; break;
     case 5: return "heater "; break;
@@ -93,7 +85,9 @@ std::string InputGenerator::parse_label (int label, int num){
     case 10: return "high "; break;
     case 11: return "low "; break;
   }
+  return "boh ";
 }
+
 
 bool InputGenerator::test_sentences_equal (std::vector<std::string> sentence1, std::vector<std::string> sentence2){
   std::string s1, s2;
@@ -108,21 +102,4 @@ bool InputGenerator::test_sentences_equal (std::vector<std::string> sentence1, s
     }
   }
   return true;
-}
-
-void InputGenerator::RemedialLikehoodController(const char* PProbability, const char* SVMProbability){
-    int index;
-    int tok = 0;
-    int l_list = 14;
-    double r[14] = {0.0};
-    double parser_p[14] ={0.0};
-    double svm_p[14]={0.0};
-    while(tok < 4){
-        for (int i = 0; i < l_list; i++) {
-            r[i] = parser_p[i] * svm_p[i];
-        }
-        index = std::distance(r, std::max_element(r,r+14));
-        tok++;
-        //command.append(ListOfTerminals.getTerminal(index));
-    }
 }
