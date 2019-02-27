@@ -18,15 +18,19 @@ int main(int argc, char *argv[]) {
   std::ofstream file_stats;
   std::vector<double> accuracy;
   std::vector<int> miglioramenti;
+  std::vector<double> accuracy_tot;
+  std::vector<int> miglioramenti_tot;
   double mean_accuracy;
   double media_miglioramenti;
   std::vector<std::vector<int>> training, testing;
-  int in=10;
-  while (in<11) {
-    std::cout << "Quante features uso per addestrare il modello?" << '\n';
-    std::cin >> in;
+  int in=5;
+  while (in<96) {
+    accuracy.clear();
+    miglioramenti.clear();
+    //std::cout << "Quante features uso per addestrare il modello?" << '\n';
+    //std::cin >> in;
     std::cout << "Utilizzerò " << in << " features per addestrare il modello e circa " << 100-in << " per testarlo.\n";
-    for (int exec = 0; exec < (int) 100/in; exec++) {
+    for (int exec = 0; exec < 10; exec++) {
       std::cout << "Esecuzione " << in << "."<< exec <<'\n';
       double current_accuracy=train_testing(in, training, testing);
       accuracy.push_back(current_accuracy);
@@ -35,8 +39,8 @@ int main(int argc, char *argv[]) {
       miglioramenti.push_back(current_miglioramenti);
       media_miglioramenti=media_miglioramenti+current_miglioramenti;
     }
-    mean_accuracy=mean_accuracy/((int) 100/in);
-    media_miglioramenti=media_miglioramenti/((int) 100/in);
+    mean_accuracy=mean_accuracy/10;
+    media_miglioramenti=media_miglioramenti/10;
     file_stats.open("../dataset/statistiche", std::ios_base::app);
     file_stats << "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
     file_stats << "Vettore accuracy:\t";
@@ -49,10 +53,26 @@ int main(int argc, char *argv[]) {
     }
     file_stats <<"\n\n";
     file_stats.close();
+    accuracy_tot.push_back(mean_accuracy);
+    miglioramenti_tot.push_back(media_miglioramenti);
     std::cout << "Accuracy media: " <<mean_accuracy<< "%\t";
     std::cout << "Miglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
-    in=in+10;
+    in=in+5;
   }
+  file_stats.open("../dataset/statistiche", std::ios_base::app);
+  std::cout << "Riepilogo accuracy: ";
+  for (size_t i = 0; i < accuracy_tot.size(); i++) {
+  std::cout << accuracy_tot.at(i)<< " ";
+  file_stats << accuracy_tot.at(i)<< " ";
+  }
+  std::cout << "\nRiepilogo miglioramenti:" << '\n';
+  for (size_t i = 0; i < miglioramenti_tot.size(); i++) {
+  std::cout << miglioramenti_tot.at(i)<< " ";
+  file_stats << miglioramenti_tot.at(i)<< " ";
+  }
+  std::cout << '\n';
+  file_stats << '\n';
+  file_stats.close();
   return 0;
 }
 
@@ -118,7 +138,7 @@ double parser(std::vector<std::vector<int>> testing){
     file.open("../dataset/feature_mauro");
     for (int j=0; j<(int)comando.size(); j++){
         FeaturesExtraction featureextr;
-        featureextr.genFeatures(comando.at(j), testing.at(comando.at(j)-1).at(vu.random_index(1, testing.size())), file);
+        featureextr.genFeatures(comando.at(j), testing.at(comando.at(j)-1).size(), file);
     }
     file.close();
     labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_testing.model","../dataset/prob.khr", accuracy);
@@ -156,8 +176,10 @@ double parser(std::vector<std::vector<int>> testing){
   }
   if((uguali_SVMeParser_orig-uguali_parser_orig)>0){
     std::cout << "La combinazaione SVM+Parser ha riconosciuto " << uguali_SVMeParser_orig-uguali_parser_orig << " comandi in più rispetto al solo parser" << '\n';
-  } else {
+  } else if ((uguali_SVMeParser_orig-uguali_parser_orig)<0){
     std::cout << "La combinazaione SVM+Parser ha riconosciuto " << uguali_parser_orig-uguali_SVMeParser_orig << " comandi in meno rispetto al solo parser" << '\n';
+  } else {
+    std::cout << "La combinazaione SVM+Parser ha riconosciuto lo stesso numero di comandi del solo parser" << '\n';
   }
   return uguali_SVMeParser_orig-uguali_parser_orig;
 }
