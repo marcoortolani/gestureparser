@@ -1,7 +1,7 @@
 #include "hand-recognizer.h"
 #include "train.h"
 #include "FeaturesExtraction.hpp"
-#include "VectorsUtils.hpp"
+#include "Utils.hpp"
 #include "earley/parse_sentence.cpp"
 #include "earley/EarleyParser.h"
 #include "earley/Stringable.h"
@@ -12,16 +12,14 @@
 #define FILE_GESTI "../input/comandi_corretti_labels.txt"
 
 void print_menu();
-std::vector<std::vector<int>> read_commands(const char* filename);
-void stampa_comando(std::vector<int> v);
-std::vector<std::vector<double>> generic_label_brobs();
-std::vector<std::vector<double>> remove_label(std::vector<std::vector<double>> probs);
+
 
 int main() {
   std::vector<std::vector<double>> labels_probabilities;
   InputGenerator ig;
-  VectorsUtils vu;
+  Utils vu;
   int opt;
+  double accuracy;
   do {
     print_menu();
     std::cin>>opt;
@@ -33,10 +31,10 @@ int main() {
         file.open("../dataset/feature_mauro");
         for (int i=0; i<5; i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(comando[i], vu.random_index(n_immagini[comando[i]]), file);
+            featureextr.genFeatures(comando[i], vu.random_index(91, n_immagini[comando[i]]), file);
         }
         file.close();
-        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
         vu.print_vec_vec(labels_probabilities, false);
         ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM);
         break;
@@ -44,8 +42,8 @@ int main() {
       case 2:{
         std::vector<std::string> sentence_parser;
         std::vector<std::string> sentence_svm_parser;
-        sentence_parser=parse_sentence(generic_label_brobs(), true);
-        sentence_svm_parser=parse_sentence(remove_label(labels_probabilities), false);
+        sentence_parser=parse_sentence(vu.generic_label_probs(), true);
+        sentence_svm_parser=parse_sentence(vu.remove_label(labels_probabilities), false);
         std::cout << "Frase riconosciuta dal solo parser" << '\n';
         if (sentence_parser.size()!=0){
           for (size_t i = 0; i < sentence_parser.size(); i++) {
@@ -74,7 +72,7 @@ int main() {
         std::vector<std::string> sentence_parser;
         std::vector<std::string> sentence_svm_parser;
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
-        std::vector<std::vector<int>> comandi = read_commands(FILE_GESTI);
+        std::vector<std::vector<int>> comandi = vu.read_commands(FILE_GESTI);
         std::vector<int> comando;
         size_t zzz;
         for (zzz = 0; zzz < 5; zzz++) {
@@ -84,17 +82,17 @@ int main() {
           file.open("../dataset/feature_mauro");
           for (int j=0; j<(int)comando.size(); j++){
               FeaturesExtraction featureextr;
-              featureextr.genFeatures(comando.at(j), vu.random_index(n_immagini[comando.at(j)]), file);
+              featureextr.genFeatures(comando.at(j), vu.random_index(91, n_immagini[comando.at(j)]), file);
           }
           file.close();
-          labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+          labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
           ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM);
           sentence_parser.clear();
           std::cout.setstate(std::ios_base::failbit);
-          sentence_parser=parse_sentence(generic_label_brobs(), true);
-          sentence_svm_parser=parse_sentence(remove_label(labels_probabilities), false);          std::cout.clear();
+          sentence_parser=parse_sentence(vu.generic_label_probs(), true);
+          sentence_svm_parser=parse_sentence(vu.remove_label(labels_probabilities), false);          std::cout.clear();
           std::cout << "Original Sentence: " << '\n';
-          stampa_comando(comando);
+          vu.stampa_comando(comando);
           std::cout << "Frase riconosciuta dal solo parser" << '\n';
           if (sentence_parser.size()!=0){
             for (size_t i = 0; i < sentence_parser.size(); i++) {
@@ -158,58 +156,4 @@ void print_menu(){
             <<"3) Simulazione\n\n"
             <<"9) Exit\n\n"
             <<"Input: ";
-}
-
-std::vector<std::vector<int>> read_commands (const char* filename){
-  std::ifstream input_file;
-  std::string line;
-  input_file.open(filename);
-  std::vector<std::vector<int>> comandi;
-  std::vector<int> tmp;
-  while (std::getline(input_file, line) && input_file.good()) {
-        boost::tokenizer<> tok(line);
-        for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
-          tmp.push_back(stoi(*beg));
-        }
-        comandi.push_back(tmp);
-        tmp.clear();
-  }
-  input_file.close();
-  //std::cout << "Letti " << comandi.size() << " comandi dal file " << filename << '\n';
-  //std::cout << "Premere invio per continuare." << '\n';
-  //std::cin.ignore();
-  //std::cin.get();
-  return comandi;
-}
-
-void stampa_comando(std::vector<int> v){
-  InputGenerator ig;
-  for (size_t i = 0; i < v.size(); i++) {
-    std::cout << ig.parse_label(v.at(i), i);
-  }
-  std::cout << '\n';
-}
-std::vector<std::vector<double>> generic_label_brobs(){
-  std::vector<std::vector<double>> svm_predictions;
-  std::vector<double> temp_v;
-  for (size_t i = 0; i < 11; i++) {
-    temp_v.push_back(1);
-  }
-  for (size_t i = 0; i < 10; i++) {
-    svm_predictions.push_back(temp_v);
-  }
-  return svm_predictions;
-}
-
-std::vector<std::vector<double>> remove_label(std::vector<std::vector<double>> probs){
-  std::vector<std::vector<double>> svm_predictions;
-  std::vector<double> temp_v;
-  for (size_t i = 0; i < probs.size(); i++) {
-    temp_v.clear();
-    for (size_t j = 1; j < 12; j++) {
-      temp_v.push_back(probs.at(i).at(j));
-    }
-    svm_predictions.push_back(temp_v);
-  }
-  return svm_predictions;
 }

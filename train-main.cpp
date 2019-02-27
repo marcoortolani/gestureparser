@@ -1,15 +1,16 @@
 #include "hand-recognizer.h"
 #include "train.h"
 #include "FeaturesExtraction.hpp"
-#include "VectorsUtils.hpp"
+#include "Utils.hpp"
 #include <unistd.h>
 
 
 void print_menu();
 
 int main() {
-  VectorsUtils vu;
+  Utils vu;
   int opt;
+  double accuracy;
   do {
     print_menu();
     std::cin>>opt;
@@ -51,7 +52,7 @@ int main() {
             }
           }
           file.close();
-        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
         std::cout << "\nGesture prediction con il file generato al puno 1" << '\n';
         //vu.print_vec_vec(labels_probabilities, false);
         //vu.print_vec_vec(vu.order_indexes(), true);
@@ -65,18 +66,18 @@ int main() {
         std::cout << "\nSenza approssimazione\n\n";
         for (int i=1; i<12; i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(i, vu.random_index(n_immagini[i]), file);
+            featureextr.genFeatures(i, vu.random_index(91, n_immagini[i]), file);
         }
         file.close();
-        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
         vu.print_vec_vec(labels_probabilities, false);
         std::cout << "\nCon approssimazione\n\n";
         for (int i=1; i<12; i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(i, vu.random_index(n_immagini[i]), file);
+            featureextr.genFeatures(i, vu.random_index(91, n_immagini[i]), file);
         }
         file.close();
-        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr");
+        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
         vu.print_vec_vec(labels_probabilities, false);
         vu.print_vec_vec(vu.order_indexes(labels_probabilities), true);
         break;

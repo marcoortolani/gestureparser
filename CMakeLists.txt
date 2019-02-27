@@ -52,9 +52,13 @@ target_link_libraries(myearley kinectCore earleyCore)
 add_subdirectory(hand-recognizer)
 add_subdirectory(libsvm)
 
-# Temporarily build another executable for the train
+# Build another executable for the train
 add_executable(train train-main.cpp)
 target_link_libraries(train svm kinectCore ${OpenCV_LIBS})
+
+# Build another executable for the testing
+add_executable(testing testing.cpp)
+target_link_libraries(testing svm kinectCore earleyCore ${OpenCV_LIBS})
 
 # Temporarily build another executable
 add_executable(main main.cpp)

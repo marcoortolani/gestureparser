@@ -173,7 +173,7 @@ double predict(FILE *input, FILE *output, std::vector<std::vector<double>> *labe
 	return ((double)correct/total*100);
 }
 
-std::vector<std::vector<double>> gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, int predict_probability = 1)
+std::vector<std::vector<double>> gesture_prediction(const char* ifilename,const char* modelfile, const char*  ofilename, double &accuracy, int predict_probability = 1)
 {
 	std::vector<std::vector<double>> labels_probabilities;
 	FILE *input, *output;
@@ -211,9 +211,9 @@ std::vector<std::vector<double>> gesture_prediction(const char* ifilename,const 
 		if(svm_check_probability_model(model)!=0)
 			info("Model supports probability estimates, but disabled in prediction.\n");
 	}
-	//double accuracy;
-	//accuracy=predict(input,output,&labels_probabilities);
-	predict(input,output,&labels_probabilities);
+
+	accuracy=predict(input,output,&labels_probabilities);
+	//predict(input,output,&labels_probabilities);
 	svm_free_and_destroy_model(&model);
 	free(x);
 	free(line);
