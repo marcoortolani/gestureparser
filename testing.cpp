@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
   while (in<96) {
     accuracy.clear();
     miglioramenti.clear();
+    mean_accuracy=0;
+    media_miglioramenti=0;
     //std::cout << "Quante features uso per addestrare il modello?" << '\n';
     //std::cin >> in;
     std::cout << "Utilizzerò " << in << " features per addestrare il modello e circa " << 100-in << " per testarlo.\n";
@@ -61,11 +63,13 @@ int main(int argc, char *argv[]) {
   }
   file_stats.open("../dataset/statistiche", std::ios_base::app);
   std::cout << "Riepilogo accuracy: ";
+  file_stats << "Riepilogo accuracy: ";
   for (size_t i = 0; i < accuracy_tot.size(); i++) {
   std::cout << accuracy_tot.at(i)<< " ";
   file_stats << accuracy_tot.at(i)<< " ";
   }
-  std::cout << "\nRiepilogo miglioramenti:" << '\n';
+  std::cout << "\nRiepilogo miglioramenti: ";
+  file_stats << "\nRiepilogo miglioramenti: ";
   for (size_t i = 0; i < miglioramenti_tot.size(); i++) {
   std::cout << miglioramenti_tot.at(i)<< " ";
   file_stats << miglioramenti_tot.at(i)<< " ";

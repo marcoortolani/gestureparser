@@ -1,1 +1,1 @@
-Query light heater status ;
+Query energymeter status ;
