@@ -52,10 +52,10 @@ void InputGenerator::parse_svm_output(const char* filename){
     }
     for (size_t i = 0; i < command.size()-1; i++) {
       sentence<<command.at(i);
-      std::cout << command.at(i);
+      //std::cout << command.at(i);
     }
     sentence<<";\n";
-    std::cout<<";\n";
+    //std::cout<<";\n";
     sentence.close();
     input_file.close();
 }

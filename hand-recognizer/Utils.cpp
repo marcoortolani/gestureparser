@@ -147,18 +147,10 @@ std::vector<int> Utils::permutateIndexes(int label) {
   return myvector;
 }
 
-void Utils::generateImagesVector(int n_train, std::vector<std::vector<int>> &training, std::vector<std::vector<int>> &testing){
+std::vector<std::vector<int>> Utils::generateIndexesVector(){
+  std::vector<std::vector<int>> indexes;
   for (int i = 0; i < 11; i++) {
-    std::vector<int> temp_v=permutateIndexes(i);
-    std::vector<int> temp_v1;
-    for (int j = 0; j < n_train; j++) {
-      temp_v1.push_back(temp_v.at(j));
-    }
-    training.push_back(temp_v1);
-    temp_v1.clear();
-    for (int k = n_train; k < (int)temp_v.size(); k++) {
-      temp_v1.push_back(temp_v.at(k));
-    }
-    testing.push_back(temp_v1);
+    indexes.push_back(permutateIndexes(i));
   }
+  return indexes;
 }

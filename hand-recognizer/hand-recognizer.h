@@ -166,8 +166,8 @@ double predict(FILE *input, FILE *output, std::vector<std::vector<double>> *labe
 			);
 	}
 	else
-		info("Accuracy = %g%% (%d/%d) (classification)\n",
-			(double)correct/total*100,correct,total);
+		// info("Accuracy = %g%% (%d/%d) (classification)\n", //Riabilitare
+		// 	(double)correct/total*100,correct,total);
 	if(predict_probability)
 		free(prob_estimates);
 	return ((double)correct/total*100);

@@ -28,7 +28,7 @@ class Utils{
     std::vector<std::vector<double>> generic_label_probs();
     std::vector<std::vector<double>> remove_label(std::vector<std::vector<double>> probs);
     std::vector<int> permutateIndexes(int label);
-    void generateImagesVector(int n_train, std::vector<std::vector<int>> &training, std::vector<std::vector<int>> &testing);
+    std::vector<std::vector<int>> generateIndexesVector();
 };
 
 #endif /*Utils_hpp*/

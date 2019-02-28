@@ -6,15 +6,18 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <sys/time.h>
 #include "earley/parse_sentence.cpp"
 #include "earley/EarleyParser.h"
 #include "earley/Stringable.h"
 #define FILE_GESTI "../input/comandi_corretti_labels.txt"
 
-double train_testing(int in, std::vector<std::vector<int>> &training, std::vector<std::vector<int>> &testing);
-double parser(std::vector<std::vector<int>> testing);
+double train_testing(int in, std::vector<std::vector<int>> &indexes);
+double parser(int in, std::vector<std::vector<int>> indexes);
 
 int main(int argc, char *argv[]) {
+  timeval start, stop;
+  double elapsedTime;
   std::ofstream file_stats;
   std::vector<double> accuracy;
   std::vector<int> miglioramenti;
@@ -22,8 +25,9 @@ int main(int argc, char *argv[]) {
   std::vector<int> miglioramenti_tot;
   double mean_accuracy;
   double media_miglioramenti;
-  std::vector<std::vector<int>> training, testing;
+  std::vector<std::vector<int>> indexes;
   int in=5;
+  gettimeofday(&start, NULL);
   while (in<96) {
     accuracy.clear();
     miglioramenti.clear();
@@ -33,17 +37,17 @@ int main(int argc, char *argv[]) {
     //std::cin >> in;
     std::cout << "Utilizzerò " << in << " features per addestrare il modello e circa " << 100-in << " per testarlo.\n";
     for (int exec = 0; exec < 10; exec++) {
-      std::cout << "Esecuzione " << in << "."<< exec <<'\n';
-      double current_accuracy=train_testing(in, training, testing);
+      std::cout << "Esecuzione " << in << "."<< exec+1 <<'\n';
+      double current_accuracy=train_testing(in, indexes);
       accuracy.push_back(current_accuracy);
       mean_accuracy=mean_accuracy+current_accuracy;
-      int current_miglioramenti = parser(testing);
+      int current_miglioramenti = parser(in, indexes);
       miglioramenti.push_back(current_miglioramenti);
       media_miglioramenti=media_miglioramenti+current_miglioramenti;
     }
     mean_accuracy=mean_accuracy/10;
     media_miglioramenti=media_miglioramenti/10;
-    file_stats.open("../dataset/statistiche", std::ios_base::app);
+    file_stats.open("../risultati", std::ios_base::app);
     file_stats << "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
     file_stats << "Vettore accuracy:\t";
     for (size_t i = 0; i < accuracy.size(); i++) {
@@ -61,7 +65,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Miglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
     in=in+5;
   }
-  file_stats.open("../dataset/statistiche", std::ios_base::app);
+  file_stats.open("../risultati", std::ios_base::app);
   std::cout << "Riepilogo accuracy: ";
   file_stats << "Riepilogo accuracy: ";
   for (size_t i = 0; i < accuracy_tot.size(); i++) {
@@ -76,23 +80,26 @@ int main(int argc, char *argv[]) {
   }
   std::cout << '\n';
   file_stats << '\n';
+  gettimeofday(&stop, NULL);
+  elapsedTime = (stop.tv_sec - start.tv_sec);
+  std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
+  file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
   file_stats.close();
   return 0;
 }
 
-double train_testing(int in, std::vector<std::vector<int>> &training, std::vector<std::vector<int>> &testing){
+double train_testing(int in, std::vector<std::vector<int>> &indexes){
   Utils vu;
   FeaturesExtraction* featureextr;
-  training.clear();
-  testing.clear();
-    vu.generateImagesVector(in, training, testing);
+  indexes.clear();
+    indexes=vu.generateIndexesVector();
     std::ofstream file;
     int num_feat=0;
     file.open("../dataset/feature_mauro");
     for (int i=0; i<11; i++){
-      for (int j=0; j<(int)training.at(i).size(); j++){
+      for (int j=0; j<in; j++){
         featureextr= new FeaturesExtraction();
-        featureextr->genFeatures(i+1, training.at(i).at(j), file);
+        featureextr->genFeatures(i+1, indexes.at(i).at(j), file);
         delete featureextr;
         num_feat++;
       }
@@ -106,9 +113,9 @@ double train_testing(int in, std::vector<std::vector<int>> &training, std::vecto
     num_feat=0;
     file.open("../dataset/feature_mauro");
     for (int i=0; i<11; i++){
-      for (int j=0; j<(int)testing.at(i).size(); j++){
+      for (int j=in; j<(int)indexes.at(i).size(); j++){
         featureextr= new FeaturesExtraction();
-        featureextr->genFeatures(i+1, testing.at(i).at(j), file);
+        featureextr->genFeatures(i+1, indexes.at(i).at(j), file);
         delete featureextr;
         num_feat++;
       }
@@ -123,7 +130,7 @@ double train_testing(int in, std::vector<std::vector<int>> &training, std::vecto
     return current_accuracy;
 }
 
-double parser(std::vector<std::vector<int>> testing){
+double parser(int in, std::vector<std::vector<int>> indexes){
   std::vector<std::vector<double>> labels_probabilities;
   InputGenerator ig;
   Utils vu;
@@ -142,7 +149,7 @@ double parser(std::vector<std::vector<int>> testing){
     file.open("../dataset/feature_mauro");
     for (int j=0; j<(int)comando.size(); j++){
         FeaturesExtraction featureextr;
-        featureextr.genFeatures(comando.at(j), testing.at(comando.at(j)-1).size(), file);
+        featureextr.genFeatures(comando.at(j), vu.random_index(in, indexes.at(comando.at(j)-1).size()), file);
     }
     file.close();
     labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_testing.model","../dataset/prob.khr", accuracy);
