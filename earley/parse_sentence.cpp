@@ -91,28 +91,28 @@ std::vector<std::string> parse_sentence(std::vector<std::vector<double>> svm_pre
                 probabilistic_vector << "}" <<std::endl;
                 //fine codice scritto da me
 
-                std::ofstream f;
-                f.open("command.txt",std::ofstream::app);
-                if(!f){
-                    std::cout << "Errore nella creazione del file!";
-                    parsed_sentence.clear();
-                    return parsed_sentence;
-                }else{
-                    for(unsigned int i = 0; i < original_sentence.size(); i++)
-                    {
-                        f << original_sentence[i] << " ";
-                    }
+                //std::ofstream f;
+                //f.open("command.txt",std::ofstream::app);
+                //if(!f){
+                //     std::cout << "Errore nella creazione del file!";
+                //     parsed_sentence.clear();
+                //     return parsed_sentence;
+                // }else{
+                    // for(unsigned int i = 0; i < original_sentence.size(); i++)
+                    // {
+                    //     f << original_sentence[i] << " ";
+                    // }
 
-                    f << "--> ";
+                    //f << "--> ";
                     parsed_sentence.clear();
                     for(unsigned int j = 0; j < sentences[kk].size(); j++){
-                        f << sentences[kk][j] << " ";
+                        //f << sentences[kk][j] << " ";
                         parsed_sentence.push_back(sentences[kk][j]);
                     }
 
-                    f << std::endl;
-                }
-                f.close();
+                    //f << std::endl;
+                //}
+                //f.close();
             }else{
                 //stringa errata
                 std::vector<unsigned int> vt;

@@ -16,6 +16,27 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes);
 double parser(int in, std::vector<std::vector<int>> indexes);
 
 int main(int argc, char *argv[]) {
+  int in, max;
+  bool script;
+  std::string output_filename;
+  if(argc > 1 && argc<3){
+      std::cout << "Modalità script.\nUsage:" << std::endl;
+      std::cout << "testing <n_features_addestramento> <file_output>" << std::endl;
+      exit(1);
+  } else if(argc > 1 && argc==3){
+    std::cout << "Modalità script.\n";
+    in= (int) std::atoi(argv[1]);
+    max=in+1;
+    std::string temp_filename(argv[2]);
+    output_filename=temp_filename;
+    script=true;
+  } else {
+    std::cout << "Modalità no script." << '\n';
+    in=5;
+    max=96;
+    script=false;
+    output_filename="../test_no_script";
+  }
   timeval start, stop;
   double elapsedTime;
   std::ofstream file_stats;
@@ -26,9 +47,8 @@ int main(int argc, char *argv[]) {
   double mean_accuracy;
   double media_miglioramenti;
   std::vector<std::vector<int>> indexes;
-  int in=5;
   gettimeofday(&start, NULL);
-  while (in<96) {
+  while (in<max) {
     accuracy.clear();
     miglioramenti.clear();
     mean_accuracy=0;
@@ -47,7 +67,7 @@ int main(int argc, char *argv[]) {
     }
     mean_accuracy=mean_accuracy/10;
     media_miglioramenti=media_miglioramenti/10;
-    file_stats.open("../risultati", std::ios_base::app);
+    file_stats.open(output_filename, std::ios_base::app);
     file_stats << "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
     file_stats << "Vettore accuracy:\t";
     for (size_t i = 0; i < accuracy.size(); i++) {
@@ -65,26 +85,28 @@ int main(int argc, char *argv[]) {
     std::cout << "Miglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
     in=in+5;
   }
-  file_stats.open("../risultati", std::ios_base::app);
-  std::cout << "Riepilogo accuracy: ";
-  file_stats << "Riepilogo accuracy: ";
-  for (size_t i = 0; i < accuracy_tot.size(); i++) {
-  std::cout << accuracy_tot.at(i)<< " ";
-  file_stats << accuracy_tot.at(i)<< " ";
+  if(!script){
+    file_stats.open("../risultati", std::ios_base::app);
+    std::cout << "Riepilogo accuracy: ";
+    file_stats << "Riepilogo accuracy: ";
+    for (size_t i = 0; i < accuracy_tot.size(); i++) {
+    std::cout << accuracy_tot.at(i)<< " ";
+    file_stats << accuracy_tot.at(i)<< " ";
+    }
+    std::cout << "\nRiepilogo miglioramenti: ";
+    file_stats << "\nRiepilogo miglioramenti: ";
+    for (size_t i = 0; i < miglioramenti_tot.size(); i++) {
+    std::cout << miglioramenti_tot.at(i)<< " ";
+    file_stats << miglioramenti_tot.at(i)<< " ";
+    }
+    std::cout << '\n';
+    file_stats << '\n';
+    gettimeofday(&stop, NULL);
+    elapsedTime = (stop.tv_sec - start.tv_sec);
+    std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
+    file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
+    file_stats.close();
   }
-  std::cout << "\nRiepilogo miglioramenti: ";
-  file_stats << "\nRiepilogo miglioramenti: ";
-  for (size_t i = 0; i < miglioramenti_tot.size(); i++) {
-  std::cout << miglioramenti_tot.at(i)<< " ";
-  file_stats << miglioramenti_tot.at(i)<< " ";
-  }
-  std::cout << '\n';
-  file_stats << '\n';
-  gettimeofday(&stop, NULL);
-  elapsedTime = (stop.tv_sec - start.tv_sec);
-  std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
-  file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
-  file_stats.close();
   return 0;
 }
 
