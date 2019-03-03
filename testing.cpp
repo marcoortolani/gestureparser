@@ -13,62 +13,72 @@
 #define FILE_GESTI "../input/comandi_corretti_labels.txt"
 
 double train_testing(int in, std::vector<std::vector<int>> &indexes);
-double parser(int in, std::vector<std::vector<int>> indexes);
+std::vector<int> parser(int in, std::vector<std::vector<int>> indexes);
 
 int main(int argc, char *argv[]) {
-  int in, max;
+  int in, max, num_exec;
   bool script;
   std::string output_filename;
-  if(argc > 1 && argc<3){
+  if(argc > 1 && argc<4){
       std::cout << "Modalità script.\nUsage:" << std::endl;
-      std::cout << "testing <n_features_addestramento> <file_output>" << std::endl;
+      std::cout << "./testing <n_features_addestramento> <cicli_per_ogni_addestramento> <file_output>" << std::endl;
       exit(1);
-  } else if(argc > 1 && argc==3){
+  } else if(argc > 1 && argc==4){
     std::cout << "Modalità script.\n";
     in= (int) std::atoi(argv[1]);
     max=in+1;
-    std::string temp_filename(argv[2]);
+    num_exec=(int) std::atoi(argv[2]);
+    std::string temp_filename(argv[3]);
     output_filename=temp_filename;
     script=true;
   } else {
     std::cout << "Modalità no script." << '\n';
     in=5;
     max=96;
+    num_exec=10;
     script=false;
-    output_filename="../test_no_script";
+    output_filename="../risultati/test_no_script";
   }
   timeval start, stop;
   double elapsedTime;
   std::ofstream file_stats;
   std::vector<double> accuracy;
   std::vector<int> miglioramenti;
+  std::vector<int> non_riconosciute;
   std::vector<double> accuracy_tot;
   std::vector<int> miglioramenti_tot;
+  std::vector<int> non_riconosciute_tot;
+  std::vector<int> temp_stats;
   double mean_accuracy;
-  double media_miglioramenti;
+  double miglioramenti_media;
+  double non_riconosciute_media;
   std::vector<std::vector<int>> indexes;
   gettimeofday(&start, NULL);
   while (in<max) {
     accuracy.clear();
     miglioramenti.clear();
+    non_riconosciute.clear();
     mean_accuracy=0;
-    media_miglioramenti=0;
-    //std::cout << "Quante features uso per addestrare il modello?" << '\n';
-    //std::cin >> in;
-    std::cout << "Utilizzerò " << in << " features per addestrare il modello e circa " << 100-in << " per testarlo.\n";
-    for (int exec = 0; exec < 10; exec++) {
-      std::cout << "Esecuzione " << in << "."<< exec+1 <<'\n';
+    miglioramenti_media=0;
+    non_riconosciute_media=0;
+    std::cout << "Utilizzerò " << in << "*11 features per addestrare il modello e circa " << 100-in << "*11 per testarlo.\n";
+    for (int exec = 0; exec < num_exec; exec++) {
+      temp_stats.clear();
+      std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
       double current_accuracy=train_testing(in, indexes);
       accuracy.push_back(current_accuracy);
       mean_accuracy=mean_accuracy+current_accuracy;
-      int current_miglioramenti = parser(in, indexes);
-      miglioramenti.push_back(current_miglioramenti);
-      media_miglioramenti=media_miglioramenti+current_miglioramenti;
+      temp_stats = parser(in, indexes);
+      miglioramenti.push_back(temp_stats.at(0));
+      non_riconosciute.push_back(-temp_stats.at(1));
+      miglioramenti_media=miglioramenti_media+temp_stats.at(0);
+      non_riconosciute_media=non_riconosciute_media+temp_stats.at(1);
     }
-    mean_accuracy=mean_accuracy/10;
-    media_miglioramenti=media_miglioramenti/10;
+    mean_accuracy=mean_accuracy/num_exec;
+    miglioramenti_media=miglioramenti_media/num_exec;
+    non_riconosciute_media=non_riconosciute_media/num_exec;
     file_stats.open(output_filename, std::ios_base::app);
-    file_stats << "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
+    file_stats << "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media  SVM+parser: " << ceil(abs(non_riconosciute_media))<<"\n";
     file_stats << "Vettore accuracy:\t";
     for (size_t i = 0; i < accuracy.size(); i++) {
       file_stats << accuracy.at(i) << "\t";
@@ -77,12 +87,15 @@ int main(int argc, char *argv[]) {
     for (size_t i = 0; i < miglioramenti.size(); i++) {
       file_stats << miglioramenti.at(i) << "\t";
     }
+    file_stats << "\nVettore non_riconosciute:\t";
+    for (size_t i = 0; i < non_riconosciute.size(); i++) {
+      file_stats << non_riconosciute.at(i) << "\t";
+    }
     file_stats <<"\n\n";
     file_stats.close();
     accuracy_tot.push_back(mean_accuracy);
-    miglioramenti_tot.push_back(media_miglioramenti);
-    std::cout << "Accuracy media: " <<mean_accuracy<< "%\t";
-    std::cout << "Miglioramenti medi SVM+parser: " << ceil(media_miglioramenti) << "\n";
+    miglioramenti_tot.push_back(miglioramenti_media);
+    std::cout<< "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media  SVM+parser: " << ceil(abs(non_riconosciute_media))<< "\n";
     in=in+5;
   }
   if(!script){
@@ -99,14 +112,22 @@ int main(int argc, char *argv[]) {
     std::cout << miglioramenti_tot.at(i)<< " ";
     file_stats << miglioramenti_tot.at(i)<< " ";
     }
+    std::cout << "\nRiepilogo non_riconosciute: ";
+    file_stats << "\nRiepilogo non_riconosciute: ";
+    for (size_t i = 0; i < non_riconosciute.size(); i++) {
+    std::cout << non_riconosciute.at(i)<< " ";
+    file_stats << non_riconosciute.at(i)<< " ";
+    }
     std::cout << '\n';
     file_stats << '\n';
     gettimeofday(&stop, NULL);
     elapsedTime = (stop.tv_sec - start.tv_sec);
-    std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
-    file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti!\n";
+    std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n";
+    file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n";
     file_stats.close();
+    sleep(15);
   }
+  std::cout << '\a';
   return 0;
 }
 
@@ -127,9 +148,6 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes){
       }
     }
     file.close();
-    //std::cout << "Before training" << '\n';
-    //std::cin.ignore();
-    //std::cin.get();
     train("../dataset/feature_mauro", "../dataset/dataset_testing.model",0,20);
     std::cout << "Addestrato con " <<num_feat<<" features."<< '\n';
     num_feat=0;
@@ -143,29 +161,27 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes){
       }
     }
     file.close();
-    //std::cout << "Before prediction" << '\n';
-    //std::cin.ignore();
-    //std::cin.get();
     double current_accuracy;
     gesture_prediction("../dataset/feature_mauro","../dataset/dataset_testing.model","../dataset/prob.khr",current_accuracy);
     std::cout << "Testato con " << num_feat<<" features." << '\n';
     return current_accuracy;
 }
 
-double parser(int in, std::vector<std::vector<int>> indexes){
+std::vector<int> parser(int in, std::vector<std::vector<int>> indexes){
   std::vector<std::vector<double>> labels_probabilities;
   InputGenerator ig;
   Utils vu;
   double accuracy;
   int uguali_SVMeParser_orig=0;
   int uguali_parser_orig=0;
-  int diverse_SVMeParser_orig=0;
-  int diverse_parser_orig=0;
+  int non_riconosciuto_svm_parser=0;
+  int non_riconosciuto_parser=0;
   std::vector<std::string> sentence_parser;
   std::vector<std::string> sentence_svm_parser;
   std::vector<std::vector<int>> comandi = vu.read_commands(FILE_GESTI);
   std::vector<int> comando;
   for (int i = 0; i < (int) comandi.size(); i++) {
+    std::cout << "Comando: " << i << '\r';
     comando=comandi.at(i);
     std::ofstream file;
     file.open("../dataset/feature_mauro");
@@ -180,39 +196,32 @@ double parser(int in, std::vector<std::vector<int>> indexes){
     std::cout.setstate(std::ios_base::failbit);
     sentence_parser=parse_sentence(vu.generic_label_probs(), true);
     sentence_svm_parser=parse_sentence(vu.remove_label(labels_probabilities), false);          std::cout.clear();
-    //std::cout << "Original Sentence: " << '\n';
-    //vu.stampa_comando(comando);
-    //std::cout << "Frase riconosciuta dal solo parser" << '\n';
-    // if (sentence_parser.size()!=0){
-    //   for (size_t i = 0; i < sentence_parser.size(); i++) {
-    //     std::cout << sentence_parser.at(i) << ' ';
-    //   }
-    //   std::cout << "\n";
-    // } else{
-    //   std::cout << "Il parser non ha riconosciuto la frase" << "\n";
-    // }
-    // std::cout << "Frase riconosciuta dalla combinazione SVM + parser" << '\n';
-    // if (sentence_svm_parser.size()!=0){
-    //   for (size_t i = 0; i < sentence_svm_parser.size(); i++) {
-    //     std::cout << sentence_svm_parser.at(i);
-    //   }
-    //   std::cout << "\n\n";
-    // } else{
-    //   std::cout << "La combinazione Parser+SVM non ha riconosciuto la frase" << "\n";
-    // }
     std::vector<std::string> comando_vector;
     for (size_t i = 0; i < comando.size(); i++) {
       comando_vector.push_back(ig.parse_label(comando.at(i), i));
     }
-    if(ig.test_sentences_equal(sentence_parser, comando_vector)) { uguali_parser_orig++; } else { diverse_parser_orig++; }
-    if(ig.test_sentences_equal(sentence_svm_parser,comando_vector)) { uguali_SVMeParser_orig++; } else { diverse_SVMeParser_orig++; }
+    if(ig.test_sentences_equal(sentence_svm_parser,comando_vector)) { uguali_SVMeParser_orig++; }
+    if(ig.test_sentences_equal(sentence_parser, comando_vector)) { uguali_parser_orig++; }
+    if (sentence_svm_parser.size()==0) {non_riconosciuto_svm_parser++;}
+    if (sentence_parser.size()==0) {non_riconosciuto_parser++;}
   }
   if((uguali_SVMeParser_orig-uguali_parser_orig)>0){
     std::cout << "La combinazaione SVM+Parser ha riconosciuto " << uguali_SVMeParser_orig-uguali_parser_orig << " comandi in più rispetto al solo parser" << '\n';
   } else if ((uguali_SVMeParser_orig-uguali_parser_orig)<0){
-    std::cout << "La combinazaione SVM+Parser ha riconosciuto " << uguali_parser_orig-uguali_SVMeParser_orig << " comandi in meno rispetto al solo parser" << '\n';
+    std::cout << "La combinazaione SVM+Parser ha riconosciuto " << -uguali_SVMeParser_orig+uguali_parser_orig << " comandi in meno rispetto al solo parser" << '\n';
   } else {
     std::cout << "La combinazaione SVM+Parser ha riconosciuto lo stesso numero di comandi del solo parser" << '\n';
   }
-  return uguali_SVMeParser_orig-uguali_parser_orig;
+  if((non_riconosciuto_svm_parser-non_riconosciuto_parser)>0){
+    std::cout << "La combinazaione SVM+Parser ha saputo parsare " << uguali_SVMeParser_orig-uguali_parser_orig << " comandi in meno rispetto al parser" << '\n';
+  } else if ((non_riconosciuto_svm_parser-non_riconosciuto_parser)<0){
+    std::cout << "La combinazaione SVM+Parser ha saputo parsare " << -non_riconosciuto_svm_parser+non_riconosciuto_parser << " comandi in più rispetto al parser." << '\n';
+  } else {
+    std::cout << "La combinazaione SVM+Parser e il solo parser non hanno saputo parsare lo stesso numero di comandi: " << non_riconosciuto_svm_parser << '\n';
+  }
+  std::cout << '\n';
+  std::vector<int> v;
+  v.push_back(uguali_SVMeParser_orig-uguali_parser_orig);
+  v.push_back(non_riconosciuto_svm_parser-non_riconosciuto_parser);
+  return v;
 }

@@ -13,6 +13,7 @@
 #include <fstream>
 #include <ctime>
 #include <cstdlib>
+#include <algorithm>
 #include <boost/tokenizer.hpp>
 #include "InputGenerator.hpp"
 

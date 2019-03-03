@@ -135,12 +135,14 @@ std::vector<std::vector<double>> Utils::remove_label(std::vector<std::vector<dou
   return svm_predictions;
 }
 
+int myrandom(int i){ return std::rand()%i; }
+
 std::vector<int> Utils::permutateIndexes(int label) {
-  std::srand ( unsigned ( std::time(0) ) );
+  std::srand(unsigned(std::time(0)));
   std::vector<int> myvector;
   int n_immagini[]={118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
   for (int i=1; i<(int)n_immagini[label]; i++) myvector.push_back(i);
-  std::random_shuffle ( myvector.begin(), myvector.end() );
+  std::random_shuffle ( myvector.begin(), myvector.end(), myrandom);
   //std::cout << "Indici mischiati: " << '\n';
   //for (int i=1; i<n_immagini[label]; i++) std::cout << myvector.at(i-1) << " ";
   //std::cout << '\n';

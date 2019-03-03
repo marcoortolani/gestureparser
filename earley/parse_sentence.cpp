@@ -56,9 +56,9 @@ std::vector<std::string> parse_sentence(std::vector<std::vector<double>> svm_pre
                 }
 
                 //codice scritto da me
-                std::ofstream probabilistic_vector;
-                probabilistic_vector.open("probabilistic.bson",std::ofstream::app);
-                probabilistic_vector <<"{ ";
+                //std::ofstream probabilistic_vector;
+                //probabilistic_vector.open("probabilistic.bson",std::ofstream::app);
+                //probabilistic_vector <<"{ ";
                 //fine codice scritto da me
 
                 std::cout << "\n\n-----------------------------------------------------" << std::endl;
@@ -66,29 +66,29 @@ std::vector<std::string> parse_sentence(std::vector<std::vector<double>> svm_pre
                 std::cout << "-----------------------------------------------------\n" << std::endl;
                 for(unsigned int i = 0; i < earley_chart.size(); i++){
                     std::vector<std::pair<std::string, double> > transition_probs = parser.getNextWordTransitions(earley_chart[i]);
-                    probabilistic_vector <<"\""<<i<<"\": { ";
+                    //probabilistic_vector <<"\""<<i<<"\": { ";
                     for(unsigned int j = 0; j < transition_probs.size(); j++){
                         //queste sono le probabilità che mi interessa prendere
                         //codice scrtto da me
                         if(transition_probs[j].first == ";" || j == transition_probs.size()-1){
-                            probabilistic_vector <<"\""<<transition_probs[j].first << "\":" << transition_probs[j].second;
+                            //probabilistic_vector <<"\""<<transition_probs[j].first << "\":" << transition_probs[j].second;
                         }else{
-                            probabilistic_vector <<"\""<<transition_probs[j].first << "\":" << transition_probs[j].second << ",    ";
+                            //probabilistic_vector <<"\""<<transition_probs[j].first << "\":" << transition_probs[j].second << ",    ";
                         }
                         //fine codice scirtto da me
                         std::cout << transition_probs[j].first << " --> " << transition_probs[j].second << "    "<<std::endl;
                     }
                     //codice scritto da me
                     if(i == earley_chart.size()-1){
-                        probabilistic_vector << "}";
+                        //probabilistic_vector << "}";
                     }else{
-                        probabilistic_vector << "},";
+                        //probabilistic_vector << "},";
                     }
                     //fine codice scritto da me
                     std::cout << std::endl;
                 }
                 //codice scritto da me
-                probabilistic_vector << "}" <<std::endl;
+                //probabilistic_vector << "}" <<std::endl;
                 //fine codice scritto da me
 
                 //std::ofstream f;
