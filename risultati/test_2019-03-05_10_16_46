@@ -1,0 +1,71 @@
+Addestrato con 5 features.
+Accuracy media SVM: 74.4307
+Miglioramenti SVM+parser: 372
+non_riconosciute_media  SVM+parser: 232
+Vettore accuracy:	68.7555	76.7873	76.9638	69.3733	83.5834	68.932	79.6117	78.1112	65.8429	76.346
+Vettore miglioramenti:	368	285	315	746	228	192	479	134	662	304
+Vettore non_riconosciute:	228	244	178	373	121	169	287	136	341	237
+
+Addestrato con 10 features.
+Accuracy media SVM: 91.0946
+Miglioramenti SVM+parser: 169
+non_riconosciute_media  SVM+parser: 85
+Vettore accuracy:	91.5584	93.7848	86.3636	91.5584	92.115	91.9295	89.8887	89.5176	91.9295	92.3006
+Vettore miglioramenti:	143	163	233	168	148	143	187	234	136	129
+Vettore non_riconosciute:	81	78	114	97	57	74	106	102	68	71
+
+Addestrato con 15 features.
+Accuracy media SVM: 93.3431
+Miglioramenti SVM+parser: 131
+non_riconosciute_media  SVM+parser: 66
+Vettore accuracy:	93.4506	94.0371	91.3978	95.6012	93.6461	93.5484	92.5709	93.3529	92.4731	93.3529
+Vettore miglioramenti:	179	95	156	98	165	146	163	75	121	109
+Vettore non_riconosciute:	70	46	77	54	71	77	80	48	66	62
+
+Addestrato con 20 features.
+Accuracy media SVM: 94.5661
+Miglioramenti SVM+parser: 108
+non_riconosciute_media  SVM+parser: 54
+Vettore accuracy:	94.4215	94.4215	96.1777	95.2479	93.6983	94.5248	94.938	93.595	94.0083	94.6281
+Vettore miglioramenti:	122	115	64	181	78	95	100	101	110	105
+Vettore non_riconosciute:	60	60	39	82	44	53	35	52	62	49
+
+Addestrato con 25 features.
+Accuracy media SVM: 94.4469
+Miglioramenti SVM+parser: 101
+non_riconosciute_media  SVM+parser: 50
+Vettore accuracy:	94.195	94.195	94.3045	95.7284	94.7426	95.9474	95.0712	93.3187	93.2092	93.7568
+Vettore miglioramenti:	118	85	59	119	85	61	115	172	99	89
+Vettore non_riconosciute:	59	40	32	53	46	32	54	85	48	46
+
+Addestrato con 30 features.
+Accuracy media SVM: 95.7226
+Miglioramenti SVM+parser: 92
+non_riconosciute_media  SVM+parser: 44
+Vettore accuracy:	95.1049	95.8042	95.9207	96.7366	95.9207	95.338	95.2214	94.9883	96.8531	95.338
+Vettore miglioramenti:	143	73	81	87	69	109	106	78	75	94
+Vettore non_riconosciute:	69	32	41	36	38	53	52	33	37	46
+
+Addestrato con 35 features.
+Accuracy media SVM: 95.99
+Miglioramenti SVM+parser: 90
+non_riconosciute_media  SVM+parser: 42
+Vettore accuracy:	97.1357	95.2677	97.1357	96.0149	95.7659	96.0149	95.0187	95.6413	95.2677	96.6376
+Vettore miglioramenti:	79	91	90	78	72	92	93	85	109	104
+Vettore non_riconosciute:	28	44	39	34	49	41	49	42	48	43
+
+Addestrato con 40 features.
+Accuracy media SVM: 96.0829
+Miglioramenti SVM+parser: 82
+non_riconosciute_media  SVM+parser: 38
+Vettore accuracy:	97.3262	95.5882	96.6578	96.6578	96.3904	95.0535	94.7861	95.9893	95.8556	96.5241
+Vettore miglioramenti:	48	114	59	86	116	84	47	64	105	94
+Vettore non_riconosciute:	21	62	22	35	64	37	23	33	33	49
+
+Addestrato con 45 features.
+Accuracy media SVM: 96.7965
+Miglioramenti SVM+parser: 75
+non_riconosciute_media  SVM+parser: 33
+Vettore accuracy:	97.114	96.3925	96.1039	97.4026	97.2583	96.8254	96.9697	96.8254	96.8254	96.2482
+Vettore miglioramenti:	42	91	44	38	126	123	54	58	89	78
+Vettore non_riconosciute:	21	43	18	19	63	55	23	24	33	25

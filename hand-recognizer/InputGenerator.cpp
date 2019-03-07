@@ -4,7 +4,7 @@ InputGenerator::InputGenerator(){
 
 }
 
-void InputGenerator::parse_svm_output(const char* filename){
+void InputGenerator::parse_svm_output(const char* filename, bool print_sentence){
     int num_parola=0;
     std::vector<std::string> command;
     std::ofstream sentence;
@@ -52,10 +52,10 @@ void InputGenerator::parse_svm_output(const char* filename){
     }
     for (size_t i = 0; i < command.size()-1; i++) {
       sentence<<command.at(i);
-      //std::cout << command.at(i);
+      if (print_sentence) std::cout << command.at(i);
     }
     sentence<<";\n";
-    //std::cout<<";\n";
+    if (print_sentence) std::cout<<";\n";
     sentence.close();
     input_file.close();
 }

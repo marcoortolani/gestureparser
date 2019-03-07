@@ -12,7 +12,7 @@
 class InputGenerator{
 public:
     InputGenerator();
-    void parse_svm_output(const char* filename);
+    void parse_svm_output(const char* filename, bool print_sentence);
     std::string parse_label (int label, int num);
     bool test_sentences_equal (std::vector<std::string> sentence1, std::vector<std::string> sentence2);
 private:

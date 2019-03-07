@@ -36,7 +36,7 @@ int main() {
         file.close();
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
         vu.print_vec_vec(labels_probabilities, false);
-        ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM);
+        ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM, true);
         break;
       }
       case 2:{
@@ -86,7 +86,7 @@ int main() {
           }
           file.close();
           labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
-          ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM);
+          ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM, false);
           sentence_parser.clear();
           std::cout.setstate(std::ios_base::failbit);
           sentence_parser=parse_sentence(vu.generic_label_probs(), true);
