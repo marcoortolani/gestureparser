@@ -25,7 +25,7 @@ int main() {
     std::cin>>opt;
     switch (opt) {
       case 1:{
-        int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
+        int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
         std::vector<int> comando_v;
         // comando_v.push_back(2);
         // comando_v.push_back(6);
@@ -93,7 +93,7 @@ int main() {
         int non_riconosciuto_parser=0;
         std::vector<std::string> sentence_parser;
         std::vector<std::string> sentence_svm_parser;
-        int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
+        int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
         std::vector<std::vector<int>> comandi = vu.read_commands(FILE_GESTI);
         std::vector<int> comando;
         size_t zzz;
