@@ -88,6 +88,26 @@ std::string InputGenerator::parse_label (int label, int num){
   return "boh ";
 }
 
+int InputGenerator::word_to_label(std::string word){
+  std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+  word.erase(std::remove(word.begin(), word.end(), ' '), word.end());
+  const char *cmd = word.c_str();
+  if(strcmp(cmd, "query") == 0) return 1;
+  if(strcmp(cmd, ";") == 0) return 1;
+  if(strcmp(cmd, "increase") == 0) return 2;
+  if(strcmp(cmd, "set") == 0) return 2;
+  if(strcmp(cmd, "decrease") == 0) return 3;
+  if(strcmp(cmd, "start") == 0) return 3;
+  if(strcmp(cmd, "stop") == 0) return 4;
+  if(strcmp(cmd, "heater") == 0) return 5;
+  if(strcmp(cmd, "light") == 0) return 6;
+  if(strcmp(cmd, "energymeter") == 0) return 7;
+  if(strcmp(cmd, "status") == 0) return 8;
+  if(strcmp(cmd, "med") == 0) return 9;
+  if(strcmp(cmd, "high") == 0) return 10;
+  if(strcmp(cmd, "low") == 0) return 11;
+  return -1;
+}
 
 bool InputGenerator::test_sentences_equal (std::vector<std::string> sentence1, std::vector<std::string> sentence2){
   std::string s1, s2;

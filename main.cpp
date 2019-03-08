@@ -26,12 +26,34 @@ int main() {
     switch (opt) {
       case 1:{
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
-        int comando[]={2, 6, 10, 2, 1};
+        std::vector<int> comando_v;
+        // comando_v.push_back(2);
+        // comando_v.push_back(6);
+        // comando_v.push_back(10);
+        // comando_v.push_back(2);
+        // comando_v.push_back(1);
+        std::string input;
+        std::cout << "Inserisci comando da parsare." << '\n';
+        bool error =true;
+        while (error) {
+          comando_v.clear();
+          error = false;
+          while (std::cin >> input && input != ";") {
+            comando_v.push_back(ig.word_to_label(input));
+            if (ig.word_to_label(input)==-1){
+              std::cout << "ERROR: rewrite the command!" << '\n';
+              error=true;
+            }
+          }
+          comando_v.push_back(1);
+        }
+        std::cout << "Comando digitato:" << '\n';
+        vu.stampa_comando(comando_v);
         std::ofstream file;
         file.open("../dataset/feature_mauro");
-        for (int i=0; i<5; i++){
+        for (int i=0; i<(int)comando_v.size(); i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(comando[i], vu.random_index(91, n_immagini[comando[i]]), file);
+            featureextr.genFeatures(comando_v.at(i), vu.random_index(91, n_immagini[comando_v.at(i)]), file);
         }
         file.close();
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
