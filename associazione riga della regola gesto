@@ -1,6 +1,6 @@
-1 = Query   7                   5
-2 = Set     9                   36
-3 = start   11                  37
+1 = Query   7
+2 = Set     9
+3 = start   11
 4 = stop    12
 5 = heater  15  22  25  27  31
 6 = light   16  21  24  28  32
@@ -9,6 +9,6 @@
 9 = med     33
 10 = high   34
 11 = low    35
-2 = increase  36
-3 = decrease  37
-1=; 5
+12 = increase  36
+13 = decrease  37
+14=; 5

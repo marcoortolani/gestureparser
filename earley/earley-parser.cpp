@@ -11,7 +11,7 @@ using std::endl;
 int label_piu_probabile (double* labels_probabilities){
   double temp_max=-1;
   int temp_index=-1;
-  for (int k = 0; k < 11; k++) {
+  for (int k = 0; k < 14; k++) {
     if(labels_probabilities[k]>temp_max){
       temp_max=labels_probabilities[k];
       temp_index=k;
@@ -21,13 +21,13 @@ int label_piu_probabile (double* labels_probabilities){
 }
 
 std::string prossima_parola(double* rules_prob, std::vector<double> svm_predictions, int num){
-  double vettore_prob[11];
+  double vettore_prob[14];
   double normalizator=0;
-  for (size_t i = 0; i < 11; i++) {
+  for (size_t i = 0; i < 14; i++) {
     vettore_prob[i]=rules_prob[i]*svm_predictions.at(i+1);
     normalizator+=vettore_prob[i];
   }
-  for (size_t i = 0; i < 11; i++) {
+  for (size_t i = 0; i < 14; i++) {
     if (normalizator==0){
       vettore_prob[i]=vettore_prob[i]; //non normalizzo
     } else    vettore_prob[i]=vettore_prob[i]/normalizator;

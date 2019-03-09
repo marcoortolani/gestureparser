@@ -113,7 +113,7 @@ void Utils::stampa_comando(std::vector<int> v){
 std::vector<std::vector<double>> Utils::generic_label_probs(){
   std::vector<std::vector<double>> svm_predictions;
   std::vector<double> temp_v;
-  for (size_t i = 0; i < 11; i++) {
+  for (size_t i = 0; i < 14; i++) {
     temp_v.push_back(1);
   }
   for (size_t i = 0; i < 10; i++) {
@@ -127,7 +127,7 @@ std::vector<std::vector<double>> Utils::remove_label(std::vector<std::vector<dou
   std::vector<double> temp_v;
   for (size_t i = 0; i < probs.size(); i++) {
     temp_v.clear();
-    for (size_t j = 1; j < 12; j++) {
+    for (size_t j = 1; j < 15; j++) {
       temp_v.push_back(probs.at(i).at(j));
     }
     svm_predictions.push_back(temp_v);
@@ -140,7 +140,7 @@ int myrandom(int i){ return std::rand()%i; }
 std::vector<int> Utils::permutateIndexes(int label) {
   std::srand(unsigned(std::time(0)));
   std::vector<int> myvector;
-  int n_immagini[]={118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105};
+  int n_immagini[]={118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
   for (int i=1; i<(int)n_immagini[label]; i++) myvector.push_back(i);
   std::random_shuffle ( myvector.begin(), myvector.end(), myrandom);
   //std::cout << "Indici mischiati: " << '\n';
@@ -151,7 +151,7 @@ std::vector<int> Utils::permutateIndexes(int label) {
 
 std::vector<std::vector<int>> Utils::generateIndexesVector(){
   std::vector<std::vector<int>> indexes;
-  for (int i = 0; i < 11; i++) {
+  for (int i = 0; i < 14; i++) {
     indexes.push_back(permutateIndexes(i));
   }
   return indexes;

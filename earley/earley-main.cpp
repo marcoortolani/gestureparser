@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
             std::vector<EarleyParser<std::string>::EarleySet> earley_chart;
             std::vector<std::vector<double>> svm_predictions;
             std::vector<double> temp_v;
-            for (size_t i = 0; i < 11; i++) {
+            for (size_t i = 0; i < 14; i++) {
               temp_v.push_back(1);
             }
             for (size_t i = 0; i < sentences.at(kk).size() ; i++) {

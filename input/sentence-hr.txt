@@ -1,1 +1,1 @@
-Set light heater increase ;
+Query energymeter status ;

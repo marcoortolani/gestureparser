@@ -19,7 +19,7 @@ int main() {
           std::ofstream file;
           file.open("../dataset/feature_mauro");
           for (int i=1; i<15; i++){
-            for (int j=1; j<91; j++){
+            for (int j=1; j<81; j++){
               FeaturesExtraction featureextr;
               featureextr.genFeatures(i, j, file);
             }
@@ -53,7 +53,7 @@ int main() {
           }
           file.close();
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
-        std::cout << "\nGesture prediction con il file generato al puno 1" << '\n';
+        std::cout << "\nGesture prediction con il file generato al puno 1. Accuracy: " << accuracy << "%\n";
         //vu.print_vec_vec(labels_probabilities, false);
         //vu.print_vec_vec(vu.order_indexes(), true);
         break;
@@ -63,18 +63,9 @@ int main() {
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
         std::ofstream file;
         file.open("../dataset/feature_mauro");
-        std::cout << "\nSenza approssimazione\n\n";
         for (int i=1; i<15; i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(i, vu.random_index(91, n_immagini[i]), file);
-        }
-        file.close();
-        labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
-        vu.print_vec_vec(labels_probabilities, false);
-        std::cout << "\nCon approssimazione\n\n";
-        for (int i=1; i<15; i++){
-            FeaturesExtraction featureextr;
-            featureextr.genFeatures(i, vu.random_index(91, n_immagini[i]), file);
+            featureextr.genFeatures(i, vu.random_index(81, n_immagini[i]), file);
         }
         file.close();
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);

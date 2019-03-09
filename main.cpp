@@ -30,8 +30,8 @@ int main() {
         // comando_v.push_back(2);
         // comando_v.push_back(6);
         // comando_v.push_back(10);
-        // comando_v.push_back(2);
-        // comando_v.push_back(1);
+        // comando_v.push_back(12);
+        // comando_v.push_back(14);
         std::string input;
         std::cout << "Inserisci comando da parsare." << '\n';
         bool error =true;
@@ -40,12 +40,13 @@ int main() {
           error = false;
           while (std::cin >> input && input != ";") {
             comando_v.push_back(ig.word_to_label(input));
+            //std::cout << ig.word_to_label(input) << '\n';
             if (ig.word_to_label(input)==-1){
               std::cout << "ERROR: rewrite the command!" << '\n';
               error=true;
             }
           }
-          comando_v.push_back(1);
+          comando_v.push_back(14);
         }
         std::cout << "Comando digitato:" << '\n';
         vu.stampa_comando(comando_v);
@@ -53,7 +54,7 @@ int main() {
         file.open("../dataset/feature_mauro");
         for (int i=0; i<(int)comando_v.size(); i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(comando_v.at(i), vu.random_index(91, n_immagini[comando_v.at(i)]), file);
+            featureextr.genFeatures(comando_v.at(i), vu.random_index(81, n_immagini[comando_v.at(i)]), file);
         }
         file.close();
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
@@ -104,7 +105,7 @@ int main() {
           file.open("../dataset/feature_mauro");
           for (int j=0; j<(int)comando.size(); j++){
               FeaturesExtraction featureextr;
-              featureextr.genFeatures(comando.at(j), vu.random_index(91, n_immagini[comando.at(j)]), file);
+              featureextr.genFeatures(comando.at(j), vu.random_index(81, n_immagini[comando.at(j)]), file);
           }
           file.close();
           labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);

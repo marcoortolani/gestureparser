@@ -69,13 +69,13 @@ std::vector<std::vector<double>> svm_predictions;
 int num=0;
 std::vector<double> current_probs;
 std::vector<double> rules_prob;
-int associazione_regole_gesti[]= {-1, -1, -1, -1, 1, -1, 1, -1, 2, -1, 3, 4, -1, -1, 5, 6, 7, -1, -1, 8, 6, 5, 7, 6, 5, 7, 5, 6, 7, 7, 5, 6, 9, 10, 11, 2, 3};
+int associazione_regole_gesti[]= {-1, -1, -1, -1, 14, -1, 1, -1, 2, -1, 3,  4, -1, -1, 5, 6, 7, -1, -1, 8, 6, 5, 7, 6, 5, 7, 5, 6, 7, 7, 5, 6, 9, 10, 11, 12, 13};
 bool is_terminal[] = {false, false, false, false, true, false, true,  false, true,  false, true, true,  false, false, true, true, true,  false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
 
 int label_piu_probabile (double* labels_probabilities){
   double temp_max=-1;
   int temp_index=-1;
-  for (int k = 0; k < 11; k++) {
+  for (int k = 0; k < 14; k++) {
     if(labels_probabilities[k]>temp_max){
       temp_max=labels_probabilities[k];
       temp_index=k+1;
@@ -87,16 +87,16 @@ int label_piu_probabile (double* labels_probabilities){
 
 std::string prossima_parola(std::vector<double> rules_prob, std::vector<double> svm_predictions, int num){
   InputGenerator ig;
-  double vettore_prob[11];
+  double vettore_prob[14];
   double normalizator=0;
-  for (size_t i = 0; i < 11; i++) {
+  for (size_t i = 0; i < 14; i++) {
     std::cout << svm_predictions.at(i) << " * " << rules_prob.at(i) << " = ";
     vettore_prob[i]=rules_prob.at(i)*svm_predictions.at(i);
     std::cout << vettore_prob[i]<< "\n";
     normalizator+=vettore_prob[i];
   }
   std::cout << "Vettore della combonazione SVM+Parser normalizzato:" << '\n';
-  for (size_t i = 0; i < 11; i++) {
+  for (size_t i = 0; i < 14; i++) {
     if (normalizator==0){
       vettore_prob[i]=vettore_prob[i]; //non normalizzo
     } else    vettore_prob[i]=vettore_prob[i]/normalizator;
@@ -113,7 +113,7 @@ void init_rules_prob (){
   rules_prob.clear();
   rules_prob.push_back(0.500978);
   rules_prob.push_back(0.499022);
-  for (size_t i = 2; i < 11; i++) {
+  for (size_t i = 2; i < 14; i++) {
     rules_prob.push_back(0);
   }
 }
@@ -125,7 +125,7 @@ std::vector<double> normalizza(std::vector<double> current_probs, std::vector<do
     normalizator += current_probs.at(i);
     }
   if(normalizator>0){
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < 14; i++) {
         normalized.push_back(rules_prob.at(i)/normalizator);
     }
   } else normalized=rules_prob;
@@ -542,7 +542,7 @@ typename EarleyParser<T>::EarleySet EarleyParser<T>::predict(const EarleySet &in
     // add each state Y --> v, update the alphas and gammas
     EarleySet predicted_states;
     rules_prob.clear();
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < 14; i++) {
       rules_prob.push_back(0);
     }
     current_probs.clear();

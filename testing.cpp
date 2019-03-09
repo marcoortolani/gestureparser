@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     mean_accuracy=0;
     miglioramenti_media=0;
     non_riconosciute_media=0;
-    std::cout << "Utilizzerò " << in << "*11 features per addestrare il modello e circa " << 100-in << "*11 per testarlo.\n";
+    std::cout << "Utilizzerò " << in << "*14 features per addestrare il modello e circa " << 100-in << "*14 per testarlo.\n";
     for (int exec = 0; exec < num_exec; exec++) {
       temp_stats.clear();
       std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
     file_stats.close();
     accuracy_tot.push_back(mean_accuracy);
     miglioramenti_tot.push_back(miglioramenti_media);
-    std::cout<< "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media  SVM+parser: " << ceil(abs(non_riconosciute_media))<< "\n";
+    std::cout<< "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media SVM+parser: " << ceil(abs(non_riconosciute_media))<< "\n\n";
     in=in+5;
   }
   if(!script){
@@ -139,7 +139,7 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes){
     std::ofstream file;
     int num_feat=0;
     file.open("../dataset/feature_mauro");
-    for (int i=0; i<11; i++){
+    for (int i=0; i<14; i++){
       for (int j=0; j<in; j++){
         featureextr= new FeaturesExtraction();
         featureextr->genFeatures(i+1, indexes.at(i).at(j), file);
@@ -152,7 +152,7 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes){
     std::cout << "Addestrato con " <<num_feat<<" features."<< '\n';
     num_feat=0;
     file.open("../dataset/feature_mauro");
-    for (int i=0; i<11; i++){
+    for (int i=0; i<14; i++){
       for (int j=in; j<(int)indexes.at(i).size(); j++){
         featureextr= new FeaturesExtraction();
         featureextr->genFeatures(i+1, indexes.at(i).at(j), file);

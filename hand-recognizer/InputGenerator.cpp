@@ -14,23 +14,11 @@ void InputGenerator::parse_svm_output(const char* filename, bool print_sentence)
     while (std::getline(input_file, line)){
         char* cmd = strtok(strdup(line.c_str()), " ");
         if(strcmp(cmd, "1") == 0){
-          if(num_parola>1){
-            command.push_back("; ");
-          }else{
             command.push_back("Query ");
-          }
         }else if (strcmp(cmd,"2") == 0){
-          if(num_parola>1){
-            command.push_back("increase ");
-          }else{
-            command.push_back("Set ");
-          }
+          command.push_back("Set ");
         }else if (strcmp(cmd,"3") == 0){
-          if(num_parola>2){
-            command.push_back("decrease ");
-          }else{
-            command.push_back("start ");
-          }
+          command.push_back("start ");
         }else if (strcmp(cmd,"4") == 0){
             command.push_back("stop ");
         }else if (strcmp(cmd,"5") == 0){
@@ -47,6 +35,12 @@ void InputGenerator::parse_svm_output(const char* filename, bool print_sentence)
             command.push_back("high ");
         }else if (strcmp(cmd,"11") == 0){
             command.push_back("low ");
+        }else if (strcmp(cmd,"12") == 0){
+            command.push_back("increase ");
+        }else if (strcmp(cmd,"13") == 0){
+            command.push_back("decrease ");
+        }else if (strcmp(cmd,"14") == 0){
+            command.push_back("; ");
         }
             num_parola++;
     }
@@ -62,20 +56,9 @@ void InputGenerator::parse_svm_output(const char* filename, bool print_sentence)
 
 std::string InputGenerator::parse_label (int label, int num){
   switch (label) {
-    case 1:
-      if (num>1) {
-        return "; ";
-      } else return "Query ";
-      break;
-    case 2:
-    if (num>1) {
-      return "increase ";
-    } else return "Set ";
-    break;
-    case 3:
-    if (num>2) {
-      return "decrease " ;
-    } else return "start ";
+    case 1: return "Query "; break;
+    case 2: return "Set "; break;
+    case 3: return "start "; break;
     case 4: return "stop "; break;
     case 5: return "heater "; break;
     case 6: return "light "; break;
@@ -84,6 +67,9 @@ std::string InputGenerator::parse_label (int label, int num){
     case 9: return "med "; break;
     case 10: return "high "; break;
     case 11: return "low "; break;
+    case 12: return "increase "; break;
+    case 13: return "decrease "; break;
+    case 14: return "; "; break;
   }
   return "boh ";
 }
@@ -93,10 +79,7 @@ int InputGenerator::word_to_label(std::string word){
   word.erase(std::remove(word.begin(), word.end(), ' '), word.end());
   const char *cmd = word.c_str();
   if(strcmp(cmd, "query") == 0) return 1;
-  if(strcmp(cmd, ";") == 0) return 1;
-  if(strcmp(cmd, "increase") == 0) return 2;
   if(strcmp(cmd, "set") == 0) return 2;
-  if(strcmp(cmd, "decrease") == 0) return 3;
   if(strcmp(cmd, "start") == 0) return 3;
   if(strcmp(cmd, "stop") == 0) return 4;
   if(strcmp(cmd, "heater") == 0) return 5;
@@ -106,6 +89,9 @@ int InputGenerator::word_to_label(std::string word){
   if(strcmp(cmd, "med") == 0) return 9;
   if(strcmp(cmd, "high") == 0) return 10;
   if(strcmp(cmd, "low") == 0) return 11;
+  if(strcmp(cmd, "increase") == 0) return 12;
+  if(strcmp(cmd, "decrease") == 0) return 13;
+  if(strcmp(cmd, ";") == 0) return 14;
   return -1;
 }
 
