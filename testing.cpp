@@ -94,12 +94,13 @@ int main(int argc, char *argv[]) {
     file_stats <<"\n\n";
     file_stats.close();
     accuracy_tot.push_back(mean_accuracy);
-    miglioramenti_tot.push_back(miglioramenti_media);
+    miglioramenti_tot.push_back(ceil(abs(miglioramenti_media)));
+    non_riconosciute_tot.push_back(ceil(abs(non_riconosciute_media)));
     std::cout<< "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media SVM+parser: " << ceil(abs(non_riconosciute_media))<< "\n\n";
     in=in+5;
   }
   if(!script){
-    file_stats.open("../risultati", std::ios_base::app);
+    file_stats.open(output_filename, std::ios_base::app);
     std::cout << "Riepilogo accuracy: ";
     file_stats << "Riepilogo accuracy: ";
     for (size_t i = 0; i < accuracy_tot.size(); i++) {
