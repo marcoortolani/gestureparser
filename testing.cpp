@@ -12,32 +12,34 @@
 #include "earley/Stringable.h"
 #define FILE_GESTI "../input/comandi_corretti_labels.txt"
 
-double train_testing(int in, std::vector<std::vector<int>> &indexes);
+double train_testing(int in, std::vector<std::vector<int>> &indexes, int seed);
 std::vector<int> parser(int in, std::vector<std::vector<int>> indexes);
 
 int main(int argc, char *argv[]) {
-  int in, max, num_exec;
+  int in, max, num_exec, seed;
   bool script;
   std::string output_filename;
-  if(argc > 1 && argc<4){
+  if(argc > 1 && argc<5){
       std::cout << "Modalità script.\nUsage:" << std::endl;
-      std::cout << "./testing <n_features_addestramento> <cicli_per_ogni_addestramento> <file_output>" << std::endl;
+      std::cout << "./testing <n_features_addestramento> <cicli_per_ogni_addestramento> <file_output> <seme>" << std::endl;
       exit(1);
-  } else if(argc > 1 && argc==4){
+  } else if(argc > 1 && argc==5){
     std::cout << "Modalità script.\n";
     in= (int) std::atoi(argv[1]);
     max=in+1;
     num_exec=(int) std::atoi(argv[2]);
     std::string temp_filename(argv[3]);
     output_filename=temp_filename;
+    seed=(int) std::atoi(argv[4]);
     script=true;
   } else {
     std::cout << "Modalità no script." << '\n';
     in=5;
-    max=96;
+    max=81;
     num_exec=10;
     script=false;
     output_filename="../risultati/test_no_script";
+    seed=(int)std::time(0);
   }
   timeval start, stop;
   double elapsedTime;
@@ -65,7 +67,7 @@ int main(int argc, char *argv[]) {
     for (int exec = 0; exec < num_exec; exec++) {
       temp_stats.clear();
       std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
-      double current_accuracy=train_testing(in, indexes);
+      double current_accuracy=train_testing(in, indexes, seed);
       accuracy.push_back(current_accuracy);
       mean_accuracy=mean_accuracy+current_accuracy;
       temp_stats = parser(in, indexes);
@@ -115,16 +117,16 @@ int main(int argc, char *argv[]) {
     }
     std::cout << "\nRiepilogo non_riconosciute: ";
     file_stats << "\nRiepilogo non_riconosciute: ";
-    for (size_t i = 0; i < non_riconosciute.size(); i++) {
-    std::cout << non_riconosciute.at(i)<< " ";
-    file_stats << non_riconosciute.at(i)<< " ";
+    for (size_t i = 0; i < non_riconosciute_tot.size(); i++) {
+    std::cout << non_riconosciute_tot.at(i)<< " ";
+    file_stats << non_riconosciute_tot.at(i)<< " ";
     }
     std::cout << '\n';
     file_stats << '\n';
     gettimeofday(&stop, NULL);
     elapsedTime = (stop.tv_sec - start.tv_sec);
     std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n";
-    file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n";
+    file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n\nFINE TEST\n\n";
     file_stats.close();
     sleep(15);
   }
@@ -132,11 +134,11 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-double train_testing(int in, std::vector<std::vector<int>> &indexes){
+double train_testing(int in, std::vector<std::vector<int>> &indexes, int seed){
   Utils vu;
   FeaturesExtraction* featureextr;
   indexes.clear();
-    indexes=vu.generateIndexesVector();
+    indexes=vu.generateIndexesVector(seed);
     std::ofstream file;
     int num_feat=0;
     file.open("../dataset/feature_mauro");

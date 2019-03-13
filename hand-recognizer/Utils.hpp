@@ -28,8 +28,8 @@ class Utils{
     void stampa_comando(std::vector<int> v);
     std::vector<std::vector<double>> generic_label_probs();
     std::vector<std::vector<double>> remove_label(std::vector<std::vector<double>> probs);
-    std::vector<int> permutateIndexes(int label);
-    std::vector<std::vector<int>> generateIndexesVector();
+    std::vector<int> permutateIndexes(int label, int seed);
+    std::vector<std::vector<int>> generateIndexesVector(int seed);
 };
 
 #endif /*Utils_hpp*/

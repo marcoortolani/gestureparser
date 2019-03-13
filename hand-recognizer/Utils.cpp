@@ -137,8 +137,8 @@ std::vector<std::vector<double>> Utils::remove_label(std::vector<std::vector<dou
 
 int myrandom(int i){ return std::rand()%i; }
 
-std::vector<int> Utils::permutateIndexes(int label) {
-  std::srand(unsigned(std::time(0)));
+std::vector<int> Utils::permutateIndexes(int label, int seed) {
+  std::srand(unsigned(seed));
   std::vector<int> myvector;
   int n_immagini[]={118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
   for (int i=1; i<(int)n_immagini[label]; i++) myvector.push_back(i);
@@ -149,10 +149,10 @@ std::vector<int> Utils::permutateIndexes(int label) {
   return myvector;
 }
 
-std::vector<std::vector<int>> Utils::generateIndexesVector(){
+std::vector<std::vector<int>> Utils::generateIndexesVector(int seed){
   std::vector<std::vector<int>> indexes;
   for (int i = 0; i < 14; i++) {
-    indexes.push_back(permutateIndexes(i));
+    indexes.push_back(permutateIndexes(i, seed));
   }
   return indexes;
 }
