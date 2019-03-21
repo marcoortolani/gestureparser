@@ -39,7 +39,6 @@ int main(int argc, char *argv[]) {
     num_exec=10;
     script=false;
     output_filename="../risultati/test_no_script";
-    seed=(int)std::time(0);
   }
   timeval start, stop;
   double elapsedTime;
@@ -64,6 +63,7 @@ int main(int argc, char *argv[]) {
     miglioramenti_media=0;
     non_riconosciute_media=0;
     std::cout << "Utilizzerò " << in << "*14 features per addestrare il modello e circa " << 100-in << "*14 per testarlo.\n";
+    if (script==false) {seed=(int)std::time(0);}
     for (int exec = 0; exec < num_exec; exec++) {
       temp_stats.clear();
       std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
