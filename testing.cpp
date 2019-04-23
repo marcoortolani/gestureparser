@@ -34,11 +34,16 @@ int main(int argc, char *argv[]) {
     script=true;
   } else {
     std::cout << "Modalità no script." << '\n';
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    char buffer [120];
+    strftime (buffer,120,"../risultati/test_no_script_%Y_%m_%d-%H_%M",now);
     in=5;
     max=81;
     num_exec=10;
     script=false;
-    output_filename="../risultati/test_no_script";
+    output_filename=buffer;
+    std::cout << "output_filename: " << output_filename << '\n';
   }
   timeval start, stop;
   double elapsedTime;
@@ -63,7 +68,7 @@ int main(int argc, char *argv[]) {
     miglioramenti_media=0;
     non_riconosciute_media=0;
     std::cout << "Utilizzerò " << in << "*14 features per addestrare il modello e circa " << 100-in << "*14 per testarlo.\n";
-    if (script==false) {seed=(int)std::time(0);}
+    if (!script) {seed=(int)std::time(0);}
     for (int exec = 0; exec < num_exec; exec++) {
       temp_stats.clear();
       std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
@@ -100,6 +105,7 @@ int main(int argc, char *argv[]) {
     non_riconosciute_tot.push_back(ceil(abs(non_riconosciute_media)));
     std::cout<< "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media SVM+parser: " << ceil(abs(non_riconosciute_media))<< "\n\n";
     in=in+5;
+    if(!script) sleep(20);
   }
   if(!script){
     file_stats.open(output_filename, std::ios_base::app);

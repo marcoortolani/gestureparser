@@ -1,0 +1,10 @@
+x=[5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80];
+accuracy=[76.5398 87.3455 91.336 92.1839 93.3906 94.9772 94.8293 95.8192 96.1963 96.6355 96.6443 96.7407 97.0681 97.8495 97.8512 99.3846];
+miglioramenti=[860 345 201 196 193 146 136 111 103 98 78 56 48 27 26 24]./1945;
+non_riconosciute=[395 124 80 79 67 55 53 40 32 31 29 25 10 9 8 6]./1945;
+subplot(1,3,1), plot(x, accuracy,'-*'), title('Variazione accuracy');
+xlim([5,80]);
+subplot(1,3,2), plot(x, miglioramenti,'-*'), title('Variazione miglioramenti');
+xlim([5,80]);
+subplot(1,3,3), plot(x, non_riconosciute,'-*'), title('Variazione comandi non riconosciuti');
+xlim([5,80]);
