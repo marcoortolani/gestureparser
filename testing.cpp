@@ -45,9 +45,13 @@ int main(int argc, char *argv[]) {
     output_filename=buffer;
     std::cout << "output_filename: " << output_filename << '\n';
   }
+  std::string output_filename_csv = output_filename;
+  output_filename_csv.append(".csv");
+  std::cout << "output_filename_csv: " << output_filename_csv << '\n';
   timeval start, stop;
   double elapsedTime;
   std::ofstream file_stats;
+  std::ofstream file_stats_csv;
   std::vector<double> accuracy;
   std::vector<int> miglioramenti;
   std::vector<int> non_riconosciute;
@@ -68,7 +72,9 @@ int main(int argc, char *argv[]) {
     miglioramenti_media=0;
     non_riconosciute_media=0;
     std::cout << "Utilizzerò " << in << "*14 features per addestrare il modello e circa " << 100-in << "*14 per testarlo.\n";
+    file_stats_csv.open(output_filename_csv, std::ios_base::app);
     if (!script) {seed=(int)std::time(0);}
+    file_stats_csv << in << "features;"<<"\n";
     for (int exec = 0; exec < num_exec; exec++) {
       temp_stats.clear();
       std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
@@ -86,20 +92,28 @@ int main(int argc, char *argv[]) {
     non_riconosciute_media=non_riconosciute_media/num_exec;
     file_stats.open(output_filename, std::ios_base::app);
     file_stats << "Addestrato con " << in << " features. \nAccuracy media SVM: " << mean_accuracy << " \nMiglioramenti SVM+parser: " << ceil(abs(miglioramenti_media)) << "\nnon_riconosciute_media  SVM+parser: " << ceil(abs(non_riconosciute_media))<<"\n";
+    file_stats_csv << "Accuracy;";
     file_stats << "Vettore accuracy:\t";
     for (size_t i = 0; i < accuracy.size(); i++) {
       file_stats << accuracy.at(i) << "\t";
+      file_stats_csv <<accuracy.at(i) << ";";
     }
+    file_stats_csv<<";Media:;"<<mean_accuracy<<";\nMiglioramenti:;";
     file_stats << "\nVettore miglioramenti:\t";
     for (size_t i = 0; i < miglioramenti.size(); i++) {
       file_stats << miglioramenti.at(i) << "\t";
+      file_stats_csv << miglioramenti.at(i) << ";";
     }
+    file_stats_csv<<";Media:;;"<<ceil(abs(miglioramenti_media))<<";\nNon Riconosciuti:;";
     file_stats << "\nVettore non_riconosciute:\t";
     for (size_t i = 0; i < non_riconosciute.size(); i++) {
       file_stats << non_riconosciute.at(i) << "\t";
+      file_stats_csv <<non_riconosciute.at(i) << ";";
     }
     file_stats <<"\n\n";
     file_stats.close();
+    file_stats_csv<<";Media:;;;"<<ceil(abs(non_riconosciute_media))<<";\n;\n;\n";
+    file_stats_csv.close();
     accuracy_tot.push_back(mean_accuracy);
     miglioramenti_tot.push_back(ceil(abs(miglioramenti_media)));
     non_riconosciute_tot.push_back(ceil(abs(non_riconosciute_media)));
@@ -109,31 +123,41 @@ int main(int argc, char *argv[]) {
   }
   if(!script){
     file_stats.open(output_filename, std::ios_base::app);
+    file_stats_csv.open(output_filename_csv, std::ios_base::app);
     std::cout << "Riepilogo accuracy: ";
     file_stats << "Riepilogo accuracy: ";
+    file_stats_csv << "Riepilogo accuracy:;";
     for (size_t i = 0; i < accuracy_tot.size(); i++) {
     std::cout << accuracy_tot.at(i)<< " ";
     file_stats << accuracy_tot.at(i)<< " ";
+    file_stats_csv<< accuracy_tot.at(i)<<";";
     }
     std::cout << "\nRiepilogo miglioramenti: ";
     file_stats << "\nRiepilogo miglioramenti: ";
+    file_stats_csv << "\nRiepilogo miglioramenti:;";
     for (size_t i = 0; i < miglioramenti_tot.size(); i++) {
     std::cout << miglioramenti_tot.at(i)<< " ";
     file_stats << miglioramenti_tot.at(i)<< " ";
+    file_stats_csv << miglioramenti_tot.at(i)<< ";";
     }
     std::cout << "\nRiepilogo non_riconosciute: ";
     file_stats << "\nRiepilogo non_riconosciute: ";
+    file_stats_csv << "\nRiepilogo non_riconosciute:;";
     for (size_t i = 0; i < non_riconosciute_tot.size(); i++) {
     std::cout << non_riconosciute_tot.at(i)<< " ";
     file_stats << non_riconosciute_tot.at(i)<< " ";
+    file_stats_csv << non_riconosciute_tot.at(i)<< ";";
     }
     std::cout << '\n';
     file_stats << '\n';
+    file_stats_csv << '\n';
     gettimeofday(&stop, NULL);
     elapsedTime = (stop.tv_sec - start.tv_sec);
     std::cout << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n";
     file_stats << "Tempo trascorso: " << (int) elapsedTime/60 << " minuti circa!\n\nFINE TEST\n\n";
     file_stats.close();
+    file_stats_csv << "Tempo trascorso (minuti):;" << (int) elapsedTime/60 << ";";
+    file_stats_csv.close();
     sleep(15);
   }
   std::cout << '\a';
