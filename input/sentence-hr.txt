@@ -1,1 +1,1 @@
-Query low status ;
+Query decrease status ;

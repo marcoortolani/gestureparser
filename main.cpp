@@ -20,6 +20,7 @@ int main() {
   Utils vu;
   int opt;
   double accuracy;
+  bool generato_comando=false;
   do {
     print_menu();
     std::cin>>opt;
@@ -60,13 +61,19 @@ int main() {
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
         vu.print_vec_vec(labels_probabilities, false);
         ig.parse_svm_output(OUTPUT_PROBABILISTIC_SVM, true);
+        generato_comando=true;
         break;
       }
       case 2:{
+        if (!generato_comando) {
+          std::cout << "Prima bisogna generare il comando (opz. 1)" << '\n';
+          break;
+        }
         std::vector<std::string> sentence_parser;
         std::vector<std::string> sentence_svm_parser;
         sentence_parser=parse_sentence(vu.generic_label_probs(), true);
         sentence_svm_parser=parse_sentence(vu.remove_label(labels_probabilities), false);
+        std::cout << "<-------------------------------------------------->" << '\n';
         std::cout << "Frase riconosciuta dal solo parser" << '\n';
         if (sentence_parser.size()!=0){
           for (size_t i = 0; i < sentence_parser.size(); i++) {
@@ -84,6 +91,7 @@ int main() {
         break;
       }
       case 3:{
+        generato_comando=false;
         int diverse_SVMeParser_orig=0;
         int diverse_SVMeParser_parser=0;
         int diverse_parser_orig=0;

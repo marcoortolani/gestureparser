@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Utilizzerò " << in << "*14 features per addestrare il modello e circa " << 100-in << "*14 per testarlo.\n";
     file_stats_csv.open(output_filename_csv, std::ios_base::app);
     if (!script) {seed=(int)std::time(0);}
-    file_stats_csv << in << "features;"<<"\n";
+    file_stats_csv << in << " features;"<<"\n";
     for (int exec = 0; exec < num_exec; exec++) {
       temp_stats.clear();
       std::cout << "Esecuzione " << in << "-"<< exec+1 <<'\n';
