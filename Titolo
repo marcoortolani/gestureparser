@@ -1,1 +1,8 @@
 Riconoscimento automatico di gesti mediante un classificatore ibrido
+
+Introduzione: obiettivi del sistema ibrido e componenti
+Stato dell'arte: quali sono i sistemi di riconoscimento di gesti
+Metodi: descrizione del sistema ibrido. 3 sezioni: analisi e classificazione gesti dai sensori-SVM; parser; sistema ibrido (le 10 pagine scritte + contestualizzazione)
+Implementazione
+Validazione sperimentale (Dataset qui) del primo blocco, del secondo blocco e del sistema ibrido
+Conclusioni
