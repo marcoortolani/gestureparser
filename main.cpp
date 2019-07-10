@@ -87,30 +87,31 @@ int main() {
       }
       case 3:{
         int use_dataset;
+        std::ofstream file_stats;
         generato_comando=false;
-        int diverse_SVMeParser_orig=0;
-        int diverse_SVMeParser_parser=0;
-        int diverse_parser_orig=0;
-        int uguali_SVMeParser_orig=0;
-        int uguali_SVMeParser_parser=0;
-        int uguali_parser_orig=0;
-        int non_riconosciuto_svm_parser=0;
-        int non_riconosciuto_parser=0;
         std::vector<std::string> sentence_parser;
         std::vector<std::string> sentence_svm_parser;
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
-        std::cout<<"\nQuale dataset utilizzo?:\n"
-                <<"0) Testset\n"
-                <<"1) Dataset rotated\n"
-                <<"2) Dataset scaled\n"
-                <<"3) Dataset scaled & rotated\n"
-                <<"9) Exit\n\n"
-                <<"Input: ";
-        std::cin >> use_dataset;
+        // std::cout<<"\nQuale dataset utilizzo?:\n"
+        //         <<"0) Testset\n"
+        //         <<"1) Dataset rotated\n"
+        //         <<"2) Dataset scaled\n"
+        //         <<"3) Dataset scaled & rotated\n"
+        //         <<"9) Exit\n\n"
+        //         <<"Input: ";
+        // std::cin >> use_dataset;
         std::vector<std::vector<int>> comandi = vu.read_commands(FILE_GESTI);
         std::vector<int> comando;
         size_t zzz;
-        std::cout << "random " << vu.random_index(1, 100) <<'\n';
+        for (use_dataset = 0; use_dataset < 4; use_dataset++) {
+          int diverse_SVMeParser_orig=0;
+          int diverse_SVMeParser_parser=0;
+          int diverse_parser_orig=0;
+          int uguali_SVMeParser_orig=0;
+          int uguali_SVMeParser_parser=0;
+          int uguali_parser_orig=0;
+          int non_riconosciuto_svm_parser=0;
+          int non_riconosciuto_parser=0;
         for (zzz = 0; zzz < 5; zzz++) {
         for (int i = 0; i < (int) comandi.size(); i++) {
           comando=comandi.at(i);
@@ -162,20 +163,48 @@ int main() {
           if(ig.test_sentences_equal(sentence_parser, comando_vector)) { uguali_parser_orig++; } else { diverse_parser_orig++; }
         }
       }
+      file_stats.open("../risultati/testing_parser_condizioni_reali", std::ios_base::app);
+      file_stats << "\n\n\n";
+      if (use_dataset==0) {
+        std::cout << "Dataset usato: testset" << '\n';
+        file_stats << "Dataset usato: testset" << '\n';
+      } else if (use_dataset==1) {
+        std::cout << "Dataset usato: rotated" << '\n';
+        file_stats << "Dataset usato: rotated" << '\n';
+      } else if (use_dataset==2) {
+        std::cout << "Dataset usato: scaled" << '\n';
+        file_stats << "Dataset usato: scaled" << '\n';
+      } else if (use_dataset==3) {
+        std::cout << "Dataset usato: rotated and scaled" << '\n';
+        file_stats << "Dataset usato: rotated and scaled" << '\n';
+      }
         std::cout << "Comandi totali: " << comandi.size()*zzz <<'\n';
+        file_stats << "Comandi totali: " << comandi.size()*zzz <<'\n';
         std::cout << "Comandi SVM+Parser diversi dai comandi corretti: " << diverse_SVMeParser_orig<< '\n';
+        file_stats << "Comandi SVM+Parser diversi dai comandi corretti: " << diverse_SVMeParser_orig<< '\n';
         std::cout << "Comandi Parser diversi dai comandi corretti: " << diverse_parser_orig<< "\n\n";
+        file_stats << "Comandi Parser diversi dai comandi corretti: " << diverse_parser_orig<< "\n";
         std::cout << "Comandi SVM+Parser diverse dai comandi Parser: " << diverse_SVMeParser_parser<< '\n';
-        std::cout << "Comandi SVM+Parser uguali ai comandi Parser: " << uguali_SVMeParser_parser<< "\n\n";
+        file_stats << "Comandi SVM+Parser diverse dai comandi Parser: " << diverse_SVMeParser_parser<< '\n';
+        std::cout << "Comandi SVM+Parser uguali ai comandi Parser: " << uguali_SVMeParser_parser<< "\n";
+        file_stats << "Comandi SVM+Parser uguali ai comandi Parser: " << uguali_SVMeParser_parser<< "\n";
         std::cout << "Comandi SVM+Parser uguali ai comandi corretti: " << uguali_SVMeParser_orig<< '\n';
-        std::cout << "Comandi Parser uguali ai comandi corretti: " << uguali_parser_orig<< "\n\n";
+        file_stats << "Comandi SVM+Parser uguali ai comandi corretti: " << uguali_SVMeParser_orig<< '\n';
+        std::cout << "Comandi Parser uguali ai comandi corretti: " << uguali_parser_orig<< "\n";
+        file_stats << "Comandi Parser uguali ai comandi corretti: " << uguali_parser_orig<< "\n";
         std::cout << "Comandi non riconosciuti dal Parser: " << non_riconosciuto_parser << '\n';
-        std::cout << "Comandi non riconosciuti da SVM+Parser: " << non_riconosciuto_svm_parser << "\n\n";
+        file_stats << "Comandi non riconosciuti dal Parser: " << non_riconosciuto_parser << '\n';
+        std::cout << "Comandi non riconosciuti da SVM+Parser: " << non_riconosciuto_svm_parser << "\n";
+        file_stats << "Comandi non riconosciuti da SVM+Parser: " << non_riconosciuto_svm_parser << "\n";
         if((uguali_SVMeParser_orig-uguali_parser_orig)>0){
           std::cout << "La combinazaione SVM+Parser ha riconosciuto " << uguali_SVMeParser_orig-uguali_parser_orig << " comandi in più rispetto al solo parser" << '\n';
+          file_stats << "La combinazaione SVM+Parser ha riconosciuto " << uguali_SVMeParser_orig-uguali_parser_orig << " comandi in più rispetto al solo parser" << '\n';
         } else {
           std::cout << "La combinazaione SVM+Parser ha riconosciuto " << uguali_parser_orig-uguali_SVMeParser_orig << " comandi in meno rispetto al solo parser" << '\n';
+          file_stats << "La combinazaione SVM+Parser ha riconosciuto " << uguali_parser_orig-uguali_SVMeParser_orig << " comandi in meno rispetto al solo parser" << '\n';
         }
+        file_stats.close();
+      }
         cout << '\a';
         break;
       }

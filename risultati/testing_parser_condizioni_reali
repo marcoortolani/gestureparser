@@ -1,0 +1,56 @@
+
+
+
+Dataset usato: testset
+Comandi totali: 9725
+Comandi SVM+Parser diversi dai comandi corretti: 204
+Comandi Parser diversi dai comandi corretti: 1527
+Comandi SVM+Parser diverse dai comandi Parser: 1393
+Comandi SVM+Parser uguali ai comandi Parser: 8332
+Comandi SVM+Parser uguali ai comandi corretti: 9521
+Comandi Parser uguali ai comandi corretti: 8198
+Comandi non riconosciuti dal Parser: 570
+Comandi non riconosciuti da SVM+Parser: 154
+La combinazaione SVM+Parser ha riconosciuto 1323 comandi in più rispetto al solo parser
+
+
+
+Dataset usato: rotated
+Comandi totali: 9725
+Comandi SVM+Parser diversi dai comandi corretti: 407
+Comandi Parser diversi dai comandi corretti: 2013
+Comandi SVM+Parser diverse dai comandi Parser: 2020
+Comandi SVM+Parser uguali ai comandi Parser: 7705
+Comandi SVM+Parser uguali ai comandi corretti: 9318
+Comandi Parser uguali ai comandi corretti: 7712
+Comandi non riconosciuti dal Parser: 811
+Comandi non riconosciuti da SVM+Parser: 52
+La combinazaione SVM+Parser ha riconosciuto 1606 comandi in più rispetto al solo parser
+
+
+
+Dataset usato: scaled
+Comandi totali: 9725
+Comandi SVM+Parser diversi dai comandi corretti: 3304
+Comandi Parser diversi dai comandi corretti: 5844
+Comandi SVM+Parser diverse dai comandi Parser: 4994
+Comandi SVM+Parser uguali ai comandi Parser: 4731
+Comandi SVM+Parser uguali ai comandi corretti: 6421
+Comandi Parser uguali ai comandi corretti: 3881
+Comandi non riconosciuti dal Parser: 1971
+Comandi non riconosciuti da SVM+Parser: 496
+La combinazaione SVM+Parser ha riconosciuto 2540 comandi in più rispetto al solo parser
+
+
+
+Dataset usato: rotated and scaled
+Comandi totali: 9725
+Comandi SVM+Parser diversi dai comandi corretti: 4291
+Comandi Parser diversi dai comandi corretti: 6272
+Comandi SVM+Parser diverse dai comandi Parser: 5801
+Comandi SVM+Parser uguali ai comandi Parser: 3924
+Comandi SVM+Parser uguali ai comandi corretti: 5434
+Comandi Parser uguali ai comandi corretti: 3453
+Comandi non riconosciuti dal Parser: 2227
+Comandi non riconosciuti da SVM+Parser: 707
+La combinazaione SVM+Parser ha riconosciuto 1981 comandi in più rispetto al solo parser

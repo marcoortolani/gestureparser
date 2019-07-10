@@ -1,1 +1,1 @@
-Query heater status ;
+status ; heater ;
