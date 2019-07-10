@@ -28,11 +28,6 @@ int main() {
       case 1:{
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
         std::vector<int> comando_v;
-        // comando_v.push_back(2);
-        // comando_v.push_back(6);
-        // comando_v.push_back(10);
-        // comando_v.push_back(12);
-        // comando_v.push_back(14);
         std::string input;
         std::cout << "Inserisci comando da parsare." << '\n';
         bool error =true;
@@ -55,7 +50,7 @@ int main() {
         file.open("../dataset/feature_mauro");
         for (int i=0; i<(int)comando_v.size(); i++){
             FeaturesExtraction featureextr;
-            featureextr.genFeatures(comando_v.at(i), vu.random_index(81, n_immagini[comando_v.at(i)]), file);
+            featureextr.genFeatures(comando_v.at(i), vu.random_index(81, n_immagini[comando_v.at(i)]), file, 0);
         }
         file.close();
         labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);
@@ -91,6 +86,7 @@ int main() {
         break;
       }
       case 3:{
+        int use_dataset;
         generato_comando=false;
         int diverse_SVMeParser_orig=0;
         int diverse_SVMeParser_parser=0;
@@ -103,9 +99,18 @@ int main() {
         std::vector<std::string> sentence_parser;
         std::vector<std::string> sentence_svm_parser;
         int n_immagini[]={0, 118, 100, 100, 108, 117, 110, 116, 112, 103, 110, 105, 118, 112, 100};
+        std::cout<<"\nQuale dataset utilizzo?:\n"
+                <<"0) Testset\n"
+                <<"1) Dataset rotated\n"
+                <<"2) Dataset scaled\n"
+                <<"3) Dataset scaled & rotated\n"
+                <<"9) Exit\n\n"
+                <<"Input: ";
+        std::cin >> use_dataset;
         std::vector<std::vector<int>> comandi = vu.read_commands(FILE_GESTI);
         std::vector<int> comando;
         size_t zzz;
+        std::cout << "random " << vu.random_index(1, 100) <<'\n';
         for (zzz = 0; zzz < 5; zzz++) {
         for (int i = 0; i < (int) comandi.size(); i++) {
           comando=comandi.at(i);
@@ -113,7 +118,11 @@ int main() {
           file.open("../dataset/feature_mauro");
           for (int j=0; j<(int)comando.size(); j++){
               FeaturesExtraction featureextr;
-              featureextr.genFeatures(comando.at(j), vu.random_index(81, n_immagini[comando.at(j)]), file);
+              if (use_dataset==0) {
+                featureextr.genFeatures(comando.at(j), vu.random_index(81, n_immagini[comando.at(j)]), file, 0);
+              } else {
+                featureextr.genFeatures(comando.at(j), vu.random_index(1, 100), file, use_dataset);
+              }
           }
           file.close();
           labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_new.model","../dataset/prob.khr", accuracy);

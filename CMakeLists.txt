@@ -63,3 +63,7 @@ target_link_libraries(testing svm kinectCore earleyCore ${OpenCV_LIBS})
 # Temporarily build another executable
 add_executable(main main.cpp)
 target_link_libraries(main svm kinectCore earleyCore ${OpenCV_LIBS})
+
+# Build another executable for generate accuracy evaluation files
+add_executable(accuracy_evaluation gen_files_accuracy_evaluation.cpp)
+target_link_libraries(accuracy_evaluation svm kinectCore earleyCore ${OpenCV_LIBS})

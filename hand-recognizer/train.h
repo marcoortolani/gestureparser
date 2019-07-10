@@ -15,7 +15,7 @@ void print_null(const char *s) {}
 
 
 void read_problem(const char *filename);
-void do_cross_validation();
+double do_cross_validation();
 
 struct svm_parameter param;		// set by parse_command_line
 struct svm_problem prob;		// set by read_problem
@@ -24,8 +24,9 @@ int cross_validation;
 int nr_fold;
 
 //svm-train
-int train(const char* input_file_name,const char* model_file_name, int cross_v, int fold)
+double train(const char* input_file_name,const char* model_file_name, int cross_v, int fold)
 {
+  double accuracy;
   param.svm_type = C_SVC;
 	param.kernel_type = RBF;
 	param.degree = 3;
@@ -56,7 +57,7 @@ int train(const char* input_file_name,const char* model_file_name, int cross_v, 
 	if(cross_validation)
 	{
     nr_fold = fold;
-		do_cross_validation();
+		accuracy=do_cross_validation();
 	}
 	else
 	{
@@ -74,12 +75,13 @@ int train(const char* input_file_name,const char* model_file_name, int cross_v, 
 	free(x_space);
 	free(line);
 
-	return 0;
+	return accuracy;
 }
 
-void do_cross_validation()
+double do_cross_validation()
 {
 	int i;
+  double accuracy;
 	int total_correct = 0;
 	double total_error = 0;
 	double sumv = 0, sumy = 0, sumvv = 0, sumyy = 0, sumvy = 0;
@@ -112,8 +114,10 @@ void do_cross_validation()
 			if(target[i] == prob.y[i])
 				++total_correct;
 		printf("Cross Validation Accuracy = %g%%\n",100.0*total_correct/prob.l);
+    accuracy=100.0*total_correct/prob.l;
 	}
 	free(target);
+  return accuracy;
 }
 
 

@@ -1,7 +1,7 @@
 #include "FeaturesExtraction.hpp"
 
-void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
-  acquireframe(dita, index);
+void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file, int use_dataset){
+  acquireframe(dita, index, use_dataset);
   //std::cout << "acquisico frame" << '\n';
   //im2bw();
   //std::cout << "bianco e nero" << '\n';
@@ -21,11 +21,21 @@ void FeaturesExtraction::genFeatures(int dita, int index, std::ofstream &file){
   file << "\n";
 }
 
-bool FeaturesExtraction::acquireframe(int dita, int index){
+bool FeaturesExtraction::acquireframe(int dita, int index, int use_dataset){
   cv::Mat image;
   char integer_string[20]="";
   char percorso[50]="";
-  strcat(percorso, "../dataset/G");
+  if (use_dataset==0) {
+    strcat(percorso, "../dataset/G");
+  } else if (use_dataset==1) {
+    strcat(percorso, "../dataset/rotated/G");
+  } else if (use_dataset==2) {
+    strcat(percorso, "../dataset/scaled/G");
+  }else if (use_dataset==3) {
+    strcat(percorso, "../dataset/rotated_and_scaled/G");
+  } else {
+    strcat(percorso, "../dataset/G");
+  }
   sprintf(integer_string, "%d", dita);
   strcat(percorso, integer_string);
   strcat(percorso, "/");

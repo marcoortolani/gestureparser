@@ -175,7 +175,7 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes, int seed){
     for (int i=0; i<14; i++){
       for (int j=0; j<in; j++){
         featureextr= new FeaturesExtraction();
-        featureextr->genFeatures(i+1, indexes.at(i).at(j), file);
+        featureextr->genFeatures(i+1, indexes.at(i).at(j), file, 0);
         delete featureextr;
         num_feat++;
       }
@@ -188,7 +188,7 @@ double train_testing(int in, std::vector<std::vector<int>> &indexes, int seed){
     for (int i=0; i<14; i++){
       for (int j=in; j<(int)indexes.at(i).size(); j++){
         featureextr= new FeaturesExtraction();
-        featureextr->genFeatures(i+1, indexes.at(i).at(j), file);
+        featureextr->genFeatures(i+1, indexes.at(i).at(j), file, 0);
         delete featureextr;
         num_feat++;
       }
@@ -220,7 +220,7 @@ std::vector<int> parser(int in, std::vector<std::vector<int>> indexes){
     file.open("../dataset/feature_mauro");
     for (int j=0; j<(int)comando.size(); j++){
         FeaturesExtraction featureextr;
-        featureextr.genFeatures(comando.at(j), vu.random_index(in, indexes.at(comando.at(j)-1).size()), file);
+        featureextr.genFeatures(comando.at(j), vu.random_index(in, indexes.at(comando.at(j)-1).size()), file, 0);
     }
     file.close();
     labels_probabilities=gesture_prediction("../dataset/feature_mauro","../dataset/dataset_testing.model","../dataset/prob.khr", accuracy);

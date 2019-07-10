@@ -1,0 +1,8 @@
+Addestrato con 5 features. 
+Accuracy media SVM: 77.3702 
+Miglioramenti SVM+parser: 389
+non_riconosciute_media  SVM+parser: 208
+Vettore accuracy:	73.0796	81.6609	
+Vettore miglioramenti:	419	358	
+Vettore non_riconosciute:	262	154	
+
